@@ -1,184 +1,177 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+:root {
+  --bg: #e7dfdf;
+  --ink: #2a2624;
+  --scale: 1;
+  --edge-x: 0px;
 }
 
-.hero {
+/* --- Viewport --- */
+.viewport {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Star mark, top-left (logo). Pinned to the real viewport corner. --- */
+.star {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 4;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* --- Fixed 1920x1080 composition canvas, scaled to fit --- */
+.stage {
   position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+  z-index: 6;
+  width: 1920px;
+  height: 1080px;
+  flex: 0 0 auto;
+  transform: scale(var(--scale));
+  transform-origin: center center;
+  isolation: isolate;
 }
 
-#center {
+/* --- WEB DESIGN headline (live text, Playfair Black, solid black).
+       Pinned to the real viewport edge but scaled with the composition. --- */
+.webdesign {
+  position: absolute;
+  left: 6px;
+  bottom: calc(24px * var(--scale));
+  z-index: 5;
+  margin: 0;
+  font-family: 'Anton', sans-serif;
+  font-weight: 400;
+  font-size: calc(298px * var(--scale));
+  line-height: 1;
+  letter-spacing: 0;
+  color: #000000;
+  white-space: nowrap;
+}
+
+/* --- Featured image: 558 x 698 --- */
+.feature {
+  position: absolute;
+  z-index: 2;
+  top: 36px;
+  right: 201px; /* right edge aligns with the left edge of the list cluster */
+  width: 640px;
+  height: 744px; /* bottom clears the headline so nothing overlaps */
+  margin: 0;
+  overflow: hidden;
+  background: #1a1a1a;
+  transform: translateX(var(--edge-x)); /* ride out to the right border */
+}
+
+.feature img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --- Thumbnail list (custom smooth scroll). Vertical padding lets any
+       thumb scroll to the centre under the fixed selector; horizontal
+       padding leaves room for the 210px selector ring. --- */
+.thumbs {
+  position: absolute;
+  z-index: 3;
+  top: 24px;
+  bottom: 24px;
+  right: -10px;
+  width: 211px;
+  box-sizing: border-box;
+  padding: 0 7px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+  align-items: center;
+  gap: 18px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+  transform: translateX(var(--edge-x)); /* ride out to the right border */
 }
 
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
+.thumbs::-webkit-scrollbar {
+  display: none;
 }
 
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
+/* --- Thumbnail: 180 x 225 --- */
+.thumb {
   position: relative;
+  flex: 0 0 auto;
+  width: 180px;
+  height: 225px;
+  padding: 0;
+  border: none;
+  background: #1a1a1a;
+  cursor: pointer;
+}
+
+.thumb img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
-  }
+.thumb:not(.is-active) img {
+  opacity: 0.6;
+}
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
-  }
+.thumb.is-active img,
+.thumb:hover img {
+  opacity: 1;
+}
+
+/* --- Inverted overlay strip: identical to the list, scrolled in sync,
+       colour-inverted and masked to the circle. Because it only contains
+       images (gaps are transparent), only the images get the effect; the
+       background showing through the gaps stays untouched. --- */
+.thumbs--invert {
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+  filter: invert(1);
+  /* show only inside the circle; slightly larger than the 100px frame hole
+     so the black frame overlaps and hides the mask edge (no seam). */
+  -webkit-mask: radial-gradient(circle 104px at 50% 50%, #000 0 104px, transparent 104px);
+  mask: radial-gradient(circle 104px at 50% 50%, #000 0 104px, transparent 104px);
+}
+
+/* Overlay images aren't dimmed (the dimming is only for the live strip). */
+.thumbs--invert .thumb img {
+  opacity: 1;
+}
+
+/* --- Fixed selector frame: 210 x 210 black square with cut corners and a
+       circular hole, pinned over the column centre. --- */
+.selector {
+  position: absolute;
+  z-index: 5;
+  top: 435px;
+  left: 1719px;
+  width: 210px;
+  height: 210px;
+  pointer-events: none;
+  transform: translateX(var(--edge-x)); /* ride out to the right border */
+  /* black everywhere except a transparent circle in the middle. The circle
+     reaches close to the mid-edges, leaving a thin border there; the cut
+     corners keep more black at the corners. */
+  background: radial-gradient(circle at 50% 50%, transparent 0 100px, #0b0b0b 100px);
+  /* square with chamfered (cut) corners */
+  clip-path: polygon(
+    38px 0, calc(100% - 38px) 0,
+    100% 38px, 100% calc(100% - 38px),
+    calc(100% - 38px) 100%, 38px 100%,
+    0 calc(100% - 38px), 0 38px
+  );
 }
