@@ -1,10 +1,13 @@
 :root {
-  --bg: #ffffff;
-  --ink: #111111;
-  --muted: #6b6b6b;
-  --accent: #1a1a1a;
+  --bg: #000000;
+  --ink: #ffffff;
+  --muted: #777777;
+  --accent: #5517ff;
+  --font-sans: "NON Natural Grotesk", "FK Roman Standard", Arial, sans-serif;
+  --font-mono: "NON Natural Mono", "Courier New", monospace;
+  --font-roman: "FK Roman Standard", Georgia, serif;
 
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-sans);
   color: var(--ink);
   background: var(--bg);
 
