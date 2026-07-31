@@ -43,12 +43,12 @@
 .ascii-portrait {
   margin: 0;
   position: absolute;
-  top: 44%;
-  left: 50%;
-  transform: translate(-50%, -50%) scaleX(0.68);
+  top: 50%;
+  left: 51%;
+  transform: translate(-50%, -50%) scaleX(0.62);
   color: rgba(255, 255, 255, 0.56);
   font-family: var(--font-mono);
-  font-size: calc(68vh / 90 / 0.8);
+  font-size: calc(82vh / 90 / 0.8);
   line-height: 0.72;
   letter-spacing: 0;
   white-space: pre;
@@ -60,20 +60,44 @@
 
 .hero-name {
   margin: 0;
-  position: absolute;
-  top: 79%;
-  left: 50%;
   z-index: 2;
-  transform: translateX(-50%);
   color: var(--theme-color);
   font-family: var(--font-sans);
-  font-size: clamp(54px, 10vw, 148px);
   font-weight: 800;
   line-height: 0.86;
-  text-align: center;
-  white-space: nowrap;
   pointer-events: none;
   user-select: none;
+}
+
+.hero-first,
+.hero-last {
+  position: absolute;
+  display: block;
+  color: var(--theme-color);
+  white-space: nowrap;
+}
+
+.hero-first {
+  top: 12vh;
+  left: 1.2vw;
+  font-size: clamp(88px, 13.5vw, 164px);
+  letter-spacing: 0;
+}
+
+.hero-last {
+  right: 2.1vw;
+  bottom: 8vh;
+  font-size: clamp(82px, 12.8vw, 156px);
+  letter-spacing: 0;
+}
+
+.hero-name img {
+  width: 0.64em;
+  height: 0.64em;
+  display: inline-block;
+  object-fit: contain;
+  vertical-align: 0.035em;
+  margin: 0 0.04em;
 }
 
 .about-view {
@@ -120,10 +144,17 @@
   line-height: 1.58;
 }
 
-.about-image {
-  width: min(38vw, 420px);
+.about-ascii-image {
+  margin: 0;
   justify-self: end;
-  display: block;
+  color: rgba(255, 255, 255, 0.54);
+  font-family: var(--font-mono);
+  font-size: clamp(4.4px, 0.54vw, 7px);
+  line-height: 0.74;
+  letter-spacing: 0;
+  white-space: pre;
+  user-select: none;
+  pointer-events: none;
 }
 
 .portfolio-menu {
@@ -545,15 +576,23 @@
   }
 
   .ascii-portrait {
-    top: 43%;
-    transform: translate(-50%, -50%) scaleX(0.58);
+    top: 47%;
+    left: 54%;
+    transform: translate(-50%, -50%) scaleX(0.46);
     font-size: calc(62vh / 90 / 0.76);
     line-height: 0.7;
   }
 
-  .hero-name {
-    top: 76%;
-    font-size: clamp(42px, 14vw, 68px);
+  .hero-first {
+    top: 88px;
+    left: 8px;
+    font-size: clamp(54px, 18vw, 82px);
+  }
+
+  .hero-last {
+    right: 8px;
+    bottom: 48px;
+    font-size: clamp(48px, 17vw, 74px);
   }
 
   .about-view {
@@ -562,8 +601,9 @@
     gap: 32px;
   }
 
-  .about-image {
-    width: min(78vw, 320px);
+  .about-ascii-image {
+    font-size: 3.8px;
+    line-height: 0.72;
     justify-self: end;
   }
 

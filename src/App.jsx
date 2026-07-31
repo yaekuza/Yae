@@ -1,15 +1,18 @@
 import { memo, useCallback, useState } from 'react'
 import './App.css'
 import profileAscii from './assets/profile-ascii.txt?raw'
-import aboutImage from './assets/img7.png'
+import aboutAscii from './assets/about-ascii.txt?raw'
+import blueLogo from './assets/bluelogo.png'
+import orangeLogo from './assets/orangelogo.png'
+import pinkLogo from './assets/pinklogo.png'
 
 const themes = [
-  { name: 'ember', color: '#ff4b18' },
-  { name: 'pink', color: '#df32aa' },
-  { name: 'violet', color: '#5517ff' },
+  { name: 'ember', color: '#ff4b18', logo: orangeLogo },
+  { name: 'pink', color: '#df32aa', logo: pinkLogo },
+  { name: 'violet', color: '#5517ff', logo: blueLogo },
 ]
 
-const pages = ['about', 'projects', 'contact']
+const pages = ['home', 'about', 'projects', 'contact']
 const asciiRows = 25
 const asciiColumns = 50
 const asciiInventory = ['J', 'O', 'R', 'G', 'E', '/', '>', '.', '']
@@ -45,7 +48,7 @@ const PageList = memo(function PageList({ onNavigate }) {
             onNavigate(page)
           }}
         >
-          <span className="page-index">{String(index + 2).padStart(2, '0')}</span>
+          <span className="page-index">{String(index + 1).padStart(2, '0')}</span>
           <span>{page}</span>
         </a>
       ))}
@@ -140,15 +143,32 @@ const AsciiPortrait = memo(function AsciiPortrait() {
   )
 })
 
-function HeroName() {
-  return <h1 className="hero-name">JORGE SIMOES</h1>
+const AboutAsciiImage = memo(function AboutAsciiImage() {
+  return (
+    <pre className="about-ascii-image" aria-label="ASCII about page visual">
+      {aboutAscii}
+    </pre>
+  )
+})
+
+function HeroName({ logo }) {
+  return (
+    <h1 className="hero-name">
+      <span className="hero-first">
+        J<img src={logo} alt="O" />RGE
+      </span>
+      <span className="hero-last">
+        SIM<img src={logo} alt="O" />ES
+      </span>
+    </h1>
+  )
 }
 
-function HomeView({ transitioning }) {
+function HomeView({ activeTheme, transitioning }) {
   return (
     <section className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}>
       <AsciiPortrait />
-      <HeroName />
+      <HeroName logo={activeTheme.logo} />
     </section>
   )
 }
@@ -167,7 +187,7 @@ function AboutView({ transitioning }) {
         <p>Outside of development, I spend my time bouldering, taking photos, and gaming.</p>
       </div>
 
-      <img className="about-image" src={aboutImage} alt="Visual reference from Jorge Simoes" />
+      <AboutAsciiImage />
     </section>
   )
 }
@@ -176,6 +196,7 @@ function App() {
   const [activeThemeName, setActiveThemeName] = useState(themes[1].name)
   const [view, setView] = useState('home')
   const [transitioning, setTransitioning] = useState(false)
+  const activeTheme = themes.find((theme) => theme.name === activeThemeName) ?? themes[1]
 
   const handleThemeSelect = useCallback((themeName) => {
     setActiveThemeName(themeName)
@@ -183,7 +204,7 @@ function App() {
 
   const handleNavigate = useCallback(
     (page) => {
-      if (page !== 'about') {
+      if (page !== 'home' && page !== 'about') {
         return
       }
 
@@ -214,7 +235,7 @@ function App() {
       {view === 'about' ? (
         <AboutView transitioning={transitioning} />
       ) : (
-        <HomeView transitioning={transitioning} />
+        <HomeView activeTheme={activeTheme} transitioning={transitioning} />
       )}
     </main>
   )
