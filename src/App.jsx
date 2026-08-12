@@ -1,10 +1,10 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import profileAscii from './assets/profile-ascii.txt?raw'
+import bloodMoonAscii from './assets/blood-moon-ascii.txt?raw'
 import blueLogo from './assets/bluelogo.png'
 import orangeLogo from './assets/orangelogo.png'
 import pinkLogo from './assets/pinklogo.png'
-import bloodMoon from './assets/BloodMascci.png'
 
 const themes = [
   { name: 'ember', color: '#ff4b18', logo: orangeLogo },
@@ -202,9 +202,11 @@ const AsciiPortrait = memo(function AsciiPortrait() {
   )
 })
 
-const BloodMoon = memo(function BloodMoon() {
+const BloodMoonAscii = memo(function BloodMoonAscii() {
   return (
-    <img className="blood-moon" src={bloodMoon} alt="" aria-hidden="true" />
+    <pre className="blood-moon-ascii" aria-hidden="true">
+      {bloodMoonAscii}
+    </pre>
   )
 })
 
@@ -224,7 +226,7 @@ function HeroName({ logo }) {
 function HomeView({ activeTheme, transitioning }) {
   return (
     <section className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}>
-      <BloodMoon />
+      <BloodMoonAscii />
       <HeroName logo={activeTheme.logo} />
     </section>
   )
