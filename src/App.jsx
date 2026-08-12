@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import profileAscii from './assets/profile-ascii.txt?raw'
 import aboutAscii from './assets/about-ascii.txt?raw'
@@ -137,6 +137,7 @@ const ThemeSelector = memo(function ThemeSelector({ activeThemeName, onThemeSele
 
 function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect }) {
   const [open, setOpen] = useState(false)
+  const menuRef = useRef()
 
   const toggleMenu = useCallback(() => {
     setOpen((current) => !current)
@@ -150,8 +151,27 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect }) {
     [onNavigate],
   )
 
+  useEffect(() => {
+    if (!open) {
+      return undefined
+    }
+
+    const handleOutsideClick = (event) => {
+      if (!menuRef.current?.contains(event.target)) {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener('pointerdown', handleOutsideClick)
+
+    return () => {
+      document.removeEventListener('pointerdown', handleOutsideClick)
+    }
+  }, [open])
+
   return (
     <nav
+      ref={menuRef}
       className={`portfolio-menu theme-${activeThemeName} ${open ? 'is-open' : ''}`}
       aria-label="Primary navigation"
       onClick={toggleMenu}
