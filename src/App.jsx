@@ -17,6 +17,45 @@ const asciiRows = 25
 const asciiColumns = 50
 const asciiInventory = ['J', 'O', 'R', 'G', 'E', '/', '>', '.', '']
 const asciiCells = Array.from({ length: asciiRows * asciiColumns }, (_, index) => getAsciiUnit(index))
+const projects = [
+  {
+    title: 'PORTFOLIO INTERFACE SYSTEM',
+    summary:
+      'A motion-focused portfolio shell with themed navigation, ASCII portrait work, and sharp page transitions.',
+    language: 'REACT',
+  },
+  {
+    title: 'ASCII IMAGE PIPELINE',
+    summary:
+      'A small conversion workflow that turns project images into terminal-style ASCII compositions.',
+    language: 'NODE',
+  },
+  {
+    title: 'MENU MOTION STUDY',
+    summary:
+      'A CSS animation pass focused on smoother transforms, fast reveals, and menu-like hover states.',
+    language: 'CSS',
+  },
+  {
+    title: 'THEME SWITCHER',
+    summary:
+      'A compact color system that swaps logo assets and accent colors across the interface.',
+    language: 'JAVASCRIPT',
+  },
+  {
+    title: 'ABOUT PAGE COMPOSITION',
+    summary:
+      'A personal profile layout balancing direct text, theme color hierarchy, and generated ASCII imagery.',
+    language: 'HTML',
+  },
+  {
+    title: 'RESPONSIVE ASCII LAYOUT',
+    summary:
+      'A responsive front-end experiment for keeping dense text art readable across viewport sizes.',
+    language: 'CSS',
+  },
+]
+const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
 
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
@@ -173,21 +212,89 @@ function HomeView({ activeTheme, transitioning }) {
   )
 }
 
-function AboutView({ transitioning }) {
+function SectionHeader({ number, title, sector, phase }) {
   return (
-    <section className={`view-layer about-view ${transitioning ? 'is-entering' : ''}`} id="about">
-      <div className="about-copy">
-        <span className="about-kicker">ABOUT</span>
-        <h1>JORGE SIMOES</h1>
-        <p>
-          I am a software development student currently in my third year, with a focus on
-          front-end development. I care about clear visual hierarchy, smooth interaction, and
-          interfaces that feel precise.
-        </p>
-        <p>Outside of development, I spend my time bouldering, taking photos, and gaming.</p>
+    <header className={`section-header ${phase === 'out' ? 'is-exiting' : 'is-entering'}`}>
+      <span className="section-rule section-rule-top" aria-hidden="true" />
+      <div className="section-title-block">
+        <span className="section-number">{number}</span>
+        <h1>{title}</h1>
       </div>
+      <span className="section-sector">{sector}</span>
+      <span className="section-rule section-rule-bottom" aria-hidden="true" />
+    </header>
+  )
+}
 
-      <AboutAsciiImage />
+function ProjectsHeader({ count, phase }) {
+  return (
+    <header className={`projects-list-header ${phase === 'out' ? 'is-exiting' : 'is-entering'}`}>
+      <h1>PROJECTS</h1>
+      <span className="projects-count">{String(count).padStart(2, '0')}</span>
+      <span className="projects-list-rule" aria-hidden="true" />
+    </header>
+  )
+}
+
+function AboutView({ phase }) {
+  return (
+    <section className={`view-layer about-view page-phase-${phase}`} id="about">
+      <SectionHeader number="02" title="ABOUT" sector="SEC-02" phase={phase} />
+
+      <div className="about-body">
+        <div className="about-copy">
+          <span className="about-kicker">JORGE SIMOES</span>
+          <h2>JORGE SIMOES</h2>
+          <p>
+            I am a software development student currently in my third year, with a focus on
+            front-end development. I care about clear visual hierarchy, smooth interaction, and
+            interfaces that feel precise.
+          </p>
+          <p>Outside of development, I spend my time bouldering, taking photos, and gaming.</p>
+        </div>
+
+        <AboutAsciiImage />
+      </div>
+    </section>
+  )
+}
+
+function ProjectsView({ phase }) {
+  const [activeFilter, setActiveFilter] = useState('ALL')
+  const filteredProjects =
+    activeFilter === 'ALL'
+      ? projects
+      : projects.filter((project) => project.language === activeFilter)
+
+  return (
+    <section className={`view-layer projects-view page-phase-${phase}`} id="projects">
+      <ProjectsHeader count={filteredProjects.length} phase={phase} />
+
+      <div className="projects-list-view">
+        <div className="project-filters" aria-label="Project language filters">
+          {projectFilters.map((filter) => (
+            <button
+              type="button"
+              className={activeFilter === filter ? 'is-active' : ''}
+              onClick={() => setActiveFilter(filter)}
+              key={filter}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        <div className="project-list">
+          {filteredProjects.map((project) => (
+            <a className="project-row" href="#projects" key={project.title}>
+              <span className="project-row-title">{project.title}</span>
+              <span className="project-row-summary">{project.summary}</span>
+              <span className="project-row-language">{project.language}</span>
+              <span className="project-row-mark" aria-hidden="true" />
+            </a>
+          ))}
+        </div>
+      </div>
     </section>
   )
 }
@@ -195,7 +302,7 @@ function AboutView({ transitioning }) {
 function App() {
   const [activeThemeName, setActiveThemeName] = useState(themes[1].name)
   const [view, setView] = useState('home')
-  const [transitioning, setTransitioning] = useState(false)
+  const [transitionPhase, setTransitionPhase] = useState('idle')
   const activeTheme = themes.find((theme) => theme.name === activeThemeName) ?? themes[1]
 
   const handleThemeSelect = useCallback((themeName) => {
@@ -204,7 +311,7 @@ function App() {
 
   const handleNavigate = useCallback(
     (page) => {
-      if (page !== 'home' && page !== 'about') {
+      if (page !== 'home' && page !== 'about' && page !== 'projects') {
         return
       }
 
@@ -212,14 +319,15 @@ function App() {
         return
       }
 
-      setTransitioning(true)
+      setTransitionPhase('out')
 
       window.setTimeout(() => {
         setView(page)
+        setTransitionPhase(page === 'home' ? 'idle' : 'in')
       }, 420)
 
       window.setTimeout(() => {
-        setTransitioning(false)
+        setTransitionPhase('idle')
       }, 900)
     },
     [view],
@@ -233,9 +341,11 @@ function App() {
         onThemeSelect={handleThemeSelect}
       />
       {view === 'about' ? (
-        <AboutView transitioning={transitioning} />
+        <AboutView phase={transitionPhase} />
+      ) : view === 'projects' ? (
+        <ProjectsView phase={transitionPhase} />
       ) : (
-        <HomeView activeTheme={activeTheme} transitioning={transitioning} />
+        <HomeView activeTheme={activeTheme} transitioning={transitionPhase === 'out'} />
       )}
     </main>
   )
