@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import profileAscii from './assets/profile-ascii.txt?raw'
-import bloodMoonAscii from './assets/blood-moon-ascii.txt?raw'
 import blueLogo from './assets/bluelogo.png'
 import orangeLogo from './assets/orangelogo.png'
 import pinkLogo from './assets/pinklogo.png'
@@ -17,8 +16,20 @@ const asciiRows = 25
 const asciiColumns = 50
 const asciiInventory = ['J', 'O', 'R', 'G', 'E', '/', '>', '.', '']
 const asciiCells = Array.from({ length: asciiRows * asciiColumns }, (_, index) => getAsciiUnit(index))
-const moonRamp = ' .,:;irsXA253hMHGS#9B&@'
-const moonFrames = createMoonFrames(bloodMoonAscii)
+const homeStars = [
+  { left: '7%', top: '18%', size: 1 },
+  { left: '15%', top: '72%', size: 2 },
+  { left: '22%', top: '34%', size: 1 },
+  { left: '31%', top: '14%', size: 1 },
+  { left: '39%', top: '79%', size: 1 },
+  { left: '48%', top: '24%', size: 2 },
+  { left: '58%', top: '68%', size: 1 },
+  { left: '66%', top: '19%', size: 1 },
+  { left: '74%', top: '82%', size: 2 },
+  { left: '82%', top: '38%', size: 1 },
+  { left: '91%', top: '16%', size: 1 },
+  { left: '94%', top: '63%', size: 1 },
+]
 const projects = [
   {
     title: 'PORTFOLIO INTERFACE SYSTEM',
@@ -61,90 +72,6 @@ const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => p
 
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
-}
-
-function getMoonBrightness(lines, x, y) {
-  const char = lines[y]?.[x] ?? ' '
-  const rampIndex = moonRamp.indexOf(char)
-
-  if (rampIndex === -1) {
-    return char === ' ' ? 0 : 0.7
-  }
-
-  return rampIndex / (moonRamp.length - 1)
-}
-
-function getMoonUnit(brightness) {
-  if (brightness < 0.045) {
-    return ' '
-  }
-
-  return moonRamp[Math.min(moonRamp.length - 1, Math.round(brightness * (moonRamp.length - 1)))]
-}
-
-function createMoonFrames(source) {
-  const lines = source.split('\n')
-  const width = Math.max(...lines.map((line) => line.length))
-  const sourceLines = lines.map((line) => line.padEnd(width, ' '))
-  const frameCount = 96
-  let minX = width
-  let maxX = 0
-  let minY = sourceLines.length
-  let maxY = 0
-
-  sourceLines.forEach((line, y) => {
-    Array.from(line).forEach((char, x) => {
-      if (char !== ' ') {
-        minX = Math.min(minX, x)
-        maxX = Math.max(maxX, x)
-        minY = Math.min(minY, y)
-        maxY = Math.max(maxY, y)
-      }
-    })
-  })
-
-  const sourceWidth = maxX - minX + 1
-  const sourceHeight = maxY - minY + 1
-  const outputWidth = sourceWidth
-  const outputHeight = sourceHeight
-  const centerX = (outputWidth - 1) / 2
-  const centerY = (outputHeight - 1) / 2
-  const radiusX = outputWidth / 2
-  const radiusY = outputHeight / 2
-
-  return Array.from({ length: frameCount }, (_, frame) => {
-    const phase = (frame / frameCount) * Math.PI * 2
-    const rows = []
-
-    for (let y = 0; y < outputHeight; y += 1) {
-      const yRatio = (y - centerY) / radiusY
-      let row = ''
-
-      for (let x = 0; x < outputWidth; x += 1) {
-        const xRatio = (x - centerX) / radiusX
-        const spherePosition = xRatio * xRatio + yRatio * yRatio
-
-        if (spherePosition > 1 || xRatio < -0.04) {
-          row += ' '
-          continue
-        }
-
-        const zRatio = Math.sqrt(Math.max(0, 1 - spherePosition))
-        const longitude = Math.atan2(zRatio, xRatio) + phase
-        const textureX =
-          minX + Math.floor((((longitude / (Math.PI * 2)) % 1) + 1) % 1 * sourceWidth)
-        const textureY = minY + y
-        const sourceBrightness = getMoonBrightness(sourceLines, textureX, textureY)
-        const sideLight = Math.min(1, 0.26 + xRatio * 0.68 + zRatio * 0.18)
-
-        row += getMoonUnit(sourceBrightness * sideLight)
-      }
-
-      rows.push(row)
-    }
-
-    return rows.join('\n')
-  })
 }
 
 const MenuIcon = memo(function MenuIcon({ open }) {
@@ -288,23 +215,20 @@ const AsciiPortrait = memo(function AsciiPortrait() {
   )
 })
 
-const BloodMoonAscii = memo(function BloodMoonAscii() {
-  const [frameIndex, setFrameIndex] = useState(0)
-
-  useEffect(() => {
-    const frameTimer = window.setInterval(() => {
-      setFrameIndex((current) => (current + 1) % moonFrames.length)
-    }, 110)
-
-    return () => {
-      window.clearInterval(frameTimer)
-    }
-  }, [])
-
+const StarField = memo(function StarField() {
   return (
-    <pre className="blood-moon-ascii" aria-hidden="true">
-      {moonFrames[frameIndex]}
-    </pre>
+    <div className="star-field" aria-hidden="true">
+      {homeStars.map((star) => (
+        <span
+          key={`${star.left}-${star.top}`}
+          style={{
+            '--star-left': star.left,
+            '--star-top': star.top,
+            '--star-size': `${star.size}px`,
+          }}
+        />
+      ))}
+    </div>
   )
 })
 
@@ -324,7 +248,7 @@ function HeroName({ logo }) {
 function HomeView({ activeTheme, transitioning }) {
   return (
     <section className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}>
-      <BloodMoonAscii />
+      <StarField />
       <HeroName logo={activeTheme.logo} />
     </section>
   )

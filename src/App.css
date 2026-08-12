@@ -1,11 +1,33 @@
 .portfolio-page {
   --theme-color: #df32aa;
+  --scrollbar-size: 6px;
+  --scrollbar-track: rgba(255, 255, 255, 0.08);
+  --scrollbar-thumb: var(--theme-color);
   min-height: 100vh;
   width: 100%;
   background: #000000;
   color: #ffffff;
   position: relative;
   overflow: hidden;
+}
+
+.portfolio-page,
+.portfolio-page * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.portfolio-page *::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+.portfolio-page *::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+.portfolio-page *::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
 }
 
 .portfolio-page.theme-ember {
@@ -40,26 +62,21 @@
   animation: theme-cycle-out 420ms steps(15, end) forwards;
 }
 
-.blood-moon-ascii {
-  margin: 0;
+.star-field {
   position: absolute;
-  top: 50%;
-  left: 0;
-  width: 83ch;
-  height: 28.56em;
-  overflow: hidden;
-  transform: translate(-50%, -50%) scaleX(0.58);
-  transform-origin: center;
-  color: rgba(255, 255, 255, 0.56);
-  font-family: var(--font-mono);
-  font-size: clamp(16px, 1.6vw, 30px);
-  line-height: 0.68;
-  letter-spacing: 0;
-  white-space: pre;
-  font-variant-ligatures: none;
+  inset: 0;
   pointer-events: none;
   user-select: none;
   z-index: 1;
+}
+
+.star-field span {
+  width: var(--star-size);
+  height: var(--star-size);
+  position: absolute;
+  left: var(--star-left);
+  top: var(--star-top);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .hero-name {
@@ -383,20 +400,6 @@
   overflow-x: hidden;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: var(--theme-color) rgba(255, 255, 255, 0.08);
-}
-
-.project-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.project-list::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.project-list::-webkit-scrollbar-thumb {
-  background: var(--theme-color);
 }
 
 .project-list.is-out .project-row {
@@ -1080,12 +1083,6 @@
 @media (max-width: 420px) {
   .portfolio-menu {
     width: 100vw;
-  }
-
-  .blood-moon-ascii {
-    font-size: 10px;
-    line-height: 0.68;
-    transform: translate(-50%, -50%) scaleX(0.58);
   }
 
   .hero-name {
