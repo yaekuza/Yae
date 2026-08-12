@@ -45,15 +45,14 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scaleX(0.58);
+  transform: translate(-50%, -50%) scaleX(0.72);
   transform-origin: center;
-  color: rgba(255, 72, 20, 0.62);
+  color: rgba(255, 255, 255, 0.56);
   font-family: var(--font-mono);
-  font-size: clamp(4px, 0.43vw, 7.8px);
-  line-height: 0.66;
+  font-size: clamp(8px, 0.86vw, 15px);
+  line-height: 0.68;
   letter-spacing: 0;
   white-space: pre;
-  text-shadow: 0 0 18px rgba(255, 72, 20, 0.2);
   pointer-events: none;
   user-select: none;
   z-index: 1;
@@ -1080,9 +1079,9 @@
   }
 
   .blood-moon-ascii {
-    font-size: 3.8px;
-    line-height: 0.64;
-    transform: translate(-50%, -50%) scaleX(0.52);
+    font-size: 6px;
+    line-height: 0.66;
+    transform: translate(-50%, -50%) scaleX(0.62);
   }
 
   .hero-name {

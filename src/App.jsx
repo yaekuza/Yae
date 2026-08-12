@@ -17,6 +17,8 @@ const asciiRows = 25
 const asciiColumns = 50
 const asciiInventory = ['J', 'O', 'R', 'G', 'E', '/', '>', '.', '']
 const asciiCells = Array.from({ length: asciiRows * asciiColumns }, (_, index) => getAsciiUnit(index))
+const moonRamp = ' .,:;irsXA253hMHGS#9B&@'
+const moonFrames = createMoonFrames(bloodMoonAscii)
 const projects = [
   {
     title: 'PORTFOLIO INTERFACE SYSTEM',
@@ -59,6 +61,87 @@ const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => p
 
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
+}
+
+function getMoonBrightness(lines, x, y) {
+  const char = lines[y]?.[x] ?? ' '
+  const rampIndex = moonRamp.indexOf(char)
+
+  if (rampIndex === -1) {
+    return char === ' ' ? 0 : 0.7
+  }
+
+  return rampIndex / (moonRamp.length - 1)
+}
+
+function getMoonUnit(brightness) {
+  if (brightness < 0.045) {
+    return ' '
+  }
+
+  return moonRamp[Math.min(moonRamp.length - 1, Math.round(brightness * (moonRamp.length - 1)))]
+}
+
+function createMoonFrames(source) {
+  const lines = source.split('\n')
+  const width = Math.max(...lines.map((line) => line.length))
+  const sourceLines = lines.map((line) => line.padEnd(width, ' '))
+  const frameCount = 96
+  let minX = width
+  let maxX = 0
+  let minY = sourceLines.length
+  let maxY = 0
+
+  sourceLines.forEach((line, y) => {
+    Array.from(line).forEach((char, x) => {
+      if (char !== ' ') {
+        minX = Math.min(minX, x)
+        maxX = Math.max(maxX, x)
+        minY = Math.min(minY, y)
+        maxY = Math.max(maxY, y)
+      }
+    })
+  })
+
+  const outputWidth = maxX - minX + 1
+  const outputHeight = maxY - minY + 1
+  const centerX = (outputWidth - 1) / 2
+  const centerY = (outputHeight - 1) / 2
+  const radiusX = outputWidth / 2
+  const radiusY = outputHeight / 2
+
+  return Array.from({ length: frameCount }, (_, frame) => {
+    const phase = (frame / frameCount) * Math.PI * 2
+    let output = ''
+
+    for (let y = 0; y < outputHeight; y += 1) {
+      const yRatio = (y - centerY) / radiusY
+
+      for (let x = 0; x < outputWidth; x += 1) {
+        const xRatio = (x - centerX) / radiusX
+        const spherePosition = xRatio * xRatio + yRatio * yRatio
+
+        if (spherePosition > 1 || xRatio < -0.04) {
+          output += ' '
+          continue
+        }
+
+        const zRatio = Math.sqrt(Math.max(0, 1 - spherePosition))
+        const longitude = Math.atan2(zRatio, xRatio) + phase
+        const textureX =
+          minX + Math.floor((((longitude / (Math.PI * 2)) % 1) + 1) % 1 * outputWidth)
+        const textureY = minY + y
+        const sourceBrightness = getMoonBrightness(sourceLines, textureX, textureY)
+        const sideLight = Math.min(1, 0.26 + xRatio * 0.68 + zRatio * 0.18)
+
+        output += getMoonUnit(sourceBrightness * sideLight)
+      }
+
+      output += '\n'
+    }
+
+    return output
+  })
 }
 
 const MenuIcon = memo(function MenuIcon({ open }) {
@@ -203,9 +286,21 @@ const AsciiPortrait = memo(function AsciiPortrait() {
 })
 
 const BloodMoonAscii = memo(function BloodMoonAscii() {
+  const [frameIndex, setFrameIndex] = useState(0)
+
+  useEffect(() => {
+    const frameTimer = window.setInterval(() => {
+      setFrameIndex((current) => (current + 1) % moonFrames.length)
+    }, 110)
+
+    return () => {
+      window.clearInterval(frameTimer)
+    }
+  }, [])
+
   return (
     <pre className="blood-moon-ascii" aria-hidden="true">
-      {bloodMoonAscii}
+      {moonFrames[frameIndex]}
     </pre>
   )
 })
