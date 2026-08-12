@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import profileAscii from './assets/profile-ascii.txt?raw'
-import aboutAscii from './assets/about-ascii.txt?raw'
 import blueLogo from './assets/bluelogo.png'
 import orangeLogo from './assets/orangelogo.png'
 import pinkLogo from './assets/pinklogo.png'
@@ -17,6 +16,30 @@ const asciiRows = 25
 const asciiColumns = 50
 const asciiInventory = ['J', 'O', 'R', 'G', 'E', '/', '>', '.', '']
 const asciiCells = Array.from({ length: asciiRows * asciiColumns }, (_, index) => getAsciiUnit(index))
+const moonAscii = `
+                 ....                 
+             .:oxOOOxo:.             
+          .:d0XXXXXXXX0d:.           
+        .oKXXXXXXXXXXXXXXKo.         
+      .dKXXXXXXXXXXXXXXXXXXKd.       
+     :0XXXXXXXXXXXXXXXXXXXXXX0:      
+    lXXXXXXXXXXXXXXXXXXXXXXXXXXl     
+   oXXXXXXXXXXXXXXXXXXXXXXXXXXXXo    
+  cXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXc   
+  OXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXO   
+ .XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.  
+ .XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.  
+  OXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXO   
+  cXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXc   
+   oXXXXXXXXXXXXXXXXXXXXXXXXXXXXo    
+    lXXXXXXXXXXXXXXXXXXXXXXXXXXl     
+     :0XXXXXXXXXXXXXXXXXXXXXX0:      
+      .dKXXXXXXXXXXXXXXXXXXKd.       
+        .oKXXXXXXXXXXXXXXKo.         
+          .:d0XXXXXXXX0d:.           
+             .:oxOOOxo:.             
+                 ....                 
+`
 const projects = [
   {
     title: 'PORTFOLIO INTERFACE SYSTEM',
@@ -196,16 +219,16 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect }) {
 
 const AsciiPortrait = memo(function AsciiPortrait() {
   return (
-    <pre className="ascii-portrait" aria-label="ASCII portrait of Jorge Simoes">
+    <pre className="about-ascii-image" aria-label="ASCII portrait of Jorge Simoes">
       {profileAscii}
     </pre>
   )
 })
 
-const AboutAsciiImage = memo(function AboutAsciiImage() {
+const AsciiMoon = memo(function AsciiMoon() {
   return (
-    <pre className="about-ascii-image" aria-label="ASCII about page visual">
-      {aboutAscii}
+    <pre className="ascii-moon" aria-hidden="true">
+      {moonAscii}
     </pre>
   )
 })
@@ -226,7 +249,7 @@ function HeroName({ logo }) {
 function HomeView({ activeTheme, transitioning }) {
   return (
     <section className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}>
-      <AsciiPortrait />
+      <AsciiMoon />
       <HeroName logo={activeTheme.logo} />
     </section>
   )
@@ -272,8 +295,7 @@ function AboutView({ phase }) {
           </p>
           <p>Outside of development, I spend my time bouldering, taking photos, and gaming.</p>
         </div>
-
-        <AboutAsciiImage />
+        <AsciiPortrait />
       </div>
     </section>
   )

@@ -40,16 +40,16 @@
   animation: theme-cycle-out 420ms steps(15, end) forwards;
 }
 
-.ascii-portrait {
+.ascii-moon {
   margin: 0;
   position: absolute;
   top: 50%;
-  left: 51%;
-  transform: translate(-50%, -50%) scaleX(0.62);
-  color: rgba(255, 255, 255, 0.56);
+  left: 50%;
+  transform: translate(-50%, -50%) scaleX(0.78);
+  color: rgba(255, 255, 255, 0.14);
   font-family: var(--font-mono);
-  font-size: calc(82vh / 90 / 0.8);
-  line-height: 0.72;
+  font-size: clamp(8px, 1.18vw, 18px);
+  line-height: 0.82;
   letter-spacing: 0;
   white-space: pre;
   transform-origin: center;
@@ -60,34 +60,39 @@
 
 .hero-name {
   margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18em;
   z-index: 2;
   color: var(--theme-color);
   font-family: var(--font-sans);
+  font-size: clamp(72px, 9.5vw, 138px);
   font-weight: 800;
   line-height: 0.86;
   pointer-events: none;
   user-select: none;
+  white-space: nowrap;
 }
 
 .hero-first,
 .hero-last {
-  position: absolute;
+  position: static;
   display: block;
-  color: var(--theme-color);
+  color: inherit;
+  font-size: inherit;
   white-space: nowrap;
 }
 
 .hero-first {
-  top: 8vh;
-  left: 2.1vw;
-  font-size: clamp(88px, 13.5vw, 164px);
   letter-spacing: 0;
 }
 
 .hero-last {
-  right: 2.1vw;
-  bottom: 8vh;
-  font-size: clamp(82px, 12.8vw, 156px);
   letter-spacing: 0;
 }
 
@@ -251,12 +256,14 @@
 .about-ascii-image {
   margin: 0;
   justify-self: end;
-  color: rgba(255, 255, 255, 0.54);
+  color: rgba(255, 255, 255, 0.56);
   font-family: var(--font-mono);
-  font-size: clamp(4.4px, 0.54vw, 7px);
-  line-height: 0.74;
+  font-size: calc(82vh / 90 / 0.8);
+  line-height: 0.72;
   letter-spacing: 0;
   white-space: pre;
+  transform: scaleX(0.62);
+  transform-origin: center;
   user-select: none;
   pointer-events: none;
 }
@@ -1071,24 +1078,14 @@
     width: 100vw;
   }
 
-  .ascii-portrait {
-    top: 47%;
-    left: 54%;
-    transform: translate(-50%, -50%) scaleX(0.46);
-    font-size: calc(62vh / 90 / 0.76);
-    line-height: 0.7;
+  .ascii-moon {
+    font-size: 8px;
+    transform: translate(-50%, -50%) scaleX(0.68);
   }
 
-  .hero-first {
-    top: 48px;
-    left: 8px;
-    font-size: clamp(54px, 18vw, 82px);
-  }
-
-  .hero-last {
-    right: 8px;
-    bottom: 48px;
-    font-size: clamp(48px, 17vw, 74px);
+  .hero-name {
+    gap: 0.14em;
+    font-size: clamp(38px, 12vw, 54px);
   }
 
   .about-view {
@@ -1121,8 +1118,9 @@
   }
 
   .about-ascii-image {
-    font-size: 3.8px;
-    line-height: 0.72;
+    font-size: calc(62vh / 90 / 0.76);
+    line-height: 0.7;
+    transform: scaleX(0.46);
     justify-self: end;
   }
 
