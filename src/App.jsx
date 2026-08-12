@@ -194,7 +194,7 @@ function HeroName({ logo }) {
   return (
     <h1 className="hero-name">
       <span className="hero-first">
-        J<img src={logo} alt="O" />RGE
+        JORGE
       </span>
       <span className="hero-last">
         SIM<img src={logo} alt="O" />ES

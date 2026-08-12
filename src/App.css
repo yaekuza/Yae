@@ -78,8 +78,8 @@
 }
 
 .hero-first {
-  top: 12vh;
-  left: 1.2vw;
+  top: 8vh;
+  left: 2.1vw;
   font-size: clamp(88px, 13.5vw, 164px);
   letter-spacing: 0;
 }
@@ -1080,7 +1080,7 @@
   }
 
   .hero-first {
-    top: 88px;
+    top: 48px;
     left: 8px;
     font-size: clamp(54px, 18vw, 82px);
   }
