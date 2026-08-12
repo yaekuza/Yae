@@ -4,6 +4,7 @@ import profileAscii from './assets/profile-ascii.txt?raw'
 import blueLogo from './assets/bluelogo.png'
 import orangeLogo from './assets/orangelogo.png'
 import pinkLogo from './assets/pinklogo.png'
+import bloodMoon from './assets/BloodMascci.png'
 
 const themes = [
   { name: 'ember', color: '#ff4b18', logo: orangeLogo },
@@ -16,30 +17,6 @@ const asciiRows = 25
 const asciiColumns = 50
 const asciiInventory = ['J', 'O', 'R', 'G', 'E', '/', '>', '.', '']
 const asciiCells = Array.from({ length: asciiRows * asciiColumns }, (_, index) => getAsciiUnit(index))
-const moonAscii = `
-                 ....                 
-             .:oxOOOxo:.             
-          .:d0XXXXXXXX0d:.           
-        .oKXXXXXXXXXXXXXXKo.         
-      .dKXXXXXXXXXXXXXXXXXXKd.       
-     :0XXXXXXXXXXXXXXXXXXXXXX0:      
-    lXXXXXXXXXXXXXXXXXXXXXXXXXXl     
-   oXXXXXXXXXXXXXXXXXXXXXXXXXXXXo    
-  cXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXc   
-  OXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXO   
- .XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.  
- .XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.  
-  OXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXO   
-  cXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXc   
-   oXXXXXXXXXXXXXXXXXXXXXXXXXXXXo    
-    lXXXXXXXXXXXXXXXXXXXXXXXXXXl     
-     :0XXXXXXXXXXXXXXXXXXXXXX0:      
-      .dKXXXXXXXXXXXXXXXXXXKd.       
-        .oKXXXXXXXXXXXXXXKo.         
-          .:d0XXXXXXXX0d:.           
-             .:oxOOOxo:.             
-                 ....                 
-`
 const projects = [
   {
     title: 'PORTFOLIO INTERFACE SYSTEM',
@@ -225,11 +202,9 @@ const AsciiPortrait = memo(function AsciiPortrait() {
   )
 })
 
-const AsciiMoon = memo(function AsciiMoon() {
+const BloodMoon = memo(function BloodMoon() {
   return (
-    <pre className="ascii-moon" aria-hidden="true">
-      {moonAscii}
-    </pre>
+    <img className="blood-moon" src={bloodMoon} alt="" aria-hidden="true" />
   )
 })
 
@@ -249,7 +224,7 @@ function HeroName({ logo }) {
 function HomeView({ activeTheme, transitioning }) {
   return (
     <section className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}>
-      <AsciiMoon />
+      <BloodMoon />
       <HeroName logo={activeTheme.logo} />
     </section>
   )

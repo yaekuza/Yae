@@ -40,19 +40,17 @@
   animation: theme-cycle-out 420ms steps(15, end) forwards;
 }
 
-.ascii-moon {
-  margin: 0;
+.blood-moon {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scaleX(0.78);
-  color: rgba(255, 255, 255, 0.14);
-  font-family: var(--font-mono);
-  font-size: clamp(8px, 1.18vw, 18px);
-  line-height: 0.82;
-  letter-spacing: 0;
-  white-space: pre;
+  width: min(74vw, 980px);
+  height: auto;
+  transform: translate(-50%, -50%);
   transform-origin: center;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: contrast(1.08) saturate(1.08);
   pointer-events: none;
   user-select: none;
   z-index: 1;
@@ -1078,9 +1076,8 @@
     width: 100vw;
   }
 
-  .ascii-moon {
-    font-size: 8px;
-    transform: translate(-50%, -50%) scaleX(0.68);
+  .blood-moon {
+    width: min(150vw, 720px);
   }
 
   .hero-name {
