@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useRef, useState } from 'react'
 import './App.css'
 import profileAscii from './assets/profile-ascii.txt?raw'
 import aboutAscii from './assets/about-ascii.txt?raw'
@@ -261,10 +261,34 @@ function AboutView({ phase }) {
 
 function ProjectsView({ phase }) {
   const [activeFilter, setActiveFilter] = useState('ALL')
+  const [filterPhase, setFilterPhase] = useState('idle')
+  const filterTimeoutRef = useRef()
+  const filterResetTimeoutRef = useRef()
   const filteredProjects =
     activeFilter === 'ALL'
       ? projects
       : projects.filter((project) => project.language === activeFilter)
+  const handleFilterSelect = useCallback(
+    (filter) => {
+      if (filter === activeFilter || filterPhase !== 'idle') {
+        return
+      }
+
+      window.clearTimeout(filterTimeoutRef.current)
+      window.clearTimeout(filterResetTimeoutRef.current)
+      setFilterPhase('out')
+
+      filterTimeoutRef.current = window.setTimeout(() => {
+        setActiveFilter(filter)
+        setFilterPhase('in')
+      }, 360)
+
+      filterResetTimeoutRef.current = window.setTimeout(() => {
+        setFilterPhase('idle')
+      }, 780)
+    },
+    [activeFilter, filterPhase],
+  )
 
   return (
     <section className={`view-layer projects-view page-phase-${phase}`} id="projects">
@@ -276,7 +300,7 @@ function ProjectsView({ phase }) {
             <button
               type="button"
               className={activeFilter === filter ? 'is-active' : ''}
-              onClick={() => setActiveFilter(filter)}
+              onClick={() => handleFilterSelect(filter)}
               key={filter}
             >
               {filter}
@@ -284,13 +308,27 @@ function ProjectsView({ phase }) {
           ))}
         </div>
 
-        <div className="project-list">
-          {filteredProjects.map((project) => (
-            <a className="project-row" href="#projects" key={project.title}>
+        <div className={`project-list is-${filterPhase}`}>
+          {filteredProjects.map((project, index) => (
+            <a
+              className="project-row"
+              href="#projects"
+              key={project.title}
+              style={{
+                '--project-row-index': index,
+                '--project-row-out-index': filteredProjects.length - index - 1,
+              }}
+            >
               <span className="project-row-title">{project.title}</span>
               <span className="project-row-summary">{project.summary}</span>
               <span className="project-row-language">{project.language}</span>
-              <span className="project-row-mark" aria-hidden="true" />
+              <span className="project-row-mark" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+              </span>
             </a>
           ))}
         </div>

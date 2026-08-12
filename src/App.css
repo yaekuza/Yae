@@ -111,8 +111,12 @@
 
 .projects-view {
   --project-line: rgba(255, 255, 255, 0.13);
+  --project-gutter: clamp(30px, 5.6vw, 96px);
+  --project-title-space: clamp(210px, 23vw, 330px);
+  --project-summary-space: clamp(280px, 35vw, 520px);
   padding-top: 68px;
   gap: 0;
+  overflow: hidden;
 }
 
 .section-header {
@@ -259,10 +263,11 @@
 
 .projects-list-view {
   min-height: 0;
-  padding: 23px 5px 46px;
+  padding: 23px var(--project-gutter) 46px;
   display: grid;
-  grid-template-rows: min-content 1fr;
+  grid-template-rows: min-content minmax(0, 1fr);
   align-content: start;
+  overflow: hidden;
   animation: page-content-in 320ms 160ms ease both;
 }
 
@@ -274,23 +279,25 @@
 }
 
 .projects-list-header h1 {
-  margin: 13px 0 0;
-  color: #ffffff;
+  margin: 28px 0 0;
+  color: #f2f2f2;
   font-family: var(--font-sans);
-  font-size: clamp(42px, 4vw, 58px);
+  font-size: 48px;
   font-weight: 400;
   line-height: 0.86;
   text-align: center;
   opacity: 0;
+  text-rendering: geometricPrecision;
 }
 
 .projects-count {
   position: absolute;
-  left: 5px;
+  left: var(--project-gutter);
   bottom: 5px;
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.58);
   font-family: var(--font-mono);
   font-size: 10px;
+  font-weight: 800;
   line-height: 1;
   opacity: 0;
 }
@@ -331,14 +338,14 @@
 }
 
 .project-filters button {
-  min-height: 34px;
+  min-height: 38px;
   border: 0;
   border-radius: 0;
   background: rgba(255, 255, 255, 0.06);
   color: #ffffff;
-  padding: 0 14px;
+  padding: 0 16px;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   line-height: 1;
   transition:
@@ -359,15 +366,46 @@
 }
 
 .project-list {
-  margin-top: 47px;
+  min-height: 0;
+  margin: 47px calc(var(--project-gutter) * -1) 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-color) rgba(255, 255, 255, 0.08);
+}
+
+.project-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.project-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.project-list::-webkit-scrollbar-thumb {
+  background: var(--theme-color);
+}
+
+.project-list.is-out .project-row {
+  animation: project-row-out 260ms cubic-bezier(0.7, 0, 0.84, 0) both;
+  animation-delay: calc(var(--project-row-out-index) * 42ms);
+}
+
+.project-list.is-in .project-row {
+  animation: project-row-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--project-row-index) * 48ms);
 }
 
 .project-row {
   min-height: 82px;
   display: grid;
-  grid-template-columns: minmax(220px, 1.25fr) minmax(280px, 1.7fr) minmax(90px, 0.32fr) 20px;
+  grid-template-columns: var(--project-title-space) var(--project-summary-space) 96px 18px;
   align-items: center;
-  gap: clamp(18px, 4vw, 66px);
+  justify-content: space-between;
+  gap: clamp(22px, 3vw, 52px);
+  padding: 0 calc(var(--project-gutter) + clamp(18px, 2.2vw, 36px));
   border-top: 1px solid var(--project-line);
   border-bottom: 1px solid var(--project-line);
   color: #ffffff;
@@ -396,20 +434,27 @@
 .project-row-title {
   position: relative;
   z-index: 1;
+  color: #f2f2f2;
   font-family: var(--font-sans);
   font-size: clamp(15px, 1.2vw, 18px);
-  font-weight: 800;
+  font-weight: 500;
   line-height: 1.05;
   text-transform: uppercase;
+  text-rendering: geometricPrecision;
+  overflow-wrap: break-word;
 }
 
 .project-row-summary {
   position: relative;
   z-index: 1;
-  color: rgba(255, 255, 255, 0.38);
-  font-family: var(--font-roman);
-  font-size: clamp(15px, 1.1vw, 18px);
-  line-height: 1.32;
+  max-width: var(--project-summary-space);
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-sans);
+  font-size: clamp(14px, 1vw, 16px);
+  font-weight: 500;
+  line-height: 1.24;
+  text-rendering: geometricPrecision;
+  overflow-wrap: break-word;
   transition: color 180ms ease;
 }
 
@@ -424,29 +469,86 @@
 }
 
 .project-row-mark {
-  width: 9px;
-  height: 9px;
+  width: 30px;
+  height: 18px;
   justify-self: end;
-  background:
-    linear-gradient(var(--theme-color) 0 0) left top / 3px 3px no-repeat,
-    linear-gradient(var(--theme-color) 0 0) right top / 3px 3px no-repeat,
-    linear-gradient(var(--theme-color) 0 0) left bottom / 3px 3px no-repeat,
-    linear-gradient(var(--theme-color) 0 0) right bottom / 3px 3px no-repeat;
-  transition: background 180ms ease;
+  position: relative;
+}
+
+.project-row-mark span {
+  width: 4px;
+  height: 4px;
+  background: var(--theme-color);
+  position: absolute;
+  transition:
+    background-color 180ms ease,
+    left 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    top 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.project-row-mark span:nth-child(1) {
+  left: 8px;
+  top: 3px;
+}
+
+.project-row-mark span:nth-child(2) {
+  left: 11px;
+  top: 8px;
+}
+
+.project-row-mark span:nth-child(3) {
+  left: 14px;
+  top: 13px;
+}
+
+.project-row-mark span:nth-child(4) {
+  left: 17px;
+  top: 8px;
+}
+
+.project-row-mark span:nth-child(5) {
+  left: 20px;
+  top: 3px;
 }
 
 .project-row:hover .project-row-summary,
 .project-row:focus-visible .project-row-summary {
-  color: rgba(0, 0, 0, 0.62);
+  color: rgba(0, 0, 0, 0.76);
 }
 
-.project-row:hover .project-row-mark,
-.project-row:focus-visible .project-row-mark {
-  background:
-    linear-gradient(#000000 0 0) left top / 3px 3px no-repeat,
-    linear-gradient(#000000 0 0) right top / 3px 3px no-repeat,
-    linear-gradient(#000000 0 0) left bottom / 3px 3px no-repeat,
-    linear-gradient(#000000 0 0) right bottom / 3px 3px no-repeat;
+.project-row:hover .project-row-mark span,
+.project-row:focus-visible .project-row-mark span {
+  background-color: #000000;
+}
+
+.project-row:hover .project-row-mark span:nth-child(1),
+.project-row:focus-visible .project-row-mark span:nth-child(1) {
+  left: 8px;
+  top: 2px;
+}
+
+.project-row:hover .project-row-mark span:nth-child(2),
+.project-row:focus-visible .project-row-mark span:nth-child(2) {
+  left: 13px;
+  top: 5px;
+}
+
+.project-row:hover .project-row-mark span:nth-child(3),
+.project-row:focus-visible .project-row-mark span:nth-child(3) {
+  left: 18px;
+  top: 8px;
+}
+
+.project-row:hover .project-row-mark span:nth-child(4),
+.project-row:focus-visible .project-row-mark span:nth-child(4) {
+  left: 13px;
+  top: 11px;
+}
+
+.project-row:hover .project-row-mark span:nth-child(5),
+.project-row:focus-visible .project-row-mark span:nth-child(5) {
+  left: 8px;
+  top: 14px;
 }
 
 .portfolio-menu {
@@ -872,6 +974,30 @@
   }
 }
 
+@keyframes project-row-out {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+@keyframes project-row-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @keyframes theme-cycle-out {
   0% {
     color: #ff4b18;
@@ -1001,6 +1127,8 @@
   }
 
   .projects-view {
+    --project-gutter: 18px;
+    --project-summary-space: 100%;
     padding: 68px 0 32px;
     gap: 0;
   }
@@ -1010,12 +1138,11 @@
   }
 
   .projects-list-header h1 {
-    margin-top: 18px;
-    font-size: clamp(34px, 11vw, 46px);
+    margin-top: 27px;
   }
 
   .projects-list-view {
-    padding: 23px 5px 32px;
+    padding: 23px var(--project-gutter) 32px;
   }
 
   .project-filters {
@@ -1023,20 +1150,20 @@
   }
 
   .project-filters button {
-    min-height: 31px;
-    padding: 0 10px;
-    font-size: 9px;
+    min-height: 34px;
+    padding: 0 12px;
+    font-size: 10px;
   }
 
   .project-list {
-    margin-top: 46px;
+    margin: 46px calc(var(--project-gutter) * -1) 0;
   }
 
   .project-row {
     min-height: 116px;
-    grid-template-columns: 1fr 56px 12px;
+    grid-template-columns: 1fr 56px 30px;
     gap: 12px;
-    padding: 12px 0;
+    padding: 12px calc(var(--project-gutter) + 14px);
   }
 
   .project-row-title {
@@ -1047,6 +1174,7 @@
   .project-row-summary {
     grid-column: 1;
     font-size: 14px;
+    max-width: 100%;
   }
 
   .project-row-language {
