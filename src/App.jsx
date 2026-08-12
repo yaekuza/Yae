@@ -103,8 +103,10 @@ function createMoonFrames(source) {
     })
   })
 
-  const outputWidth = maxX - minX + 1
-  const outputHeight = maxY - minY + 1
+  const sourceWidth = maxX - minX + 1
+  const sourceHeight = maxY - minY + 1
+  const outputWidth = sourceWidth
+  const outputHeight = sourceHeight
   const centerX = (outputWidth - 1) / 2
   const centerY = (outputHeight - 1) / 2
   const radiusX = outputWidth / 2
@@ -112,35 +114,36 @@ function createMoonFrames(source) {
 
   return Array.from({ length: frameCount }, (_, frame) => {
     const phase = (frame / frameCount) * Math.PI * 2
-    let output = ''
+    const rows = []
 
     for (let y = 0; y < outputHeight; y += 1) {
       const yRatio = (y - centerY) / radiusY
+      let row = ''
 
       for (let x = 0; x < outputWidth; x += 1) {
         const xRatio = (x - centerX) / radiusX
         const spherePosition = xRatio * xRatio + yRatio * yRatio
 
         if (spherePosition > 1 || xRatio < -0.04) {
-          output += ' '
+          row += ' '
           continue
         }
 
         const zRatio = Math.sqrt(Math.max(0, 1 - spherePosition))
         const longitude = Math.atan2(zRatio, xRatio) + phase
         const textureX =
-          minX + Math.floor((((longitude / (Math.PI * 2)) % 1) + 1) % 1 * outputWidth)
+          minX + Math.floor((((longitude / (Math.PI * 2)) % 1) + 1) % 1 * sourceWidth)
         const textureY = minY + y
         const sourceBrightness = getMoonBrightness(sourceLines, textureX, textureY)
         const sideLight = Math.min(1, 0.26 + xRatio * 0.68 + zRatio * 0.18)
 
-        output += getMoonUnit(sourceBrightness * sideLight)
+        row += getMoonUnit(sourceBrightness * sideLight)
       }
 
-      output += '\n'
+      rows.push(row)
     }
 
-    return output
+    return rows.join('\n')
   })
 }
 
