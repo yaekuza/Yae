@@ -558,12 +558,10 @@
 
 .portfolio-menu {
   --theme-color: #5517ff;
-  --menu-line: rgba(242, 242, 242, 0.025);
+  --menu-line: #f2f2f20f;
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
   background: var(--menu-line);
-  backdrop-filter: blur(16px) saturate(1.08);
-  -webkit-backdrop-filter: blur(16px) saturate(1.08);
   color: #ffffff;
   position: fixed;
   top: 12px;
@@ -572,6 +570,12 @@
   z-index: 10;
   font-family: var(--font-mono);
   transform-origin: top center;
+}
+
+.portfolio-menu:not(.is-open),
+.portfolio-menu:not(.is-open) .menu-top {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .portfolio-menu.theme-ember {
@@ -592,8 +596,6 @@
   grid-template-columns: 64px 1fr 64px;
   align-items: center;
   background: var(--menu-line);
-  backdrop-filter: blur(16px) saturate(1.08);
-  -webkit-backdrop-filter: blur(16px) saturate(1.08);
   cursor: pointer;
   user-select: none;
   position: relative;
