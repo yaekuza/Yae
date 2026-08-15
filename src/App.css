@@ -558,7 +558,7 @@
 
 .portfolio-menu {
   --theme-color: #5517ff;
-  --menu-line: rgba(242, 242, 242, 0.07);
+  --menu-line: rgba(242, 242, 242, 0.14);
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
   background: var(--menu-line);
