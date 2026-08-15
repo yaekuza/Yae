@@ -727,7 +727,8 @@
   grid-template-columns: 54px 1fr 54px;
   align-items: center;
   background-color: #000000;
-  border-bottom: var(--menu-gap) solid var(--menu-line);
+  background-clip: padding-box;
+  border-bottom: var(--menu-gap) solid transparent;
   color: #ffffff;
   overflow: hidden;
   text-transform: uppercase;
@@ -796,7 +797,8 @@
   place-items: center;
   overflow: hidden;
   background: #000000;
-  border-bottom: 4px solid var(--menu-line);
+  background-clip: padding-box;
+  border-bottom: 4px solid transparent;
   color: rgba(255, 255, 255, 0.42);
   font-family: var(--font-mono);
   font-size: 7px;
@@ -819,7 +821,8 @@
   height: 28px;
   padding: 13px 2px 12px;
   background: #000000;
-  border-bottom: var(--menu-gap) solid var(--menu-line);
+  background-clip: padding-box;
+  border-bottom: var(--menu-gap) solid transparent;
   position: relative;
 }
 
@@ -876,6 +879,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--menu-gap);
   background: var(--menu-line);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 }
 
 .theme-selector button {
