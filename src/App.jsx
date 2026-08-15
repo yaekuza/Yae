@@ -16,20 +16,6 @@ const asciiRows = 25
 const asciiColumns = 50
 const asciiInventory = ['J', 'O', 'R', 'G', 'E', '/', '>', '.', '']
 const asciiCells = Array.from({ length: asciiRows * asciiColumns }, (_, index) => getAsciiUnit(index))
-const homeStars = [
-  { left: '7%', top: '18%', size: 1 },
-  { left: '15%', top: '72%', size: 2 },
-  { left: '22%', top: '34%', size: 1 },
-  { left: '31%', top: '14%', size: 1 },
-  { left: '39%', top: '79%', size: 1 },
-  { left: '48%', top: '24%', size: 2 },
-  { left: '58%', top: '68%', size: 1 },
-  { left: '66%', top: '19%', size: 1 },
-  { left: '74%', top: '82%', size: 2 },
-  { left: '82%', top: '38%', size: 1 },
-  { left: '91%', top: '16%', size: 1 },
-  { left: '94%', top: '63%', size: 1 },
-]
 const projects = [
   {
     title: 'PORTFOLIO INTERFACE SYSTEM',
@@ -215,23 +201,6 @@ const AsciiPortrait = memo(function AsciiPortrait() {
   )
 })
 
-const StarField = memo(function StarField() {
-  return (
-    <div className="star-field" aria-hidden="true">
-      {homeStars.map((star) => (
-        <span
-          key={`${star.left}-${star.top}`}
-          style={{
-            '--star-left': star.left,
-            '--star-top': star.top,
-            '--star-size': `${star.size}px`,
-          }}
-        />
-      ))}
-    </div>
-  )
-})
-
 function HeroName({ logo }) {
   return (
     <h1 className="hero-name">
@@ -239,7 +208,7 @@ function HeroName({ logo }) {
         JORGE
       </span>
       <span className="hero-last">
-        SIM<img src={logo} alt="O" />ES
+        SIM<img className="hero-logo" src={logo} alt="O" />ES
       </span>
     </h1>
   )
@@ -248,7 +217,6 @@ function HeroName({ logo }) {
 function HomeView({ activeTheme, transitioning }) {
   return (
     <section className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}>
-      <StarField />
       <HeroName logo={activeTheme.logo} />
     </section>
   )
