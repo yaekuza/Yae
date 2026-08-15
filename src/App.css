@@ -553,12 +553,14 @@
 
 .portfolio-menu {
   --theme-color: #5517ff;
-  --menu-line: #f2f2f20a;
+  --menu-surface: rgba(0, 0, 0, 0.74);
+  --menu-panel: rgba(0, 0, 0, 0.62);
+  --menu-line: rgba(242, 242, 242, 0.1);
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
-  background: var(--menu-line);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--menu-surface);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   color: #ffffff;
   position: fixed;
   top: 12px;
@@ -586,9 +588,9 @@
   display: grid;
   grid-template-columns: 64px 1fr 64px;
   align-items: center;
-  background: var(--menu-line);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--menu-surface);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -690,7 +692,9 @@
   z-index: 1;
   transform: translate3d(0, -10px, 0) scaleY(0.985);
   transform-origin: top center;
-  background: var(--menu-line);
+  background: var(--menu-panel);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   padding: var(--menu-gap);
   transition:
     opacity 210ms ease,
@@ -712,7 +716,7 @@
 }
 
 .page-list {
-  background: var(--menu-line);
+  background: transparent;
 }
 
 .page-link {
@@ -720,7 +724,7 @@
   display: grid;
   grid-template-columns: 54px 1fr 54px;
   align-items: center;
-  background-color: #000000;
+  background-color: var(--menu-panel);
   border-bottom: var(--menu-gap) solid var(--menu-line);
   color: #ffffff;
   overflow: hidden;
@@ -789,7 +793,7 @@
   grid-template-rows: repeat(25, 1fr);
   place-items: center;
   overflow: hidden;
-  background: #000000;
+  background: var(--menu-panel);
   border-bottom: 4px solid var(--menu-line);
   color: rgba(255, 255, 255, 0.42);
   font-family: var(--font-mono);
@@ -812,7 +816,7 @@
 .led-bar {
   height: 28px;
   padding: 13px 2px 12px;
-  background: #000000;
+  background: var(--menu-panel);
   border-bottom: var(--menu-gap) solid var(--menu-line);
   position: relative;
 }

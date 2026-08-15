@@ -151,6 +151,47 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect }) {
   )
 
   useEffect(() => {
+    const getScrollParent = (target) => {
+      if (!(target instanceof Element)) {
+        return document.scrollingElement ?? document.documentElement
+      }
+
+      let current = target
+
+      while (current && current !== document.body) {
+        const overflowY = window.getComputedStyle(current).overflowY
+
+        if ((overflowY === 'auto' || overflowY === 'scroll') && current.scrollHeight > current.clientHeight) {
+          return current
+        }
+
+        current = current.parentElement
+      }
+
+      return document.scrollingElement ?? document.documentElement
+    }
+
+    const handleWheel = (event) => {
+      const scrollParent = getScrollParent(event.target)
+      const scrollTop = scrollParent === document.scrollingElement ? window.scrollY : scrollParent.scrollTop
+
+      if (event.deltaY < 0 && scrollTop <= 0) {
+        setOpen(true)
+      }
+
+      if (event.deltaY > 0) {
+        setOpen(false)
+      }
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: true })
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
+
+  useEffect(() => {
     if (!open) {
       return undefined
     }
