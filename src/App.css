@@ -589,8 +589,8 @@
   grid-template-columns: 64px 1fr 64px;
   align-items: center;
   background: var(--menu-line);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -602,7 +602,7 @@
   align-items: center;
   padding-left: 6px;
   font-family: var(--font-mono);
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0;
@@ -693,8 +693,8 @@
   transform: translate3d(0, -10px, 0) scaleY(0.985);
   transform-origin: top center;
   background: var(--menu-line);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   padding: var(--menu-gap);
   transition:
     opacity 210ms ease,
@@ -717,8 +717,8 @@
 
 .page-list {
   background: var(--menu-line);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .page-link {
