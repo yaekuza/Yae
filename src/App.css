@@ -47,6 +47,11 @@
   width: 100%;
   position: absolute;
   inset: 0;
+  transition: filter 260ms ease;
+}
+
+.portfolio-page.menu-is-open .view-layer {
+  filter: blur(7px);
 }
 
 .home-view {
@@ -557,8 +562,8 @@
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
   background: var(--menu-line);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #ffffff;
   position: fixed;
   top: 12px;
@@ -587,8 +592,8 @@
   grid-template-columns: 64px 1fr 64px;
   align-items: center;
   background: var(--menu-line);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -691,8 +696,6 @@
   transform: translate3d(0, -10px, 0) scaleY(0.985);
   transform-origin: top center;
   background: var(--menu-line);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
   padding: var(--menu-gap);
   transition:
     opacity 210ms ease,
@@ -715,8 +718,6 @@
 
 .page-list {
   background: var(--menu-line);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
 }
 
 .page-link {

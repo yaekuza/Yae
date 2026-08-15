@@ -134,7 +134,7 @@ const ThemeSelector = memo(function ThemeSelector({ activeThemeName, onThemeSele
   )
 })
 
-function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect }) {
+function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect, onOpenChange }) {
   const [open, setOpen] = useState(false)
   const menuRef = useRef()
 
@@ -149,6 +149,10 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect }) {
     },
     [onNavigate],
   )
+
+  useEffect(() => {
+    onOpenChange(open)
+  }, [onOpenChange, open])
 
   useEffect(() => {
     if (!open) {
@@ -350,6 +354,7 @@ function App() {
   const [activeThemeName, setActiveThemeName] = useState(themes[1].name)
   const [view, setView] = useState('home')
   const [transitionPhase, setTransitionPhase] = useState('idle')
+  const [menuOpen, setMenuOpen] = useState(false)
   const activeTheme = themes.find((theme) => theme.name === activeThemeName) ?? themes[1]
 
   const handleThemeSelect = useCallback((themeName) => {
@@ -381,10 +386,14 @@ function App() {
   )
 
   return (
-    <main className={`portfolio-page theme-${activeThemeName}`} aria-label="Jorge Simoes portfolio">
+    <main
+      className={`portfolio-page theme-${activeThemeName} ${menuOpen ? 'menu-is-open' : ''}`}
+      aria-label="Jorge Simoes portfolio"
+    >
       <PortfolioMenu
         activeThemeName={activeThemeName}
         onNavigate={handleNavigate}
+        onOpenChange={setMenuOpen}
         onThemeSelect={handleThemeSelect}
       />
       {view === 'about' ? (
