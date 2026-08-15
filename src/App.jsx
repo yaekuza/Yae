@@ -385,6 +385,24 @@ function App() {
     [view],
   )
 
+  useEffect(() => {
+    if (!menuOpen) {
+      return undefined
+    }
+
+    const preventPageScroll = (event) => {
+      event.preventDefault()
+    }
+
+    window.addEventListener('wheel', preventPageScroll, { passive: false, capture: true })
+    window.addEventListener('touchmove', preventPageScroll, { passive: false, capture: true })
+
+    return () => {
+      window.removeEventListener('wheel', preventPageScroll, { capture: true })
+      window.removeEventListener('touchmove', preventPageScroll, { capture: true })
+    }
+  }, [menuOpen])
+
   return (
     <main
       className={`portfolio-page theme-${activeThemeName} ${menuOpen ? 'menu-is-open' : ''}`}

@@ -52,6 +52,7 @@
 
 .portfolio-page.menu-is-open .view-layer {
   filter: blur(4px);
+  overscroll-behavior: none;
 }
 
 .home-view {
