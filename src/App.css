@@ -560,7 +560,7 @@
   --theme-color: #5517ff;
   --menu-line: #f2f2f20f;
   --menu-gap: 4px;
-  width: min(385px, calc(100vw - 16px));
+  width: min(368px, calc(100vw - 16px));
   color: #ffffff;
   position: fixed;
   top: 12px;
