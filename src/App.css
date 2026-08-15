@@ -558,10 +558,12 @@
 
 .portfolio-menu {
   --theme-color: #5517ff;
-  --menu-line: #f2f2f20f;
+  --menu-line: #f2f2f21a;
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
   background: var(--menu-line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: #ffffff;
   position: fixed;
   top: 12px;
@@ -570,12 +572,6 @@
   z-index: 10;
   font-family: var(--font-mono);
   transform-origin: top center;
-}
-
-.portfolio-menu:not(.is-open),
-.portfolio-menu:not(.is-open) .menu-top {
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
 }
 
 .portfolio-menu.theme-ember {
@@ -596,6 +592,8 @@
   grid-template-columns: 64px 1fr 64px;
   align-items: center;
   background: var(--menu-line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -698,6 +696,8 @@
   transform: translate3d(0, -10px, 0) scaleY(0.985);
   transform-origin: top center;
   background: var(--menu-line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   padding: var(--menu-gap);
   transition:
     opacity 210ms ease,
@@ -720,6 +720,8 @@
 
 .page-list {
   background: var(--menu-line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .page-link {
