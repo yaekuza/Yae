@@ -553,12 +553,12 @@
 
 .portfolio-menu {
   --theme-color: #5517ff;
-  --menu-line: rgba(242, 242, 242, 0.12);
+  --menu-line: #f2f2f20a;
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
   background: var(--menu-line);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   color: #ffffff;
   position: fixed;
   top: 12px;
@@ -587,8 +587,8 @@
   grid-template-columns: 64px 1fr 64px;
   align-items: center;
   background: var(--menu-line);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   cursor: pointer;
   user-select: none;
   position: relative;
