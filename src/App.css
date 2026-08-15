@@ -557,8 +557,8 @@
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
   background: var(--menu-line);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   color: #ffffff;
   position: fixed;
   top: 12px;
@@ -587,8 +587,8 @@
   grid-template-columns: 64px 1fr 64px;
   align-items: center;
   background: var(--menu-line);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -691,6 +691,8 @@
   transform: translate3d(0, -10px, 0) scaleY(0.985);
   transform-origin: top center;
   background: var(--menu-line);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   padding: var(--menu-gap);
   transition:
     opacity 210ms ease,
@@ -713,6 +715,8 @@
 
 .page-list {
   background: var(--menu-line);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .page-link {
