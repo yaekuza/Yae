@@ -553,9 +553,9 @@
 
 .portfolio-menu {
   --theme-color: #5517ff;
-  --menu-surface: rgba(0, 0, 0, 0.74);
-  --menu-panel: rgba(0, 0, 0, 0.62);
-  --menu-line: rgba(242, 242, 242, 0.1);
+  --menu-surface: rgba(242, 242, 242, 0.16);
+  --menu-panel: rgba(242, 242, 242, 0.1);
+  --menu-line: rgba(242, 242, 242, 0.14);
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
   background: var(--menu-surface);
