@@ -553,14 +553,12 @@
 
 .portfolio-menu {
   --theme-color: #5517ff;
-  --menu-surface: rgba(14, 14, 14, 0.46);
-  --menu-panel: rgba(12, 12, 12, 0.34);
-  --menu-line: rgba(242, 242, 242, 0.1);
+  --menu-line: #f2f2f20a;
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
-  background: var(--menu-surface);
-  backdrop-filter: blur(22px) saturate(1.18);
-  -webkit-backdrop-filter: blur(22px) saturate(1.18);
+  background: var(--menu-line);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #ffffff;
   position: fixed;
   top: 12px;
@@ -588,9 +586,9 @@
   display: grid;
   grid-template-columns: 64px 1fr 64px;
   align-items: center;
-  background: var(--menu-surface);
-  backdrop-filter: blur(22px) saturate(1.18);
-  -webkit-backdrop-filter: blur(22px) saturate(1.18);
+  background: var(--menu-line);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -692,9 +690,7 @@
   z-index: 1;
   transform: translate3d(0, -10px, 0) scaleY(0.985);
   transform-origin: top center;
-  background: var(--menu-panel);
-  backdrop-filter: blur(22px) saturate(1.18);
-  -webkit-backdrop-filter: blur(22px) saturate(1.18);
+  background: var(--menu-line);
   padding: var(--menu-gap);
   transition:
     opacity 210ms ease,
@@ -716,7 +712,7 @@
 }
 
 .page-list {
-  background: transparent;
+  background: var(--menu-line);
 }
 
 .page-link {
@@ -724,7 +720,7 @@
   display: grid;
   grid-template-columns: 54px 1fr 54px;
   align-items: center;
-  background-color: var(--menu-panel);
+  background-color: #000000;
   border-bottom: var(--menu-gap) solid var(--menu-line);
   color: #ffffff;
   overflow: hidden;
@@ -793,7 +789,7 @@
   grid-template-rows: repeat(25, 1fr);
   place-items: center;
   overflow: hidden;
-  background: var(--menu-panel);
+  background: #000000;
   border-bottom: 4px solid var(--menu-line);
   color: rgba(255, 255, 255, 0.42);
   font-family: var(--font-mono);
@@ -816,7 +812,7 @@
 .led-bar {
   height: 28px;
   padding: 13px 2px 12px;
-  background: var(--menu-panel);
+  background: #000000;
   border-bottom: var(--menu-gap) solid var(--menu-line);
   position: relative;
 }
