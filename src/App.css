@@ -554,6 +554,7 @@
 .portfolio-menu {
   --theme-color: #5517ff;
   --menu-line: #f2f2f20a;
+  --menu-glass: rgba(242, 242, 242, 0.14);
   --menu-gap: 4px;
   width: min(385px, calc(100vw - 16px));
   background: var(--menu-line);
@@ -567,6 +568,7 @@
   z-index: 10;
   font-family: var(--font-mono);
   transform-origin: top center;
+  isolation: isolate;
 }
 
 .portfolio-menu.theme-ember {
@@ -593,6 +595,27 @@
   user-select: none;
   position: relative;
   z-index: 2;
+  overflow: hidden;
+}
+
+.menu-top::before,
+.menu-content::before,
+.page-list::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--menu-glass);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.menu-top > *,
+.menu-content > *,
+.page-list > * {
+  position: relative;
+  z-index: 1;
 }
 
 .menu-mark {
@@ -691,8 +714,6 @@
   transform: translate3d(0, -10px, 0) scaleY(0.985);
   transform-origin: top center;
   background: var(--menu-line);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
   padding: var(--menu-gap);
   transition:
     opacity 210ms ease,
@@ -715,8 +736,7 @@
 
 .page-list {
   background: var(--menu-line);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  position: relative;
 }
 
 .page-link {
