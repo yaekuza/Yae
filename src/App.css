@@ -455,8 +455,8 @@
   z-index: 1;
   max-width: var(--project-summary-space);
   color: rgba(255, 255, 255, 0.72);
-  font-family: var(--font-sans);
-  font-size: clamp(14px, 1vw, 16px);
+  font-family: "FK Roman Standard", sans-serif;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.24;
   text-rendering: geometricPrecision;
@@ -755,8 +755,8 @@
 .page-index {
   padding-left: 13px;
   color: inherit;
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: "FK Roman Standard", sans-serif;
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -1229,7 +1229,6 @@
 
   .project-row-summary {
     grid-column: 1;
-    font-size: 14px;
     max-width: 100%;
   }
 
