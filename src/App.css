@@ -64,10 +64,6 @@
   opacity: 0;
 }
 
-.home-view.is-transitioning .hero-name {
-  animation: theme-cycle-out 420ms steps(15, end) forwards;
-}
-
 .hero-name {
   margin: 0;
   position: absolute;
@@ -1065,74 +1061,6 @@
   85%,
   100% {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes theme-cycle-out {
-  0% {
-    color: #ff4b18;
-    opacity: 1;
-  }
-
-  6.666%,
-  26.666%,
-  46.666%,
-  66.666%,
-  86.666% {
-    color: #df32aa;
-  }
-
-  13.333%,
-  33.333%,
-  53.333%,
-  73.333%,
-  93.333% {
-    color: #5517ff;
-  }
-
-  20%,
-  40%,
-  60%,
-  80% {
-    color: #ff4b18;
-  }
-
-  100% {
-    color: #ff4b18;
-    opacity: 0;
-  }
-}
-
-@keyframes theme-cycle-in {
-  0% {
-    color: #ff4b18;
-  }
-
-  6.666%,
-  26.666%,
-  46.666%,
-  66.666%,
-  86.666% {
-    color: #df32aa;
-  }
-
-  13.333%,
-  33.333%,
-  53.333%,
-  73.333%,
-  93.333% {
-    color: #5517ff;
-  }
-
-  20%,
-  40%,
-  60%,
-  80% {
-    color: #ff4b18;
-  }
-
-  100% {
-    color: var(--theme-color);
   }
 }
 

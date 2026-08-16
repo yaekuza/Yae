@@ -10,6 +10,7 @@ const themes = [
   { name: 'pink', color: '#df32aa', logo: pinkLogo },
   { name: 'violet', color: '#5517ff', logo: blueLogo },
 ]
+const themeLogoSources = themes.map((theme) => theme.logo)
 
 const pages = ['home', 'about', 'projects', 'contact']
 const asciiRows = 25
@@ -212,7 +213,7 @@ function HeroName({ logo }) {
         JORGE
       </span>
       <span className="hero-last">
-        SIM<img className="hero-logo" src={logo} alt="O" />ES
+        SIM<img className="hero-logo" src={logo} alt="O" loading="eager" decoding="sync" fetchPriority="high" />ES
       </span>
     </h1>
   )
@@ -359,6 +360,14 @@ function App() {
 
   const handleThemeSelect = useCallback((themeName) => {
     setActiveThemeName(themeName)
+  }, [])
+
+  useEffect(() => {
+    themeLogoSources.forEach((logoSource) => {
+      const image = new Image()
+      image.decoding = 'sync'
+      image.src = logoSource
+    })
   }, [])
 
   const handleNavigate = useCallback(
