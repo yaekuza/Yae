@@ -79,7 +79,7 @@ const aboutFacts = [
   ['STUDY', 'SOFTWARE DEVELOPMENT'],
   ['SCHOOL', 'GRAFISCH LYCEUM'],
   ['STATUS', 'ENTERING THIRD YEAR'],
-  ['GOAL', 'INTERNSHIP'],
+  ['CURRENT GOAL', 'INTERNSHIP'],
 ]
 const aboutStack = ['REACT', 'NEXT.JS', 'TAILWIND', 'JAVASCRIPT', 'GSAP']
 const cvDocument = {
@@ -334,60 +334,66 @@ function AboutView({ phase }) {
       <SectionHeader number="02" title="ABOUT" sector="SEC-02" phase={phase} />
 
       <div className="about-body">
-        <div className="about-journal">
-          <span className="about-kicker">JORGE SIMOES / JOURNAL</span>
+        <article className="about-journal">
+          <header className="about-article-head">
+            <span>JORGE SIMOES / JOURNAL</span>
+            <span>SOFTWARE DEVELOPER</span>
+          </header>
+
           <h2>Software Developer with a quiet eye for interface detail.</h2>
           <p className="about-lead">
             I build with a calm rhythm: first understanding the shape of an idea, then turning it
             into something precise, visual, and usable.
           </p>
 
-          <div className="about-article">
+          <div className="about-article-copy">
             {aboutSections.map((section) => (
-              <article className="about-entry" key={section.label}>
+              <p className="about-entry" key={section.label}>
                 <span>{section.label}</span>
-                <p>{section.text}</p>
-              </article>
+                {section.text}
+              </p>
             ))}
           </div>
 
-          <div className="about-data">
-            <div className="about-facts">
+          <footer className="about-journal-footer">
+            <dl className="about-meta">
               {aboutFacts.map(([label, value]) => (
-                <div className="about-fact" key={label}>
-                  <span>{label}</span>
-                  <strong>{value}</strong>
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
                 </div>
               ))}
-            </div>
+            </dl>
 
-            <div className="about-stack" aria-label="Technology stack">
-              {aboutStack.map((tool) => (
-                <span key={tool}>{tool}</span>
-              ))}
-            </div>
-          </div>
+            <div className="about-footer-tools">
+              <div className="about-stack" aria-label="Technology stack">
+                {aboutStack.map((tool) => (
+                  <span key={tool}>{tool}</span>
+                ))}
+              </div>
 
-          <div className="cv-actions">
-            <button type="button" onClick={() => setCvPreviewOpen(true)}>
-              PREVIEW CV
-            </button>
-            <a
-              className={!cvReady ? 'is-disabled' : ''}
-              href={cvDocument.href || '#about'}
-              download={cvDocument.fileName}
-              aria-disabled={!cvReady}
-              onClick={(event) => {
-                if (!cvReady) {
-                  event.preventDefault()
-                }
-              }}
-            >
-              DOWNLOAD CV
-            </a>
-            <span>{cvReady ? cvDocument.fileName : 'CV FILE PENDING'}</span>
-          </div>
-        </div>
+              <div className="cv-actions">
+                <button type="button" onClick={() => setCvPreviewOpen(true)}>
+                  PREVIEW CV
+                </button>
+                <a
+                  className={!cvReady ? 'is-disabled' : ''}
+                  href={cvDocument.href || '#about'}
+                  download={cvDocument.fileName}
+                  aria-disabled={!cvReady}
+                  onClick={(event) => {
+                    if (!cvReady) {
+                      event.preventDefault()
+                    }
+                  }}
+                >
+                  DOWNLOAD CV
+                </a>
+                <span>{cvReady ? cvDocument.fileName : 'CV FILE PENDING'}</span>
+              </div>
+            </div>
+          </footer>
+        </article>
 
         <div className="about-visual">
           <AsciiPortrait />
