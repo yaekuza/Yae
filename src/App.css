@@ -126,19 +126,14 @@
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-gutter: stable;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .about-view::-webkit-scrollbar {
-  width: var(--scrollbar-size);
-}
-
-.about-view::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
-.about-view::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .projects-view {
@@ -439,28 +434,31 @@
 }
 
 .about-visual {
-  height: calc(100vh - 190px);
-  min-height: 320px;
-  max-width: 100%;
-  position: sticky;
-  top: 126px;
-  align-self: start;
+  width: min(34vw, 420px);
+  height: min(66vh, 560px);
+  position: fixed;
+  right: clamp(18px, 4.5vw, 62px);
+  bottom: 34px;
+  z-index: 0;
   display: grid;
   align-items: end;
   justify-items: end;
-  overflow: hidden;
+  overflow: visible;
+  pointer-events: none;
 }
 
 .about-ascii-image {
   margin: 0;
-  justify-self: end;
+  position: absolute;
+  right: 0;
+  bottom: 0;
   color: rgba(255, 255, 255, 0.56);
   font-family: var(--font-mono);
-  font-size: calc(62vh / 90 / 0.8);
+  font-size: min(0.74vw, 7.2px);
   line-height: 0.72;
   letter-spacing: 0;
   white-space: pre;
-  transform: scaleX(0.52);
+  transform: scaleX(0.42);
   transform-origin: right bottom;
   user-select: none;
   pointer-events: none;
@@ -1438,8 +1436,12 @@
     margin-left: 0;
   }
 
+  .about-visual,
   .about-ascii-image {
     display: none;
+  }
+
+  .about-ascii-image {
     font-size: calc(62vh / 90 / 0.76);
     line-height: 0.7;
     transform: scaleX(0.46);
