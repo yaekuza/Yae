@@ -454,7 +454,7 @@
   position: relative;
   z-index: 1;
   max-width: var(--project-summary-space);
-  color: rgba(255, 255, 255, 0.72);
+  color: #7d7d7d;
   font-family: "FK Roman Standard", sans-serif;
   font-size: 16px;
   font-weight: 500;
@@ -468,7 +468,7 @@
   position: relative;
   z-index: 1;
   justify-self: start;
-  font-family: var(--font-mono);
+  font-family: "Tiny5", sans-serif;
   font-size: 9px;
   font-weight: 800;
   line-height: 1;
@@ -755,7 +755,7 @@
 .page-index {
   padding-left: 13px;
   color: inherit;
-  font-family: "FK Roman Standard", sans-serif;
+  font-family: "Tiny5", sans-serif;
   font-size: 16px;
   font-weight: 400;
 }
