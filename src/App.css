@@ -123,7 +123,22 @@
 }
 
 .about-view {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.about-view::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+}
+
+.about-view::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+.about-view::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
 }
 
 .projects-view {
@@ -424,7 +439,12 @@
 }
 
 .about-visual {
-  min-height: 0;
+  height: calc(100vh - 190px);
+  min-height: 320px;
+  max-width: 100%;
+  position: sticky;
+  top: 126px;
+  align-self: start;
   display: grid;
   align-items: end;
   justify-items: end;
@@ -436,12 +456,12 @@
   justify-self: end;
   color: rgba(255, 255, 255, 0.56);
   font-family: var(--font-mono);
-  font-size: calc(72vh / 90 / 0.8);
+  font-size: calc(62vh / 90 / 0.8);
   line-height: 0.72;
   letter-spacing: 0;
   white-space: pre;
-  transform: scaleX(0.62);
-  transform-origin: center;
+  transform: scaleX(0.52);
+  transform-origin: right bottom;
   user-select: none;
   pointer-events: none;
 }
