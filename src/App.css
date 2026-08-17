@@ -248,7 +248,7 @@
   animation: page-content-out 180ms ease both;
 }
 
-.about-journal {
+.about-article-panel {
   max-width: 760px;
   position: relative;
   z-index: 1;
@@ -274,7 +274,7 @@
   line-height: 1;
 }
 
-.about-journal h2 {
+.about-article-panel h2 {
   max-width: 740px;
   margin-top: 16px;
   color: #f2f2f2;
@@ -324,7 +324,7 @@
   line-height: 1;
 }
 
-.about-journal-footer {
+.about-info-footer {
   grid-column: 1 / -1;
   width: 100%;
   margin-top: clamp(30px, 4vw, 58px);
@@ -442,14 +442,13 @@
 }
 
 .about-visual {
-  width: min(46vw, 620px);
+  width: 100%;
   height: min(78vh, 700px);
-  position: fixed;
-  right: clamp(8px, 2.5vw, 38px);
-  bottom: clamp(28px, 5vh, 54px);
+  position: relative;
+  align-self: start;
   z-index: 0;
   display: grid;
-  align-items: end;
+  align-items: start;
   justify-items: end;
   overflow: visible;
   pointer-events: none;
@@ -459,7 +458,7 @@
   margin: 0;
   position: absolute;
   right: 0;
-  bottom: 0;
+  top: 0;
   color: rgba(255, 255, 255, 0.56);
   font-family: var(--font-mono);
   font-size: min(1vw, 10px);
@@ -467,7 +466,7 @@
   letter-spacing: 0;
   white-space: pre;
   transform: scaleX(0.48);
-  transform-origin: right bottom;
+  transform-origin: right top;
   user-select: none;
   pointer-events: none;
 }
@@ -1402,7 +1401,7 @@
     font-size: 12px;
   }
 
-  .about-journal h2 {
+  .about-article-panel h2 {
     font-size: clamp(32px, 10vw, 48px);
   }
 
@@ -1419,7 +1418,7 @@
     margin-top: 14px;
   }
 
-  .about-journal-footer {
+  .about-info-footer {
     grid-template-columns: 1fr;
     gap: 18px;
     margin-top: 24px;

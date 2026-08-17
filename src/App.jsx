@@ -334,9 +334,9 @@ function AboutView({ phase }) {
       <SectionHeader number="02" title="ABOUT" sector="SEC-02" phase={phase} />
 
       <div className="about-body">
-        <article className="about-journal">
+        <article className="about-article-panel">
           <header className="about-article-head">
-            <span>JORGE SIMOES / JOURNAL</span>
+            <span>JORGE SIMOES / ABOUT</span>
             <span>SOFTWARE DEVELOPER</span>
           </header>
 
@@ -360,7 +360,7 @@ function AboutView({ phase }) {
           <AsciiPortrait />
         </div>
 
-        <footer className="about-journal-footer">
+        <footer className="about-info-footer">
           <dl className="about-meta">
             {aboutFacts.map(([label, value]) => (
               <div key={label}>
