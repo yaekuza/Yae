@@ -354,50 +354,50 @@ function AboutView({ phase }) {
               </p>
             ))}
           </div>
-
-          <footer className="about-journal-footer">
-            <dl className="about-meta">
-              {aboutFacts.map(([label, value]) => (
-                <div key={label}>
-                  <dt>{label}</dt>
-                  <dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
-
-            <div className="about-footer-tools">
-              <div className="about-stack" aria-label="Technology stack">
-                {aboutStack.map((tool) => (
-                  <span key={tool}>{tool}</span>
-                ))}
-              </div>
-
-              <div className="cv-actions">
-                <button type="button" onClick={() => setCvPreviewOpen(true)}>
-                  PREVIEW CV
-                </button>
-                <a
-                  className={!cvReady ? 'is-disabled' : ''}
-                  href={cvDocument.href || '#about'}
-                  download={cvDocument.fileName}
-                  aria-disabled={!cvReady}
-                  onClick={(event) => {
-                    if (!cvReady) {
-                      event.preventDefault()
-                    }
-                  }}
-                >
-                  DOWNLOAD CV
-                </a>
-                <span>{cvReady ? cvDocument.fileName : 'CV FILE PENDING'}</span>
-              </div>
-            </div>
-          </footer>
         </article>
 
         <div className="about-visual">
           <AsciiPortrait />
         </div>
+
+        <footer className="about-journal-footer">
+          <dl className="about-meta">
+            {aboutFacts.map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="about-footer-tools">
+            <div className="about-stack" aria-label="Technology stack">
+              {aboutStack.map((tool) => (
+                <span key={tool}>{tool}</span>
+              ))}
+            </div>
+
+            <div className="cv-actions">
+              <button type="button" onClick={() => setCvPreviewOpen(true)}>
+                PREVIEW CV
+              </button>
+              <a
+                className={!cvReady ? 'is-disabled' : ''}
+                href={cvDocument.href || '#about'}
+                download={cvDocument.fileName}
+                aria-disabled={!cvReady}
+                onClick={(event) => {
+                  if (!cvReady) {
+                    event.preventDefault()
+                  }
+                }}
+              >
+                DOWNLOAD CV
+              </a>
+              <span>{cvReady ? cvDocument.fileName : 'CV FILE PENDING'}</span>
+            </div>
+          </div>
+        </footer>
       </div>
 
       <CvPreview open={cvPreviewOpen} onClose={() => setCvPreviewOpen(false)} />
