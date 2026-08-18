@@ -325,13 +325,26 @@ function ProjectsHeader({ count, phase }) {
   )
 }
 
+function AboutHeader({ phase }) {
+  return (
+    <header
+      className={`projects-list-header about-list-header ${
+        phase === 'out' ? 'is-exiting' : 'is-entering'
+      }`}
+    >
+      <h1>ABOUT</h1>
+      <span className="projects-list-rule" aria-hidden="true" />
+    </header>
+  )
+}
+
 function AboutView({ phase }) {
   const [cvPreviewOpen, setCvPreviewOpen] = useState(false)
   const cvReady = Boolean(cvDocument.href)
 
   return (
     <section className={`view-layer about-view page-phase-${phase}`} id="about">
-      <SectionHeader number="02" title="ABOUT" sector="SEC-02" phase={phase} />
+      <AboutHeader phase={phase} />
 
       <div className="about-body">
         <article className="about-article-panel">

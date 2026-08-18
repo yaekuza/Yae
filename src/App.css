@@ -123,6 +123,7 @@
 }
 
 .about-view {
+  --project-line: rgba(255, 255, 255, 0.13);
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
