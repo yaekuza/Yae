@@ -56,38 +56,6 @@ const projects = [
   },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
-const aboutSections = [
-  {
-    label: 'CURRENTLY',
-    text:
-      'I am 18 years old, based in the Netherlands, and studying Software Development at Grafisch Lyceum. After the vacation I enter my third year, where the next important step is finding an internship that lets me grow inside real production work.',
-  },
-  {
-    label: 'PRACTICE',
-    text:
-      'My work leans toward front-end and interface systems: layouts that feel exact, motion that supports the page, and design decisions that make an experience easier to read. I like when code and visuals feel like they belong to the same thought.',
-  },
-  {
-    label: 'OUTSIDE',
-    text:
-      'Away from the editor I spend time bouldering, taking photos, and studying design. I am calm and quiet by nature, but also curious and competitive once I find something worth improving.',
-  },
-]
-const aboutFacts = [
-  ['AGE', '18'],
-  ['LOCATION', 'NETHERLANDS'],
-  ['STUDY', 'SOFTWARE DEVELOPMENT'],
-  ['SCHOOL', 'GRAFISCH LYCEUM'],
-  ['STATUS', 'ENTERING THIRD YEAR'],
-  ['CURRENT GOAL', 'INTERNSHIP'],
-]
-const aboutStack = ['REACT', 'NEXT.JS', 'TAILWIND', 'JAVASCRIPT', 'GSAP']
-const cvDocument = {
-  title: 'JORGE SIMOES CV',
-  fileName: 'Jorge-Simoes-CV.pdf',
-  href: '',
-}
-
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
 }
@@ -237,49 +205,6 @@ const AsciiPortrait = memo(function AsciiPortrait() {
   )
 })
 
-function CvPreview({ open, onClose }) {
-  if (!open) {
-    return null
-  }
-
-  return (
-    <div className="cv-preview-backdrop" role="presentation" onClick={onClose}>
-      <section
-        className="cv-preview"
-        role="dialog"
-        aria-modal="true"
-        aria-label="CV preview"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="cv-preview-top">
-          <span>{cvDocument.title}</span>
-          <button type="button" onClick={onClose} aria-label="Close CV preview">
-            CLOSE
-          </button>
-        </div>
-
-        <div className="cv-preview-paper">
-          <span className="cv-preview-status">CV FILE PENDING</span>
-          <h2>JORGE SIMOES</h2>
-          <p>Software Developer based in the Netherlands.</p>
-          <dl>
-            {aboutFacts.map(([label, value]) => (
-              <div key={label}>
-                <dt>{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-          <p>
-            The final CV document is being updated. These details hold the current profile shape
-            until the PDF is ready.
-          </p>
-        </div>
-      </section>
-    </div>
-  )
-}
-
 function HeroName({ logo }) {
   return (
     <h1 className="hero-name">
@@ -339,81 +264,15 @@ function AboutHeader({ phase }) {
 }
 
 function AboutView({ phase }) {
-  const [cvPreviewOpen, setCvPreviewOpen] = useState(false)
-  const cvReady = Boolean(cvDocument.href)
-
   return (
     <section className={`view-layer about-view page-phase-${phase}`} id="about">
       <AboutHeader phase={phase} />
 
       <div className="about-body">
-        <article className="about-article-panel">
-          <header className="about-article-head">
-            <span>JORGE SIMOES / ABOUT</span>
-            <span>SOFTWARE DEVELOPER</span>
-          </header>
-
-          <h2>Software Developer with a quiet eye for interface detail.</h2>
-          <p className="about-lead">
-            I build with a calm rhythm: first understanding the shape of an idea, then turning it
-            into something precise, visual, and usable.
-          </p>
-
-          <div className="about-article-copy">
-            {aboutSections.map((section) => (
-              <p className="about-entry" key={section.label}>
-                <span>{section.label}</span>
-                {section.text}
-              </p>
-            ))}
-          </div>
-        </article>
-
         <div className="about-visual">
           <AsciiPortrait />
         </div>
-
-        <footer className="about-info-footer">
-          <dl className="about-meta">
-            {aboutFacts.map(([label, value]) => (
-              <div key={label}>
-                <dt>{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="about-footer-tools">
-            <div className="about-stack" aria-label="Technology stack">
-              {aboutStack.map((tool) => (
-                <span key={tool}>{tool}</span>
-              ))}
-            </div>
-
-            <div className="cv-actions">
-              <button type="button" onClick={() => setCvPreviewOpen(true)}>
-                PREVIEW CV
-              </button>
-              <a
-                className={!cvReady ? 'is-disabled' : ''}
-                href={cvDocument.href || '#about'}
-                download={cvDocument.fileName}
-                aria-disabled={!cvReady}
-                onClick={(event) => {
-                  if (!cvReady) {
-                    event.preventDefault()
-                  }
-                }}
-              >
-                DOWNLOAD CV
-              </a>
-              <span>{cvReady ? cvDocument.fileName : 'CV FILE PENDING'}</span>
-            </div>
-          </div>
-        </footer>
       </div>
-
-      <CvPreview open={cvPreviewOpen} onClose={() => setCvPreviewOpen(false)} />
     </section>
   )
 }
