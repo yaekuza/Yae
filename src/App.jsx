@@ -56,6 +56,37 @@ const projects = [
   },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
+const aboutStories = [
+  {
+    title: 'Back-story',
+    text:
+      'Back then I used to do a lot of bouldering and it was extremely fun. Unfortunately, the vacation struck and I was not able to use free transport anymore. While that disappointed me, it also pushed me to look for other ways to keep growing, stay curious, and keep building things that feel personal.',
+  },
+  {
+    title: 'Front-story',
+    text:
+      'I am an 18 year old software development student from the Netherlands, currently entering my third year at Grafisch Lyceum. I am focused on front-end work, visual systems, and interfaces that feel sharp, calm, and precise.',
+  },
+  {
+    title: 'Current',
+    text:
+      'Right now my main goal is finding an internship for the coming school year. I want a place where I can improve through real projects, learn from people with more experience, and keep developing my own eye for design, motion, and code.',
+  },
+  {
+    title: 'Outside',
+    text:
+      'Outside of development I care about bouldering, photography, and design. I am calm and quiet most of the time, but I become competitive when I find something worth improving.',
+  },
+]
+const aboutDetails = [
+  ['NAME', 'Jorge Simoes'],
+  ['AGE', '18'],
+  ['LOCATION', 'Netherlands'],
+  ['STUDY', 'Software Development'],
+  ['STATUS', 'Available'],
+  ['CURRENT GOAL', 'Finding an Internship'],
+]
+
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
 }
@@ -257,6 +288,7 @@ function AboutHeader({ phase }) {
         phase === 'out' ? 'is-exiting' : 'is-entering'
       }`}
     >
+      <span className="about-sector">sec-02</span>
       <h1>ABOUT</h1>
       <span className="projects-list-rule" aria-hidden="true" />
     </header>
@@ -269,9 +301,28 @@ function AboutView({ phase }) {
       <AboutHeader phase={phase} />
 
       <div className="about-body">
+        <section className="about-story" aria-label="About story">
+          <div className="about-story-scroll">
+            {aboutStories.map((story) => (
+              <article className="about-story-entry" key={story.title}>
+                <h2>{story.title}</h2>
+                <p>{story.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <div className="about-visual">
           <AsciiPortrait />
         </div>
+
+        <aside className="about-info" aria-label="Personal information">
+          {aboutDetails.map(([label, value]) => (
+            <p key={label}>
+              <span>{label} /</span> {value}
+            </p>
+          ))}
+        </aside>
       </div>
     </section>
   )
