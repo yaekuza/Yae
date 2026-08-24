@@ -305,7 +305,7 @@
   text-rendering: geometricPrecision;
 }
 
-.projects-count {
+.projects-sector {
   position: absolute;
   left: var(--project-gutter);
   bottom: 5px;
@@ -333,7 +333,7 @@
 }
 
 .projects-list-header.is-entering h1,
-.projects-list-header.is-entering .projects-count {
+.projects-list-header.is-entering .projects-sector {
   animation: section-text-in 260ms 140ms ease both;
 }
 
@@ -342,7 +342,7 @@
 }
 
 .projects-list-header.is-exiting h1,
-.projects-list-header.is-exiting .projects-count {
+.projects-list-header.is-exiting .projects-sector {
   animation: section-text-out 180ms ease both;
 }
 
@@ -802,6 +802,8 @@
   contain: layout paint;
   transform: translateZ(0);
   backface-visibility: hidden;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .ascii-grid span {

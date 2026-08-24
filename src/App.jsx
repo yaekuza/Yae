@@ -240,11 +240,11 @@ function SectionHeader({ number, title, sector, phase }) {
   )
 }
 
-function ProjectsHeader({ count, phase }) {
+function ProjectsHeader({ phase }) {
   return (
     <header className={`projects-list-header ${phase === 'out' ? 'is-exiting' : 'is-entering'}`}>
       <h1>PROJECTS</h1>
-      <span className="projects-count">{String(count).padStart(2, '0')}</span>
+      <span className="projects-sector">SECTOR 03</span>
       <span className="projects-list-rule" aria-hidden="true" />
     </header>
   )
@@ -310,7 +310,7 @@ function ProjectsView({ phase }) {
 
   return (
     <section className={`view-layer projects-view page-phase-${phase}`} id="projects">
-      <ProjectsHeader count={filteredProjects.length} phase={phase} />
+      <ProjectsHeader phase={phase} />
 
       <div className="projects-list-view">
         <div className="project-filters" aria-label="Project language filters">
