@@ -86,6 +86,10 @@ const aboutDetails = [
   ['STATUS', 'Available'],
   ['CURRENT GOAL', 'Finding an Internship'],
 ]
+const cvDocument = {
+  fileName: 'Jorge-Simoes-CV.pdf',
+  href: '',
+}
 
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
@@ -296,6 +300,8 @@ function AboutHeader({ phase }) {
 }
 
 function AboutView({ phase }) {
+  const cvReady = Boolean(cvDocument.href)
+
   return (
     <section className={`view-layer about-view page-phase-${phase}`} id="about">
       <AboutHeader phase={phase} />
@@ -322,6 +328,20 @@ function AboutView({ phase }) {
               <span>{label} /</span> {value}
             </p>
           ))}
+
+          <a
+            className={`about-cv-link ${!cvReady ? 'is-disabled' : ''}`}
+            href={cvDocument.href || '#about'}
+            download={cvDocument.fileName}
+            aria-disabled={!cvReady}
+            onClick={(event) => {
+              if (!cvReady) {
+                event.preventDefault()
+              }
+            }}
+          >
+            <span>CV /</span> DOWNLOAD
+          </a>
         </aside>
       </div>
     </section>
