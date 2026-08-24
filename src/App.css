@@ -240,7 +240,7 @@
   height: 100%;
   padding: 0 0 0 var(--about-gutter);
   display: grid;
-  grid-template-columns: minmax(0, 44%) minmax(260px, 30%) minmax(260px, 26%);
+  grid-template-columns: minmax(0, 42%) minmax(300px, 33%) minmax(260px, 25%);
   align-items: stretch;
   position: relative;
   animation: page-content-in 320ms 160ms ease both;
@@ -285,9 +285,8 @@
   content: "";
   position: absolute;
   right: 0;
-  top: 50%;
+  top: clamp(38px, 6vh, 62px);
   background: var(--theme-color);
-  transform: translateY(-50%);
 }
 
 .about-story-scroll {
@@ -356,11 +355,11 @@
   position: relative;
   color: rgba(255, 255, 255, 0.56);
   font-family: var(--font-mono);
-  font-size: clamp(4px, 0.5vw, 6px);
+  font-size: clamp(5.8px, 0.72vw, 8.6px);
   line-height: 0.72;
   letter-spacing: 0;
   white-space: pre;
-  transform: scaleX(0.42);
+  transform: scaleX(0.48);
   transform-origin: center;
   user-select: none;
   pointer-events: none;
