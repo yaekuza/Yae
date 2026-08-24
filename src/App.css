@@ -124,7 +124,7 @@
 
 .about-view {
   --project-line: rgba(255, 255, 255, 0.13);
-  --about-gutter: clamp(28px, 3vw, 42px);
+  --about-gutter: clamp(30px, 5.6vw, 96px);
   padding-bottom: 0;
   gap: 0;
   overflow-x: hidden;
@@ -238,10 +238,11 @@
 .about-body {
   min-height: 0;
   height: 100%;
-  padding: 0 0 0 var(--about-gutter);
+  padding: 23px var(--about-gutter) 38px;
   display: grid;
-  grid-template-columns: minmax(0, 42%) minmax(300px, 33%) minmax(260px, 25%);
-  align-items: stretch;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 38vw);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: start;
   position: relative;
   animation: page-content-in 320ms 160ms ease both;
 }
@@ -270,137 +271,119 @@
   animation: section-text-out 180ms ease both;
 }
 
-.about-story {
+.about-index {
   min-width: 0;
   min-height: 0;
-  height: 100%;
-  position: relative;
   display: grid;
-  padding: clamp(38px, 6vh, 62px) clamp(28px, 3vw, 42px) 30px 0;
+  grid-template-rows: min-content repeat(5, minmax(76px, 1fr));
+  align-self: stretch;
+  border-top: 1px solid var(--project-line);
 }
 
-.about-story::after {
-  width: 2px;
-  height: clamp(108px, 24vh, 182px);
-  content: "";
-  position: absolute;
-  right: 0;
-  top: clamp(38px, 6vh, 62px);
-  background: var(--theme-color);
+.about-index-top {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--project-line);
+  color: rgba(255, 255, 255, 0.48);
+  font-family: "Tiny5", sans-serif;
+  font-size: 12px;
+  line-height: 1;
 }
 
-.about-story-scroll {
-  min-height: 0;
-  height: 100%;
-  overflow-y: auto;
-  padding-right: clamp(18px, 2vw, 28px);
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.about-story-scroll::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}
-
-.about-story-entry {
+.about-row {
+  min-height: 78px;
   display: grid;
-  gap: 10px;
+  grid-template-columns: minmax(128px, 0.52fr) minmax(0, 1.5fr) minmax(90px, 0.42fr);
+  align-items: center;
+  gap: clamp(14px, 2vw, 30px);
+  border-bottom: 1px solid var(--project-line);
 }
 
-.about-story-entry + .about-story-entry {
-  margin-top: clamp(28px, 5vh, 46px);
-  border-top: 1px solid color-mix(in srgb, var(--theme-color) 74%, transparent);
-  padding-top: 18px;
+.about-row-title {
+  color: #f2f2f2;
+  font-family: var(--font-sans);
+  font-size: clamp(15px, 1.3vw, 19px);
+  font-weight: 500;
+  line-height: 1;
 }
 
-.about-story-entry h2 {
-  margin: 0;
+.about-row-summary {
+  color: #7d7d7d;
+  font-family: "FK Roman Standard", sans-serif;
+  font-size: clamp(15px, 1.24vw, 18px);
+  font-weight: 500;
+  line-height: 1.24;
+}
+
+.about-row-meta {
+  justify-self: end;
   color: var(--theme-color);
   font-family: "Tiny5", sans-serif;
-  font-size: 13px;
-  font-weight: 400;
+  font-size: 12px;
   line-height: 1;
-  text-align: right;
 }
 
-.about-story-entry:nth-child(even) h2 {
-  text-align: left;
-}
-
-.about-story-entry p {
-  margin: 0;
-  color: #f2f2f2;
-  font-family: "Tiny5", sans-serif;
-  font-size: clamp(12px, 1vw, 16px);
-  font-weight: 400;
-  line-height: 1.16;
-  text-wrap: pretty;
-}
-
-.about-visual {
+.about-portrait {
+  min-width: 0;
   width: 100%;
-  height: 100%;
+  height: min(68vh, 620px);
   position: relative;
-  z-index: 0;
   display: grid;
-  place-items: center;
-  overflow: visible;
-  pointer-events: none;
+  grid-template-rows: min-content minmax(0, 1fr) min-content;
+  border-top: 1px solid var(--project-line);
+  border-bottom: 1px solid var(--project-line);
+  overflow: hidden;
+}
+
+.about-portrait-top {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--project-line);
+  color: rgba(255, 255, 255, 0.48);
+  font-family: "Tiny5", sans-serif;
+  font-size: 12px;
+  line-height: 1;
 }
 
 .about-ascii-image {
-  margin: 0;
+  margin: auto;
   position: relative;
   color: rgba(255, 255, 255, 0.56);
   font-family: var(--font-mono);
-  font-size: clamp(5.8px, 0.72vw, 8.6px);
+  font-size: clamp(5.2px, 0.58vw, 7.6px);
   line-height: 0.72;
   letter-spacing: 0;
   white-space: pre;
-  transform: scaleX(0.48);
+  transform: scaleX(0.44);
   transform-origin: center;
   user-select: none;
   pointer-events: none;
 }
 
-.about-info {
-  min-width: 0;
+.about-fact-strip {
   display: grid;
-  align-content: start;
-  gap: clamp(19px, 3vh, 31px);
-  border-left: 1px solid rgba(255, 255, 255, 0.16);
-  padding: clamp(60px, 11vh, 94px) clamp(24px, 4vw, 54px) 30px clamp(18px, 3vw, 34px);
-  color: #f2f2f2;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--project-line);
+}
+
+.about-fact-strip span {
+  min-height: 34px;
+  display: grid;
+  place-items: center start;
+  border-right: 1px solid var(--project-line);
+  color: rgba(255, 255, 255, 0.62);
   font-family: "Tiny5", sans-serif;
-  font-size: clamp(13px, 1.25vw, 18px);
+  font-size: 12px;
   line-height: 1;
+  padding: 0 12px;
 }
 
-.about-info p {
-  margin: 0;
-}
-
-.about-info span {
-  color: var(--theme-color);
-}
-
-.about-cv-link {
-  width: fit-content;
-  margin-top: clamp(12px, 2vh, 22px);
-  color: #f2f2f2;
-  font-family: "Tiny5", sans-serif;
-  line-height: 1;
-}
-
-.about-cv-link span {
-  color: var(--theme-color);
-}
-
-.about-cv-link.is-disabled {
-  color: rgba(255, 255, 255, 0.38);
-  cursor: default;
+.about-fact-strip span:nth-child(even) {
+  border-right: 0;
 }
 
 .projects-list-view {
@@ -1228,46 +1211,33 @@
   .about-body {
     grid-template-columns: 1fr;
     padding: 0 18px 18px;
-    place-items: stretch;
+    gap: 16px;
   }
 
-  .about-story {
-    padding: 22px 0 14px;
-    border-right: 0;
+  .about-index {
+    grid-template-rows: min-content repeat(5, minmax(70px, auto));
   }
 
-  .about-story::after {
-    display: none;
+  .about-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px 0;
   }
 
-  .about-story-scroll {
-    height: 28vh;
-    padding-right: 0;
+  .about-row-meta {
+    justify-self: start;
   }
 
-  .about-story-entry + .about-story-entry {
-    margin-top: 20px;
-    padding-top: 14px;
+  .about-portrait {
+    height: 32vh;
   }
 
-  .about-story-entry p {
-    font-size: 12px;
+  .about-ascii-image {
+    font-size: min(1.25vw, 4.8px);
   }
 
-  .about-info {
-    gap: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.16);
-    border-left: 0;
-    padding: 15px 0 0;
-    font-size: 12px;
-  }
-
-  .about-cv-link {
-    margin-top: 4px;
-  }
-
-  .about-visual {
-    display: none;
+  .about-fact-strip {
+    grid-template-columns: 1fr;
   }
 
   .projects-view {

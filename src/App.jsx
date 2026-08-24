@@ -56,40 +56,39 @@ const projects = [
   },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
-const aboutStories = [
+const aboutRows = [
   {
-    title: 'Back-story',
-    text:
-      'Back then I used to do a lot of bouldering and it was extremely fun. Unfortunately, the vacation struck and I was not able to use free transport anymore. While that disappointed me, it also pushed me to look for other ways to keep growing, stay curious, and keep building things that feel personal.',
+    title: 'CURRENTLY',
+    summary:
+      '18 year old software development student in the Netherlands, entering the third year at Grafisch Lyceum.',
+    meta: 'SEC-02 / 01',
   },
   {
-    title: 'Front-story',
-    text:
-      'I am an 18 year old software development student from the Netherlands, currently entering my third year at Grafisch Lyceum. I am focused on front-end work, visual systems, and interfaces that feel sharp, calm, and precise.',
+    title: 'FOCUS',
+    summary:
+      'Front-end interfaces, visual systems, motion, and code that keeps the structure sharp without losing character.',
+    meta: 'SEC-02 / 02',
   },
   {
-    title: 'Current',
-    text:
-      'Right now my main goal is finding an internship for the coming school year. I want a place where I can improve through real projects, learn from people with more experience, and keep developing my own eye for design, motion, and code.',
+    title: 'TEMPER',
+    summary:
+      'Calm, quiet, curious, and competitive when something is worth improving.',
+    meta: 'SEC-02 / 03',
   },
   {
-    title: 'Outside',
-    text:
-      'Outside of development I care about bouldering, photography, and design. I am calm and quiet most of the time, but I become competitive when I find something worth improving.',
+    title: 'OUTSIDE',
+    summary:
+      'Bouldering, photography, and design keep the work connected to physical rhythm and visual observation.',
+    meta: 'SEC-02 / 04',
+  },
+  {
+    title: 'NEXT',
+    summary:
+      'Looking for an internship where real production work can sharpen both my technical habits and design eye.',
+    meta: 'SEC-02 / 05',
   },
 ]
-const aboutDetails = [
-  ['NAME', 'Jorge Simoes'],
-  ['AGE', '18'],
-  ['LOCATION', 'Netherlands'],
-  ['STUDY', 'Software Development'],
-  ['STATUS', 'Available'],
-  ['CURRENT GOAL', 'Finding an Internship'],
-]
-const cvDocument = {
-  fileName: 'Jorge-Simoes-CV.pdf',
-  href: '',
-}
+const aboutFacts = ['JORGE SIMOES', 'SOFTWARE DEVELOPER', 'REACT / NEXT.JS / GSAP', 'INTERNSHIP READY']
 
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
@@ -300,48 +299,38 @@ function AboutHeader({ phase }) {
 }
 
 function AboutView({ phase }) {
-  const cvReady = Boolean(cvDocument.href)
-
   return (
     <section className={`view-layer about-view page-phase-${phase}`} id="about">
       <AboutHeader phase={phase} />
 
       <div className="about-body">
-        <section className="about-story" aria-label="About story">
-          <div className="about-story-scroll">
-            {aboutStories.map((story) => (
-              <article className="about-story-entry" key={story.title}>
-                <h2>{story.title}</h2>
-                <p>{story.text}</p>
-              </article>
-            ))}
+        <section className="about-index" aria-label="About index">
+          <div className="about-index-top">
+            <span>PROFILE INDEX</span>
+            <span>05 RECORDS</span>
           </div>
+
+          {aboutRows.map((row) => (
+            <article className="about-row" key={row.title}>
+              <span className="about-row-title">{row.title}</span>
+              <span className="about-row-summary">{row.summary}</span>
+              <span className="about-row-meta">{row.meta}</span>
+            </article>
+          ))}
         </section>
 
-        <div className="about-visual">
+        <aside className="about-portrait" aria-label="ASCII portrait and details">
+          <div className="about-portrait-top">
+            <span>ASCII PORTRAIT</span>
+            <span>JORGE SIMOES</span>
+          </div>
           <AsciiPortrait />
-        </div>
 
-        <aside className="about-info" aria-label="Personal information">
-          {aboutDetails.map(([label, value]) => (
-            <p key={label}>
-              <span>{label} /</span> {value}
-            </p>
-          ))}
-
-          <a
-            className={`about-cv-link ${!cvReady ? 'is-disabled' : ''}`}
-            href={cvDocument.href || '#about'}
-            download={cvDocument.fileName}
-            aria-disabled={!cvReady}
-            onClick={(event) => {
-              if (!cvReady) {
-                event.preventDefault()
-              }
-            }}
-          >
-            <span>CV /</span> DOWNLOAD
-          </a>
+          <div className="about-fact-strip" aria-label="Profile facts">
+            {aboutFacts.map((fact) => (
+              <span key={fact}>{fact}</span>
+            ))}
+          </div>
         </aside>
       </div>
     </section>
