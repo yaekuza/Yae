@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
-import profileAscii from './assets/profile-ascii.txt?raw'
+import profileImage from './assets/Media (27).jpg'
 import blueLogo from './assets/bluelogo.png'
 import orangeLogo from './assets/orangelogo.png'
 import pinkLogo from './assets/pinklogo.png'
@@ -56,25 +56,6 @@ const projects = [
   },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
-const aboutProfile = {
-  label: 'SEC-02 / PROFILE',
-  title: 'Jorge Simoes, software developer.',
-  text:
-    'I build front-end interfaces with a focus on structure, motion, and visual precision. I am entering my third year at Grafisch Lyceum and looking for an internship where I can grow through real production work.',
-}
-const aboutDetails = [
-  ['NAME', 'JORGE SIMOES'],
-  ['AGE', '18'],
-  ['LOCATION', 'NETHERLANDS'],
-  ['SCHOOL', 'GRAFISCH LYCEUM'],
-  ['STUDY', 'SOFTWARE DEVELOPMENT / THIRD YEAR'],
-  ['GOAL', 'FINDING AN INTERNSHIP'],
-  ['ROLE', 'SOFTWARE DEVELOPER'],
-  ['STACK', 'REACT / NEXT.JS / JAVASCRIPT / GSAP'],
-  ['FOCUS', 'FRONT-END / MOTION / VISUAL SYSTEMS'],
-  ['OUTSIDE', 'BOULDERING / PHOTOGRAPHY / DESIGN'],
-  ['TRAITS', 'CALM / QUIET / CURIOUS / COMPETITIVE'],
-]
 
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
@@ -217,14 +198,6 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect, onOpenChang
   )
 }
 
-const AsciiPortrait = memo(function AsciiPortrait() {
-  return (
-    <pre className="about-ascii-image" aria-label="ASCII portrait of Jorge Simoes">
-      {profileAscii}
-    </pre>
-  )
-})
-
 function HeroName({ logo }) {
   return (
     <h1 className="hero-name">
@@ -243,20 +216,6 @@ function HomeView({ activeTheme, transitioning }) {
     <section className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}>
       <HeroName logo={activeTheme.logo} />
     </section>
-  )
-}
-
-function SectionHeader({ number, title, sector, phase }) {
-  return (
-    <header className={`section-header ${phase === 'out' ? 'is-exiting' : 'is-entering'}`}>
-      <span className="section-rule section-rule-top" aria-hidden="true" />
-      <div className="section-title-block">
-        <span className="section-number">{number}</span>
-        <h1>{title}</h1>
-      </div>
-      <span className="section-sector">{sector}</span>
-      <span className="section-rule section-rule-bottom" aria-hidden="true" />
-    </header>
   )
 }
 
@@ -290,24 +249,13 @@ function AboutView({ phase }) {
       <AboutHeader phase={phase} />
 
       <div className="about-body">
-        <section className="about-profile" aria-label="About profile">
-          <span className="about-profile-label">{aboutProfile.label}</span>
-          <h2>{aboutProfile.title}</h2>
-          <p>{aboutProfile.text}</p>
-
-          <div className="about-details" aria-label="Profile details">
-            {aboutDetails.map(([label, value]) => (
-              <div className="about-detail" key={label}>
-                <span>{label}</span>
-                <strong>{value}</strong>
-              </div>
-            ))}
-          </div>
+        <section className="about-identity" aria-label="About identity">
+          <h2>JORGE SIMOES</h2>
+          <p>SOFTWARE DEVELOPER</p>
         </section>
 
-        <figure className="about-portrait" aria-label="ASCII portrait of Jorge Simoes">
-          <AsciiPortrait />
-          <figcaption>JORGE SIMOES / ASCII PORTRAIT</figcaption>
+        <figure className="about-portrait" aria-label="Portrait of Jorge Simoes">
+          <img className="about-portrait-image" src={profileImage} alt="Jorge Simoes" />
         </figure>
       </div>
     </section>
