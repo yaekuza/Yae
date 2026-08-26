@@ -56,45 +56,19 @@ const projects = [
   },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
-const aboutRows = [
-  {
-    title: 'CURRENTLY',
-    summary:
-      '18 year old software development student in the Netherlands, entering the third year at Grafisch Lyceum.',
-    meta: 'SEC-02 / 01',
-  },
-  {
-    title: 'FOCUS',
-    summary:
-      'Front-end interfaces, visual systems, motion, and code that keeps the structure sharp without losing character.',
-    meta: 'SEC-02 / 02',
-  },
-  {
-    title: 'TEMPER',
-    summary:
-      'Calm, quiet, curious, and competitive when something is worth improving.',
-    meta: 'SEC-02 / 03',
-  },
-  {
-    title: 'OUTSIDE',
-    summary:
-      'Bouldering, photography, and design keep the work connected to physical rhythm and visual observation.',
-    meta: 'SEC-02 / 04',
-  },
-  {
-    title: 'NEXT',
-    summary:
-      'Looking for an internship where real production work can sharpen both my technical habits and design eye.',
-    meta: 'SEC-02 / 05',
-  },
-]
-const aboutFacts = ['JORGE SIMOES', 'SOFTWARE DEVELOPER', 'REACT / NEXT.JS / GSAP', 'INTERNSHIP READY']
-const aboutIntro = {
-  label: 'AVAILABLE FOR INTERNSHIP',
-  title: 'Calm front-end work with a sharper visual edge.',
+const aboutProfile = {
+  label: 'SEC-02 / PROFILE',
+  title: 'Software developer building calm, visual interfaces.',
   text:
-    'I am an 18 year old software development student from the Netherlands, building interfaces that balance structure, motion, and visual precision.',
+    'I am an 18 year old software development student from the Netherlands, entering my third year at Grafisch Lyceum and looking for an internship where I can grow through real production work.',
 }
+const aboutDetails = [
+  ['LOCATION', 'NETHERLANDS'],
+  ['STUDY', 'SOFTWARE DEVELOPMENT'],
+  ['FOCUS', 'FRONT-END / MOTION / VISUAL SYSTEMS'],
+  ['STACK', 'REACT / NEXT.JS / JAVASCRIPT / GSAP'],
+  ['OUTSIDE', 'BOULDERING / PHOTOGRAPHY / DESIGN'],
+]
 
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
@@ -310,35 +284,25 @@ function AboutView({ phase }) {
       <AboutHeader phase={phase} />
 
       <div className="about-body">
-        <section className="about-statement" aria-label="About introduction">
-          <span>{aboutIntro.label}</span>
-          <h2>{aboutIntro.title}</h2>
-          <p>{aboutIntro.text}</p>
-        </section>
+        <section className="about-profile" aria-label="About profile">
+          <span className="about-profile-label">{aboutProfile.label}</span>
+          <h2>{aboutProfile.title}</h2>
+          <p>{aboutProfile.text}</p>
 
-        <aside className="about-portrait" aria-label="ASCII portrait and details">
-          <div className="about-portrait-top">
-            <span>ASCII PORTRAIT</span>
-            <span>JORGE SIMOES</span>
-          </div>
-          <AsciiPortrait />
-
-          <div className="about-fact-strip" aria-label="Profile facts">
-            {aboutFacts.map((fact) => (
-              <span key={fact}>{fact}</span>
+          <div className="about-details" aria-label="Profile details">
+            {aboutDetails.map(([label, value]) => (
+              <div className="about-detail" key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+              </div>
             ))}
           </div>
-        </aside>
-
-        <section className="about-detail-list" aria-label="About details">
-          {aboutRows.map((row) => (
-            <article className="about-row" key={row.title}>
-              <span className="about-row-title">{row.title}</span>
-              <span className="about-row-summary">{row.summary}</span>
-              <span className="about-row-meta">{row.meta}</span>
-            </article>
-          ))}
         </section>
+
+        <figure className="about-portrait" aria-label="ASCII portrait of Jorge Simoes">
+          <AsciiPortrait />
+          <figcaption>JORGE SIMOES / ASCII PORTRAIT</figcaption>
+        </figure>
       </div>
     </section>
   )
