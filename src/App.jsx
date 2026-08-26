@@ -58,16 +58,22 @@ const projects = [
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
 const aboutProfile = {
   label: 'SEC-02 / PROFILE',
-  title: 'Software developer building calm, visual interfaces.',
+  title: 'Jorge Simoes, software developer.',
   text:
-    'I am an 18 year old software development student from the Netherlands, entering my third year at Grafisch Lyceum and looking for an internship where I can grow through real production work.',
+    'I build front-end interfaces with a focus on structure, motion, and visual precision. I am entering my third year at Grafisch Lyceum and looking for an internship where I can grow through real production work.',
 }
 const aboutDetails = [
+  ['NAME', 'JORGE SIMOES'],
+  ['AGE', '18'],
   ['LOCATION', 'NETHERLANDS'],
-  ['STUDY', 'SOFTWARE DEVELOPMENT'],
-  ['FOCUS', 'FRONT-END / MOTION / VISUAL SYSTEMS'],
+  ['SCHOOL', 'GRAFISCH LYCEUM'],
+  ['STUDY', 'SOFTWARE DEVELOPMENT / THIRD YEAR'],
+  ['GOAL', 'FINDING AN INTERNSHIP'],
+  ['ROLE', 'SOFTWARE DEVELOPER'],
   ['STACK', 'REACT / NEXT.JS / JAVASCRIPT / GSAP'],
+  ['FOCUS', 'FRONT-END / MOTION / VISUAL SYSTEMS'],
   ['OUTSIDE', 'BOULDERING / PHOTOGRAPHY / DESIGN'],
+  ['TRAITS', 'CALM / QUIET / CURIOUS / COMPETITIVE'],
 ]
 
 function getAsciiUnit(index, offset = 0) {
