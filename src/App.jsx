@@ -89,6 +89,12 @@ const aboutRows = [
   },
 ]
 const aboutFacts = ['JORGE SIMOES', 'SOFTWARE DEVELOPER', 'REACT / NEXT.JS / GSAP', 'INTERNSHIP READY']
+const aboutIntro = {
+  label: 'AVAILABLE FOR INTERNSHIP',
+  title: 'Calm front-end work with a sharper visual edge.',
+  text:
+    'I am an 18 year old software development student from the Netherlands, building interfaces that balance structure, motion, and visual precision.',
+}
 
 function getAsciiUnit(index, offset = 0) {
   return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
@@ -304,19 +310,10 @@ function AboutView({ phase }) {
       <AboutHeader phase={phase} />
 
       <div className="about-body">
-        <section className="about-index" aria-label="About index">
-          <div className="about-index-top">
-            <span>PROFILE INDEX</span>
-            <span>05 RECORDS</span>
-          </div>
-
-          {aboutRows.map((row) => (
-            <article className="about-row" key={row.title}>
-              <span className="about-row-title">{row.title}</span>
-              <span className="about-row-summary">{row.summary}</span>
-              <span className="about-row-meta">{row.meta}</span>
-            </article>
-          ))}
+        <section className="about-statement" aria-label="About introduction">
+          <span>{aboutIntro.label}</span>
+          <h2>{aboutIntro.title}</h2>
+          <p>{aboutIntro.text}</p>
         </section>
 
         <aside className="about-portrait" aria-label="ASCII portrait and details">
@@ -332,6 +329,16 @@ function AboutView({ phase }) {
             ))}
           </div>
         </aside>
+
+        <section className="about-detail-list" aria-label="About details">
+          {aboutRows.map((row) => (
+            <article className="about-row" key={row.title}>
+              <span className="about-row-title">{row.title}</span>
+              <span className="about-row-summary">{row.summary}</span>
+              <span className="about-row-meta">{row.meta}</span>
+            </article>
+          ))}
+        </section>
       </div>
     </section>
   )
