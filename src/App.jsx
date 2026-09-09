@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import profileImage from './assets/Media (27).jpg'
 import blueLogo from './assets/bluelogo.png'
@@ -12,22 +12,26 @@ const themes = [
 ]
 const themeLogoSources = themes.map((theme) => theme.logo)
 
+const AboutModel = lazy(() => import('./AboutModel'))
+
 const pages = ['home', 'about', 'projects', 'contact']
-const asciiRows = 25
-const asciiColumns = 50
-const asciiInventory = ['J', 'O', 'R', 'G', 'E', '/', '>', '.', '']
-const asciiCells = Array.from({ length: asciiRows * asciiColumns }, (_, index) => getAsciiUnit(index))
+const aboutProfile = {
+  name: 'JORGE SIMOES',
+  role: 'Software Developer',
+  text:
+    'I am 18, born in Portugal and currently living in the Netherlands for school and work. Right now everything I do points at front-end development, and I plan on becoming a pro in that field, so most of my time goes into learning how interfaces are structured, how they move, and why some of them feel better than others. Outside of that you will find me bouldering or taking photos. I am currently looking for an internship for my third year.',
+}
 const projects = [
   {
     title: 'PORTFOLIO INTERFACE SYSTEM',
     summary:
-      'A motion-focused portfolio shell with themed navigation, ASCII portrait work, and sharp page transitions.',
+      'A motion-focused portfolio shell with themed navigation, portrait composition, and sharp page transitions.',
     language: 'REACT',
   },
   {
-    title: 'ASCII IMAGE PIPELINE',
+    title: 'VISUAL ASSET PIPELINE',
     summary:
-      'A small conversion workflow that turns project images into terminal-style ASCII compositions.',
+      'A small image workflow for preparing expressive assets that stay crisp inside the interface.',
     language: 'NODE',
   },
   {
@@ -45,21 +49,17 @@ const projects = [
   {
     title: 'ABOUT PAGE COMPOSITION',
     summary:
-      'A personal profile layout balancing direct text, theme color hierarchy, and generated ASCII imagery.',
+      'A personal profile layout balancing direct text, theme color hierarchy, and editorial portrait work.',
     language: 'HTML',
   },
   {
-    title: 'RESPONSIVE ASCII LAYOUT',
+    title: 'RESPONSIVE VISUAL LAYOUT',
     summary:
-      'A responsive front-end experiment for keeping dense text art readable across viewport sizes.',
+      'A responsive front-end experiment for keeping dense visual sections readable across viewport sizes.',
     language: 'CSS',
   },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
-
-function getAsciiUnit(index, offset = 0) {
-  return asciiInventory[(index * 5 + Math.floor(index / asciiColumns) * 3 + offset) % asciiInventory.length]
-}
 
 const MenuIcon = memo(function MenuIcon({ open }) {
   return (
@@ -90,16 +90,6 @@ const PageList = memo(function PageList({ onNavigate }) {
           <span className="page-index">{String(index + 1).padStart(2, '0')}</span>
           <span>{page}</span>
         </a>
-      ))}
-    </div>
-  )
-})
-
-const AsciiGrid = memo(function AsciiGrid() {
-  return (
-    <div className="ascii-grid" aria-hidden="true">
-      {asciiCells.map((cell, index) => (
-        <span key={index}>{cell}</span>
       ))}
     </div>
   )
@@ -190,7 +180,6 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect, onOpenChang
 
       <div className="menu-content" aria-hidden={!open}>
         <PageList onNavigate={handleNavigate} />
-        <AsciiGrid />
         <LedBar />
         <ThemeSelector activeThemeName={activeThemeName} onThemeSelect={onThemeSelect} />
       </div>
@@ -249,14 +238,31 @@ function AboutView({ phase }) {
       <AboutHeader phase={phase} />
 
       <div className="about-body">
-        <section className="about-identity" aria-label="About identity">
-          <h2>JORGE SIMOES</h2>
-          <p>SOFTWARE DEVELOPER</p>
-        </section>
+        <div className="about-identity">
+          <h2 className="about-name">
+            <span>{aboutProfile.name}</span>
+          </h2>
+          <p className="about-role">{aboutProfile.role}</p>
+        </div>
+
+        <Suspense fallback={null}>
+          <AboutModel />
+        </Suspense>
 
         <figure className="about-portrait" aria-label="Portrait of Jorge Simoes">
           <img className="about-portrait-image" src={profileImage} alt="Jorge Simoes" />
+          <div className="portrait-cover" aria-hidden="true">
+            <span className="portrait-pixel-arrow">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </span>
+          </div>
         </figure>
+
+        <p className="about-lead">{aboutProfile.text}</p>
       </div>
     </section>
   )
