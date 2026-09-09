@@ -1,13 +1,15 @@
 import { lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
-import profileImage from './assets/Media (27).jpg'
+import AboutLinks from './AboutLinks'
+import yaetypeShot from './assets/yaetypeSS.png'
+import { cvHref, links } from './links'
 import blueLogo from './assets/bluelogo.png'
 import orangeLogo from './assets/orangelogo.png'
 import pinkLogo from './assets/pinklogo.png'
 
 const themes = [
-  { name: 'ember', color: '#ff4b18', logo: orangeLogo },
   { name: 'pink', color: '#df32aa', logo: pinkLogo },
+  { name: 'ember', color: '#ff4b18', logo: orangeLogo },
   { name: 'violet', color: '#5517ff', logo: blueLogo },
 ]
 const themeLogoSources = themes.map((theme) => theme.logo)
@@ -23,41 +25,35 @@ const aboutProfile = {
 }
 const projects = [
   {
-    title: 'PORTFOLIO INTERFACE SYSTEM',
+    title: 'YAETYPE',
     summary:
-      'A motion-focused portfolio shell with themed navigation, portrait composition, and sharp page transitions.',
-    language: 'REACT',
+      'A typing trainer built around fast restarts, real word tests, and modes that keep practice from feeling like a drill.',
+    language: 'NEXT.JS',
+    href: 'https://yaetype.jorgesimoes.com',
+    image: yaetypeShot,
+    overview:
+      'A typing test that stays out of your way. One line of text, instant restart on enter, and four ways to run a session: classic for a straight test, survival for pressure, multiplayer for racing someone, and custom for setting your own rules. Accounts keep your history so progress is measurable instead of a number you forget.',
+    reason:
+      'Every trainer I tried buried the test under settings or made mistakes feel punishing. I wanted one calm enough to sit in front of for an hour, so the interface holds a single focus point and everything else steps back until you ask for it.',
+    meta: [
+      ['ROLE', 'FULLSTACK DEVELOPER'],
+      ['STACK', 'NEXT.JS / REACT / JAVASCRIPT'],
+      ['BACKEND', 'DATABASE / LOGIN SYSTEM'],
+      ['STATUS', 'LIVE / V1.2.0'],
+    ],
   },
-  {
-    title: 'VISUAL ASSET PIPELINE',
-    summary:
-      'A small image workflow for preparing expressive assets that stay crisp inside the interface.',
-    language: 'NODE',
-  },
-  {
-    title: 'MENU MOTION STUDY',
-    summary:
-      'A CSS animation pass focused on smoother transforms, fast reveals, and menu-like hover states.',
-    language: 'CSS',
-  },
-  {
-    title: 'THEME SWITCHER',
-    summary:
-      'A compact color system that swaps logo assets and accent colors across the interface.',
-    language: 'JAVASCRIPT',
-  },
-  {
-    title: 'ABOUT PAGE COMPOSITION',
-    summary:
-      'A personal profile layout balancing direct text, theme color hierarchy, and editorial portrait work.',
-    language: 'HTML',
-  },
-  {
-    title: 'RESPONSIVE VISUAL LAYOUT',
-    summary:
-      'A responsive front-end experiment for keeping dense visual sections readable across viewport sizes.',
-    language: 'CSS',
-  },
+]
+const contactIntro = {
+  label: 'AVAILABLE',
+  statement: 'Looking for an internship for my third year.',
+  text:
+    'Open to front-end and fullstack work in the Netherlands. The fastest way to reach me is email — I answer everything.',
+}
+const contactChannels = [
+  { label: 'EMAIL', value: links.email, href: `mailto:${links.email}` },
+  { label: 'LINKEDIN', value: 'JORGE SIMOES', href: links.linkedin, external: true },
+  { label: 'GITHUB', value: 'YAEKUZA', href: links.github, external: true },
+  { label: 'CV', value: 'DOWNLOAD PDF', href: cvHref, download: true },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
 
@@ -232,6 +228,56 @@ function AboutHeader({ phase }) {
   )
 }
 
+function ContactHeader({ phase }) {
+  return (
+    <header
+      className={`projects-list-header ${phase === 'out' ? 'is-exiting' : 'is-entering'}`}
+    >
+      <h1>CONTACT</h1>
+      <span className="projects-sector">SECTOR 04</span>
+      <span className="projects-list-rule" aria-hidden="true" />
+    </header>
+  )
+}
+
+function ContactView({ phase }) {
+  return (
+    <section className={`view-layer contact-view page-phase-${phase}`} id="contact">
+      <ContactHeader phase={phase} />
+
+      <div className="contact-body">
+        <div className="contact-intro">
+          <span className="contact-label">{contactIntro.label}</span>
+          <h2 className="contact-statement">{contactIntro.statement}</h2>
+          <p className="contact-lead">{contactIntro.text}</p>
+        </div>
+
+        <div className="contact-channels">
+          {contactChannels.map((channel) => (
+            <a
+              className="contact-channel"
+              href={channel.href}
+              key={channel.label}
+              {...(channel.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+              {...(channel.download ? { download: 'Jorge Simoes CV.pdf' } : {})}
+            >
+              <span className="contact-channel-label">{channel.label}</span>
+              <span className="contact-channel-value">{channel.value}</span>
+              <span className="contact-channel-mark" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function AboutView({ phase }) {
   return (
     <section className={`view-layer about-view page-phase-${phase}`} id="about">
@@ -243,24 +289,12 @@ function AboutView({ phase }) {
             <span>{aboutProfile.name}</span>
           </h2>
           <p className="about-role">{aboutProfile.role}</p>
+          <AboutLinks />
         </div>
 
         <Suspense fallback={null}>
           <AboutModel />
         </Suspense>
-
-        <figure className="about-portrait" aria-label="Portrait of Jorge Simoes">
-          <img className="about-portrait-image" src={profileImage} alt="Jorge Simoes" />
-          <div className="portrait-cover" aria-hidden="true">
-            <span className="portrait-pixel-arrow">
-              <span />
-              <span />
-              <span />
-              <span />
-              <span />
-            </span>
-          </div>
-        </figure>
 
         <p className="about-lead">{aboutProfile.text}</p>
       </div>
@@ -268,15 +302,79 @@ function AboutView({ phase }) {
   )
 }
 
+function ProjectDetail({ project, onBack }) {
+  return (
+    <article className="project-detail">
+      <button type="button" className="project-back" onClick={onBack}>
+        <span className="project-back-mark" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+        </span>
+        BACK
+      </button>
+
+      <header className="project-detail-head">
+        <h2>{project.title}</h2>
+        <a
+          className="project-detail-link"
+          href={project.href}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {project.href.replace('https://', '')}
+        </a>
+      </header>
+
+      <div className="project-detail-body">
+        <div className="project-detail-text">
+          <section className="project-detail-block">
+            <span className="project-detail-label">OVERVIEW</span>
+            <p>{project.overview}</p>
+          </section>
+
+          <section className="project-detail-block">
+            <span className="project-detail-label">WHY IT WAS MADE</span>
+            <p>{project.reason}</p>
+          </section>
+        </div>
+
+        <div className="project-detail-side">
+          <figure className="project-detail-shot">
+            <img src={project.image} alt={`${project.title} interface`} />
+          </figure>
+
+          <div className="project-detail-meta">
+            {project.meta.map(([label, value]) => (
+              <div key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 function ProjectsView({ phase }) {
   const [activeFilter, setActiveFilter] = useState('ALL')
   const [filterPhase, setFilterPhase] = useState('idle')
+  const [activeProject, setActiveProject] = useState(null)
+  const [swapPhase, setSwapPhase] = useState('idle')
   const filterTimeoutRef = useRef()
   const filterResetTimeoutRef = useRef()
+  const swapTimeoutRef = useRef()
+  const swapResetTimeoutRef = useRef()
   const filteredProjects =
     activeFilter === 'ALL'
       ? projects
       : projects.filter((project) => project.language === activeFilter)
+  const listPhase = swapPhase === 'out' ? 'out' : filterPhase
+
   const handleFilterSelect = useCallback(
     (filter) => {
       if (filter === activeFilter || filterPhase !== 'idle') {
@@ -299,48 +397,87 @@ function ProjectsView({ phase }) {
     [activeFilter, filterPhase],
   )
 
+  const handleSwap = useCallback(
+    (project) => {
+      if (swapPhase !== 'idle') {
+        return
+      }
+
+      window.clearTimeout(swapTimeoutRef.current)
+      window.clearTimeout(swapResetTimeoutRef.current)
+      setSwapPhase('out')
+
+      swapTimeoutRef.current = window.setTimeout(() => {
+        setActiveProject(project)
+        setSwapPhase('in')
+      }, 340)
+
+      swapResetTimeoutRef.current = window.setTimeout(() => {
+        setSwapPhase('idle')
+      }, 900)
+    },
+    [swapPhase],
+  )
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(filterTimeoutRef.current)
+      window.clearTimeout(filterResetTimeoutRef.current)
+      window.clearTimeout(swapTimeoutRef.current)
+      window.clearTimeout(swapResetTimeoutRef.current)
+    },
+    [],
+  )
+
   return (
     <section className={`view-layer projects-view page-phase-${phase}`} id="projects">
       <ProjectsHeader phase={phase} />
 
-      <div className="projects-list-view">
-        <div className="project-filters" aria-label="Project language filters">
-          {projectFilters.map((filter) => (
-            <button
-              type="button"
-              className={activeFilter === filter ? 'is-active' : ''}
-              onClick={() => handleFilterSelect(filter)}
-              key={filter}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
+      <div className={`projects-list-view is-${swapPhase}`}>
+        {activeProject ? (
+          <ProjectDetail project={activeProject} onBack={() => handleSwap(null)} />
+        ) : (
+          <>
+            <div className="project-filters" aria-label="Project language filters">
+              {projectFilters.map((filter) => (
+                <button
+                  type="button"
+                  className={activeFilter === filter ? 'is-active' : ''}
+                  onClick={() => handleFilterSelect(filter)}
+                  key={filter}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
 
-        <div className={`project-list is-${filterPhase}`}>
-          {filteredProjects.map((project, index) => (
-            <a
-              className="project-row"
-              href="#projects"
-              key={project.title}
-              style={{
-                '--project-row-index': index,
-                '--project-row-out-index': filteredProjects.length - index - 1,
-              }}
-            >
-              <span className="project-row-title">{project.title}</span>
-              <span className="project-row-summary">{project.summary}</span>
-              <span className="project-row-language">{project.language}</span>
-              <span className="project-row-mark" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-              </span>
-            </a>
-          ))}
-        </div>
+            <div className={`project-list is-${listPhase}`}>
+              {filteredProjects.map((project, index) => (
+                <button
+                  type="button"
+                  className="project-row"
+                  key={project.title}
+                  onClick={() => handleSwap(project)}
+                  style={{
+                    '--project-row-index': index,
+                    '--project-row-out-index': filteredProjects.length - index - 1,
+                  }}
+                >
+                  <span className="project-row-title">{project.title}</span>
+                  <span className="project-row-summary">{project.summary}</span>
+                  <span className="project-row-language">{project.language}</span>
+                  <span className="project-row-mark" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </span>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   )
@@ -367,7 +504,7 @@ function App() {
 
   const handleNavigate = useCallback(
     (page) => {
-      if (page !== 'home' && page !== 'about' && page !== 'projects') {
+      if (!pages.includes(page)) {
         return
       }
 
@@ -420,6 +557,8 @@ function App() {
       />
       {view === 'about' ? (
         <AboutView phase={transitionPhase} />
+      ) : view === 'contact' ? (
+        <ContactView phase={transitionPhase} />
       ) : view === 'projects' ? (
         <ProjectsView phase={transitionPhase} />
       ) : (
