@@ -185,12 +185,12 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect, onOpenChang
 
 function HeroName({ logo }) {
   return (
-    <h1 className="hero-name">
-      <span className="hero-first">
+    <h1 className="hero-name" aria-label="Jorge Simões">
+      <span className="hero-first" aria-hidden="true">
         JORGE
       </span>
-      <span className="hero-last">
-        SIM<img className="hero-logo" src={logo} alt="O" loading="eager" decoding="sync" fetchPriority="high" />ES
+      <span className="hero-last" aria-hidden="true">
+        SIM<img className="hero-logo" src={logo} alt="" loading="eager" decoding="sync" fetchPriority="high" />ES
       </span>
     </h1>
   )
