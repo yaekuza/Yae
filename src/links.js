@@ -1,6 +1,8 @@
-import cvFile from './assets/Personal CV jorge simoes.pdf?url'
+import cvFile from './assets/Personal_CV_Jorgesimoes.pdf?url'
+import cvFileNL from './assets/Personal_CV_JorgesimoesNL.pdf?url'
 
 export const cvHref = cvFile
+export const cvHrefNL = cvFileNL
 
 export const links = {
   email: 'jorgesimoes096@gmail.com',

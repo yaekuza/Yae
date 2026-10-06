@@ -1,13 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Tiny5&display=swap");
-
 :root {
   --bg: #000000;
   --ink: #ffffff;
   --muted: #777777;
   --accent: #5517ff;
-  --font-sans: "NON Natural Grotesk", "FK Roman Standard", Arial, sans-serif;
-  --font-mono: "NON Natural Mono", "Courier New", monospace;
-  --font-roman: "FK Roman Standard", Georgia, serif;
+  --font-sans: "Space Grotesk", "NON Natural Grotesk", Arial, sans-serif;
+  --font-mono: "Space Mono", "NON Natural Mono", "Courier New", monospace;
+  --font-roman: "Instrument Serif", "FK Roman Standard", Georgia, serif;
 
   font-family: var(--font-sans);
   color: var(--ink);

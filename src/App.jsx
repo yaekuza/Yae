@@ -2,10 +2,16 @@ import { lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from '
 import './App.css'
 import AboutLinks from './AboutLinks'
 import yaetypeShot from './assets/yaetypeSS.png'
-import { cvHref, links } from './links'
+import melographShot from './assets/Melograph.png'
+import melostudioShot from './assets/melostudio.png'
+import ariaShot from './assets/Aria.png'
+import { cvHref, cvHrefNL, links } from './links'
 import blueLogo from './assets/bluelogo.png'
 import orangeLogo from './assets/orangelogo.png'
 import pinkLogo from './assets/pinklogo.png'
+import contactPhoto1 from './assets/img1.png'
+import contactPhoto2 from './assets/img2.png'
+import contactPhoto7 from './assets/img7.png'
 
 const themes = [
   { name: 'pink', color: '#df32aa', logo: pinkLogo },
@@ -17,6 +23,36 @@ const themeLogoSources = themes.map((theme) => theme.logo)
 const AboutModel = lazy(() => import('./AboutModel'))
 
 const pages = ['home', 'about', 'projects', 'contact']
+const NAV_OUT_DURATION = 420
+const NAV_SETTLE_DURATION = 900
+const HOME_LOGO_SCROLL_RANGE = 1200
+const HOME_LOGO_HANDOFF_RANGE = 110
+const HOME_LOGO_MIN_SCALE = 0.32
+const HOME_LOGO_SHIFT_RATIO = 0.32
+const HOME_SCROLL_SPEED = 0.55
+const HOME_SCROLL_EASE = 0.085
+const storyBlocks = [
+  {
+    id: 'school',
+    text:
+      "I'm Jorge, a front-end developer studying at Grafisch Lyceum Rotterdam. I was born in Portugal and now live in the Netherlands for school, and for the work that comes after it.",
+  },
+  {
+    id: 'origin',
+    text:
+      'It started when I was around 16. One website really caught my attention, not for what it said, but for how it was built. Everything was properly calculated, the visual hierarchy just worked, and it got me thinking about how something like that is made. I wanted to try it myself, and that is what pushed me into designing and then into coding.',
+  },
+  {
+    id: 'goal',
+    text:
+      "I want to be a coding engineer, though I'm still figuring out exactly where that lands. For now I'm going for front-end. Later on I might change my mind and move toward backend instead.",
+  },
+  {
+    id: 'outside',
+    text:
+      "Outside of coding I really enjoy climbing, it keeps my mind and body fresh and healthy. I also love interacting with people, even though I'd say I'm somewhat of an introvert.",
+  },
+]
 const aboutProfile = {
   name: 'JORGE SIMOES',
   role: 'Software Developer',
@@ -42,18 +78,84 @@ const projects = [
       ['STATUS', 'LIVE / V1.2.0'],
     ],
   },
+  {
+    title: 'MELOGRAPH',
+    summary:
+      'A music archive where artists, charts and news sit in one browsable catalogue, built around smooth scroll and a cursor that reacts to the page.',
+    language: 'NEXT.JS',
+    href: 'https://melograph.vercel.app',
+    image: melographShot,
+    overview:
+      'A music platform that treats a catalogue like something worth looking at. Artists have their own pages with their songs and videos pulled in from iTunes and YouTube, a top 20 ranks what is charting, and a news section keeps the rest. Accounts sit on top of it so you can like what you find and keep it on your profile.',
+    reason:
+      'A school project with a small team where I took the front-end. Most music sites hand you a grid and stop there, so I spent the time on how it moves instead: smooth scrolling, a custom cursor, a spinning record on the landing page, and page transitions that make browsing feel continuous rather than like loading documents.',
+    meta: [
+      ['ROLE', 'FRONT-END DEVELOPER'],
+      ['STACK', 'NEXT.JS / TYPESCRIPT / SCSS'],
+      ['TEAM', 'GROUP PROJECT / 3 DEVS'],
+      ['STATUS', 'LIVE / SCHOOL PROJECT'],
+    ],
+  },
+  {
+    title: 'MELOSTUDIO',
+    summary:
+      'A browser DAW where you build a beat in the timeline, publish it, and get feedback back from other producers.',
+    language: 'SOLID.JS',
+    href: 'https://github.com/Gaspaco/MeloStudio',
+    image: melostudioShot,
+    overview:
+      'Music production that runs in a tab. A studio with a timeline, piano roll, drum machine and synths on top of the Web Audio API, plus mic recording when you want to put something real on the track. Finished beats get published to a feed where other producers can listen, like and comment, so the work gets a reaction instead of sitting in a folder.',
+    reason:
+      'A team project where I worked on the front-end alongside another developer. Making a beat usually means installing a DAW first, and getting feedback on it means exporting and posting somewhere else entirely. Putting both in the browser removes the whole setup step, which is the part that stops people from starting.',
+    meta: [
+      ['ROLE', 'FRONT-END DEVELOPER'],
+      ['STACK', 'SOLIDJS / TYPESCRIPT / WEB AUDIO'],
+      ['TEAM', 'GROUP PROJECT / 3 DEVS'],
+      ['STATUS', 'NOT DEPLOYED / SOURCE ON GITHUB'],
+    ],
+  },
+  {
+    title: 'ARIA',
+    summary:
+      'A health app that pairs people with a coach, where the coach writes the training and nutrition plans and the client follows them day to day.',
+    language: 'REACT NATIVE',
+    href: 'https://health-app-xi-five.vercel.app',
+    image: ariaShot,
+    overview:
+      'Two apps sharing one account system. On the client side it tracks steps, sleep, runs on a map, mood and meals, with a recipe browser and a barcode scanner for logging food. On the coach side it turns into a caseload: clients request a coach, the coach accepts, then builds their workout and nutrition plans, keeps notes, watches progress and talks to them in chat.',
+    reason:
+      'A team project where I built the coach side. That half needed its own navigation, its own screens for assigning clients and editing their training courses, and permissions wide enough to let a coach change another account\u2019s plan without letting a client do the same, so part of the work sat in the backend rules rather than the interface.',
+    meta: [
+      ['ROLE', 'FRONT-END DEVELOPER / COACH APP'],
+      ['STACK', 'REACT NATIVE / EXPO / TYPESCRIPT'],
+      ['BACKEND', 'SUPABASE / AUTH / PERMISSIONS'],
+      ['STATUS', 'LIVE / SCHOOL PROJECT'],
+    ],
+  },
 ]
 const contactIntro = {
-  label: 'AVAILABLE',
-  statement: 'Looking for an internship for my third year.',
   text:
     'Open to front-end and fullstack work in the Netherlands. The fastest way to reach me is email — I answer everything.',
+}
+const contactPhotos = [contactPhoto7, contactPhoto2, contactPhoto1]
+let lastContactPhotoIndex = -1
+
+function pickContactPhotoIndex() {
+  const index = Math.floor(Math.random() * contactPhotos.length)
+  return index === lastContactPhotoIndex ? (index + 1) % contactPhotos.length : index
 }
 const contactChannels = [
   { label: 'EMAIL', value: links.email, href: `mailto:${links.email}` },
   { label: 'LINKEDIN', value: 'JORGE SIMOES', href: links.linkedin, external: true },
   { label: 'GITHUB', value: 'YAEKUZA', href: links.github, external: true },
-  { label: 'CV', value: 'DOWNLOAD PDF', href: cvHref, download: true },
+  {
+    label: 'CV',
+    value: 'DOWNLOAD PDF',
+    options: [
+      { label: 'ENGLISH', href: cvHref, filename: 'Jorge Simoes CV.pdf' },
+      { label: 'DUTCH', href: cvHrefNL, filename: 'Jorge Simoes CV (NL).pdf' },
+    ],
+  },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
 
@@ -183,96 +285,352 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect, onOpenChang
   )
 }
 
-function HeroName({ logo }) {
+function HeroName({ logo, logoRef }) {
   return (
     <h1 className="hero-name" aria-label="Jorge Simões">
       <span className="hero-first" aria-hidden="true">
         JORGE
       </span>
       <span className="hero-last" aria-hidden="true">
-        SIM<img className="hero-logo" src={logo} alt="" loading="eager" decoding="sync" fetchPriority="high" />ES
+        SIM
+        <img
+          className="hero-logo"
+          src={logo}
+          alt=""
+          loading="eager"
+          decoding="sync"
+          fetchPriority="high"
+          ref={logoRef}
+        />
+        ES
       </span>
     </h1>
   )
 }
 
-function HomeView({ activeTheme, transitioning }) {
+const ScrollIndicator = memo(function ScrollIndicator({ hidden }) {
   return (
-    <section className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}>
-      <HeroName logo={activeTheme.logo} />
+    <div className={`scroll-indicator ${hidden ? 'is-hidden' : ''}`} aria-hidden="true">
+      <span className="scroll-indicator-mark">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </span>
+    </div>
+  )
+})
+
+function HomeView({ activeTheme, transitioning }) {
+  const scrollRef = useRef()
+  const blockRefs = useRef([])
+  const heroLogoRef = useRef()
+  const pinLogoRef = useRef()
+  const pinLogoImgRef = useRef()
+  const [scrolled, setScrolled] = useState(false)
+  const [activeStoryId, setActiveStoryId] = useState(storyBlocks[0].id)
+
+  useEffect(() => {
+    const scrollEl = scrollRef.current
+    const heroLogo = heroLogoRef.current
+    const pinLogo = pinLogoRef.current
+    const pinLogoImg = pinLogoImgRef.current
+
+    if (!scrollEl || !heroLogo || !pinLogo || !pinLogoImg) {
+      return undefined
+    }
+
+    let frame
+    let originX = 0
+    let originY = 0
+    let startScale = HOME_LOGO_MIN_SCALE
+    const narrowScreen = window.matchMedia('(max-width: 900px)')
+
+    // Anchor the pinned logo to where the inline one actually sits inside the
+    // name, which is right of centre and shifts when the webfont swaps in.
+    const measureOrigin = () => {
+      const heroRect = heroLogo.getBoundingClientRect()
+      const pinSize = pinLogo.offsetWidth
+
+      if (!heroRect.width || !pinSize) {
+        return
+      }
+
+      originX = heroRect.left + heroRect.width / 2 - window.innerWidth / 2
+      originY =
+        heroRect.top + heroRect.height / 2 + scrollEl.scrollTop - window.innerHeight / 2
+      startScale = heroRect.width / pinSize
+    }
+
+    const applyScrollProgress = () => {
+      const scrollTop = scrollEl.scrollTop
+      const progress = Math.min(1, scrollTop / HOME_LOGO_SCROLL_RANGE)
+      const eased = progress * progress * (3 - 2 * progress)
+      const scale = startScale + (1 - startScale) * eased
+      const targetX = window.innerWidth * HOME_LOGO_SHIFT_RATIO
+      const x = originX + (targetX - originX) * eased
+      const y = originY * (1 - eased)
+      const handoff = narrowScreen.matches
+        ? 0
+        : Math.min(1, scrollTop / HOME_LOGO_HANDOFF_RANGE)
+
+      pinLogo.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`
+      pinLogo.style.opacity = String(handoff)
+      heroLogo.style.opacity = String(1 - handoff)
+      pinLogoImg.style.animationPlayState = progress >= 1 ? 'paused' : 'running'
+
+      if (scrollTop > 24) {
+        setScrolled(true)
+      }
+    }
+
+    const handleScroll = () => {
+      window.cancelAnimationFrame(frame)
+      frame = window.requestAnimationFrame(applyScrollProgress)
+    }
+
+    const handleResize = () => {
+      measureOrigin()
+      applyScrollProgress()
+    }
+
+    measureOrigin()
+    applyScrollProgress()
+    document.fonts.ready.then(handleResize)
+
+    scrollEl.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.cancelAnimationFrame(frame)
+      scrollEl.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  useEffect(() => {
+    const scrollEl = scrollRef.current
+
+    if (!scrollEl || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return undefined
+    }
+
+    let frame = null
+    let target = scrollEl.scrollTop
+    let current = target
+
+    const tick = () => {
+      const distance = target - current
+
+      if (Math.abs(distance) < 0.5) {
+        current = target
+        scrollEl.scrollTop = current
+        frame = null
+        return
+      }
+
+      current += distance * HOME_SCROLL_EASE
+      scrollEl.scrollTop = current
+      frame = window.requestAnimationFrame(tick)
+    }
+
+    const handleWheel = (event) => {
+      // The menu's own wheel lock runs first in the capture phase.
+      if (event.defaultPrevented) {
+        return
+      }
+
+      event.preventDefault()
+
+      if (frame === null) {
+        current = scrollEl.scrollTop
+        target = current
+      }
+
+      let delta = event.deltaY
+
+      if (event.deltaMode === 1) {
+        delta *= 16
+      } else if (event.deltaMode === 2) {
+        delta *= scrollEl.clientHeight
+      }
+
+      const maxScroll = scrollEl.scrollHeight - scrollEl.clientHeight
+      target = Math.min(maxScroll, Math.max(0, target + delta * HOME_SCROLL_SPEED))
+
+      if (frame === null) {
+        frame = window.requestAnimationFrame(tick)
+      }
+    }
+
+    scrollEl.addEventListener('wheel', handleWheel, { passive: false })
+
+    return () => {
+      if (frame !== null) {
+        window.cancelAnimationFrame(frame)
+      }
+
+      scrollEl.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
+
+  useEffect(() => {
+    const scrollEl = scrollRef.current
+
+    if (!scrollEl) {
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveStoryId(entry.target.dataset.storyId)
+          }
+        })
+      },
+      { root: scrollEl, threshold: 0.6 },
+    )
+
+    blockRefs.current.forEach((node) => {
+      if (node) {
+        observer.observe(node)
+      }
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
+  const activeStoryIndex = storyBlocks.findIndex((block) => block.id === activeStoryId)
+
+  return (
+    <section
+      className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}
+      ref={scrollRef}
+    >
+      <div className="home-hero">
+        <HeroName logo={activeTheme.logo} logoRef={heroLogoRef} />
+        <ScrollIndicator hidden={scrolled} />
+      </div>
+
+      <div className="home-logo-pin" ref={pinLogoRef} aria-hidden="true">
+        <div
+          className="home-logo-pin-step"
+          style={{ transform: `rotate(${Math.max(0, activeStoryIndex) * 90}deg)` }}
+        >
+          <img
+            className="home-logo-pin-img"
+            src={activeTheme.logo}
+            alt=""
+            ref={pinLogoImgRef}
+          />
+        </div>
+      </div>
+
+      <div className="home-story">
+        <div className="home-story-text">
+          {storyBlocks.map((block, index) => (
+            <p
+              className={`home-story-block ${block.id === activeStoryId ? 'is-active' : ''}`}
+              key={block.id}
+              data-story-id={block.id}
+              ref={(node) => {
+                blockRefs.current[index] = node
+              }}
+            >
+              {block.text}
+            </p>
+          ))}
+        </div>
+      </div>
     </section>
   )
 }
 
-function ProjectsHeader({ phase }) {
-  return (
-    <header className={`projects-list-header ${phase === 'out' ? 'is-exiting' : 'is-entering'}`}>
-      <h1>PROJECTS</h1>
-      <span className="projects-sector">SECTOR 03</span>
-      <span className="projects-list-rule" aria-hidden="true" />
-    </header>
-  )
-}
+function SectionHeader({
+  phase,
+  title,
+  sectorLabel,
+  sectorClassName = 'projects-sector',
+  sectorFirst = false,
+  extraClassName = '',
+}) {
+  const sector = <span className={sectorClassName}>{sectorLabel}</span>
 
-function AboutHeader({ phase }) {
   return (
     <header
-      className={`projects-list-header about-list-header ${
-        phase === 'out' ? 'is-exiting' : 'is-entering'
-      }`}
+      className={['projects-list-header', extraClassName, phase === 'out' ? 'is-exiting' : 'is-entering']
+        .filter(Boolean)
+        .join(' ')}
     >
-      <span className="about-sector">sec-02</span>
-      <h1>ABOUT</h1>
-      <span className="projects-list-rule" aria-hidden="true" />
-    </header>
-  )
-}
-
-function ContactHeader({ phase }) {
-  return (
-    <header
-      className={`projects-list-header ${phase === 'out' ? 'is-exiting' : 'is-entering'}`}
-    >
-      <h1>CONTACT</h1>
-      <span className="projects-sector">SECTOR 04</span>
+      {sectorFirst && sector}
+      <h1>{title}</h1>
+      {!sectorFirst && sector}
       <span className="projects-list-rule" aria-hidden="true" />
     </header>
   )
 }
 
 function ContactView({ phase }) {
+  const [photoIndex] = useState(pickContactPhotoIndex)
+
+  useEffect(() => {
+    lastContactPhotoIndex = photoIndex
+  }, [photoIndex])
+
+  const photo = contactPhotos[photoIndex]
+
   return (
     <section className={`view-layer contact-view page-phase-${phase}`} id="contact">
-      <ContactHeader phase={phase} />
+      <SectionHeader phase={phase} title="CONTACT" sectorLabel="SECTOR 04" />
 
       <div className="contact-body">
         <div className="contact-intro">
-          <span className="contact-label">{contactIntro.label}</span>
-          <h2 className="contact-statement">{contactIntro.statement}</h2>
+          <h2 className="contact-statement">
+            Looking for an <span className="contact-highlight">internship</span> for my third
+            year.
+          </h2>
           <p className="contact-lead">{contactIntro.text}</p>
         </div>
 
-        <div className="contact-channels">
-          {contactChannels.map((channel) => (
+        <img className="contact-photo" src={photo} alt="" />
+      </div>
+
+      <div className="contact-channels">
+        {contactChannels.map((channel) =>
+          channel.options ? (
+            <div className="contact-channel contact-channel-cv" key={channel.label}>
+              <div className="contact-channel-default">
+                <span className="contact-channel-label">{channel.label}</span>
+                <span className="contact-channel-value">{channel.value}</span>
+              </div>
+
+              <div className="contact-channel-options">
+                {channel.options.map((option) => (
+                  <a
+                    className="contact-channel-option"
+                    href={option.href}
+                    download={option.filename}
+                    key={option.label}
+                  >
+                    {option.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
             <a
               className="contact-channel"
               href={channel.href}
               key={channel.label}
               {...(channel.external ? { target: '_blank', rel: 'noreferrer' } : {})}
-              {...(channel.download ? { download: 'Jorge Simoes CV.pdf' } : {})}
             >
               <span className="contact-channel-label">{channel.label}</span>
               <span className="contact-channel-value">{channel.value}</span>
-              <span className="contact-channel-mark" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-              </span>
             </a>
-          ))}
-        </div>
+          ),
+        )}
       </div>
     </section>
   )
@@ -281,7 +639,14 @@ function ContactView({ phase }) {
 function AboutView({ phase }) {
   return (
     <section className={`view-layer about-view page-phase-${phase}`} id="about">
-      <AboutHeader phase={phase} />
+      <SectionHeader
+        phase={phase}
+        title="ABOUT"
+        sectorLabel="sec-02"
+        sectorClassName="about-sector"
+        sectorFirst
+        extraClassName="about-list-header"
+      />
 
       <div className="about-body">
         <div className="about-identity">
@@ -342,9 +707,11 @@ function ProjectDetail({ project, onBack }) {
         </div>
 
         <div className="project-detail-side">
-          <figure className="project-detail-shot">
-            <img src={project.image} alt={`${project.title} interface`} />
-          </figure>
+          {project.image ? (
+            <figure className="project-detail-shot">
+              <img src={project.image} alt={`${project.title} interface`} />
+            </figure>
+          ) : null}
 
           <div className="project-detail-meta">
             {project.meta.map(([label, value]) => (
@@ -431,7 +798,7 @@ function ProjectsView({ phase }) {
 
   return (
     <section className={`view-layer projects-view page-phase-${phase}`} id="projects">
-      <ProjectsHeader phase={phase} />
+      <SectionHeader phase={phase} title="PROJECTS" sectorLabel="SECTOR 03" />
 
       <div className={`projects-list-view is-${swapPhase}`}>
         {activeProject ? (
@@ -483,9 +850,14 @@ function ProjectsView({ phase }) {
   )
 }
 
+function getViewFromHash() {
+  const hash = window.location.hash.replace('#', '')
+  return pages.includes(hash) ? hash : 'home'
+}
+
 function App() {
   const [activeThemeName, setActiveThemeName] = useState(themes[1].name)
-  const [view, setView] = useState('home')
+  const [view, setView] = useState(getViewFromHash)
   const [transitionPhase, setTransitionPhase] = useState('idle')
   const [menuOpen, setMenuOpen] = useState(false)
   const activeTheme = themes.find((theme) => theme.name === activeThemeName) ?? themes[1]
@@ -503,7 +875,7 @@ function App() {
   }, [])
 
   const handleNavigate = useCallback(
-    (page) => {
+    (page, { pushHistory = true } = {}) => {
       if (!pages.includes(page)) {
         return
       }
@@ -512,19 +884,33 @@ function App() {
         return
       }
 
+      if (pushHistory) {
+        const url = page === 'home' ? window.location.pathname + window.location.search : `#${page}`
+        window.history.pushState(null, '', url)
+      }
+
       setTransitionPhase('out')
 
       window.setTimeout(() => {
         setView(page)
         setTransitionPhase(page === 'home' ? 'idle' : 'in')
-      }, 420)
+      }, NAV_OUT_DURATION)
 
       window.setTimeout(() => {
         setTransitionPhase('idle')
-      }, 900)
+      }, NAV_SETTLE_DURATION)
     },
     [view],
   )
+
+  useEffect(() => {
+    const handlePopState = () => {
+      handleNavigate(getViewFromHash(), { pushHistory: false })
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [handleNavigate])
 
   useEffect(() => {
     if (!menuOpen) {
