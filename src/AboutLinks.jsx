@@ -23,19 +23,20 @@ function AboutLinks() {
           href={link.href}
           target="_blank"
           rel="noreferrer"
-          aria-label={link.name}
           key={link.name}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d={link.icon} />
           </svg>
+          <span className="about-link-label">{link.name}</span>
         </a>
       ))}
 
-      <a className="about-link" href={cvHref} download="Jorge Simoes CV.pdf" aria-label="Download CV">
+      <a className="about-link" href={cvHref} download="Jorge Simoes CV.pdf">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path fillRule="evenodd" d={icons.cv} />
         </svg>
+        <span className="about-link-label">CV</span>
       </a>
     </div>
   )

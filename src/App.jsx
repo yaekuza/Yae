@@ -1,6 +1,7 @@
 import { lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import AboutLinks from './AboutLinks'
+import GardenName from './GardenName'
 import yaetypeShot from './assets/yaetypeSS.png'
 import melographShot from './assets/Melograph.png'
 import melostudioShot from './assets/melostudio.png'
@@ -31,34 +32,63 @@ const HOME_LOGO_MIN_SCALE = 0.32
 const HOME_LOGO_SHIFT_RATIO = 0.32
 const HOME_SCROLL_SPEED = 0.55
 const HOME_SCROLL_EASE = 0.085
+const HOME_FOOTER_BLOOM_AT = 0.3
+const HOME_PIN_EXIT_AT = 0.85
 const storyBlocks = [
   {
     id: 'school',
+    label: 'SCHOOL',
     text:
       "I'm Jorge, a front-end developer studying at Grafisch Lyceum Rotterdam. I was born in Portugal and now live in the Netherlands for school, and for the work that comes after it.",
   },
   {
     id: 'origin',
+    label: 'ORIGIN',
     text:
       'It started when I was around 16. One website really caught my attention, not for what it said, but for how it was built. Everything was properly calculated, the visual hierarchy just worked, and it got me thinking about how something like that is made. I wanted to try it myself, and that is what pushed me into designing and then into coding.',
   },
   {
     id: 'goal',
+    label: 'DIRECTION',
     text:
       "I want to be a coding engineer, though I'm still figuring out exactly where that lands. For now I'm going for front-end. Later on I might change my mind and move toward backend instead.",
   },
   {
     id: 'outside',
+    label: 'OFF SCREEN',
     text:
       "Outside of coding I really enjoy climbing, it keeps my mind and body fresh and healthy. I also love interacting with people, even though I'd say I'm somewhat of an introvert.",
   },
 ]
+const homeStatement = ['INTERFACES', 'THAT MOVE', 'WITH INTENT']
+const homeDisplay = ['FRONT', 'END', 'SINCE', 'SIXTEEN']
+const homeStats = [
+  ['BASED', 'ROTTERDAM, NL'],
+  ['SCHOOL', 'GRAFISCH LYCEUM'],
+  ['FOCUS', 'FRONT-END / FULLSTACK'],
+  ['STATUS', 'OPEN TO INTERNSHIP'],
+]
+const homeEthos =
+  'I build the front of the web: the part people actually touch. Most of my time goes into how interfaces are structured, how they move, and why some of them feel better than others.'
+
 const aboutProfile = {
   name: 'JORGE SIMOES',
   role: 'Software Developer',
   text:
     'I am 18, born in Portugal and currently living in the Netherlands for school and work. Right now everything I do points at front-end development, and I plan on becoming a pro in that field, so most of my time goes into learning how interfaces are structured, how they move, and why some of them feel better than others. Outside of that you will find me bouldering or taking photos. I am currently looking for an internship for my third year.',
 }
+const aboutStatement = [
+  'Structure, motion, and the',
+  'reason some interfaces',
+  'feel better than others',
+]
+const aboutFacts = [
+  ['STACK', 'React \u00b7 Next.js \u00b7 TypeScript'],
+  ['ALSO', 'Solid.js \u00b7 React Native \u00b7 Three.js'],
+  ['SCHOOL', 'Grafisch Lyceum Rotterdam'],
+  ['LANGUAGES', 'Portuguese \u00b7 English \u00b7 Dutch'],
+  ['AWAY FROM SCREEN', 'Bouldering \u00b7 Photography'],
+]
 const projects = [
   {
     title: 'YAETYPE',
@@ -133,6 +163,14 @@ const projects = [
     ],
   },
 ]
+const homeWork = projects.map((project, index) => ({
+  index: String(index + 1).padStart(2, '0'),
+  title: project.title,
+  stack: project.language,
+  status: (project.meta.find(([key]) => key === 'STATUS')?.[1] ?? '').split(' / ')[0],
+  href: project.href,
+}))
+
 const contactIntro = {
   text:
     'Open to front-end and fullstack work in the Netherlands. The fastest way to reach me is email — I answer everything.',
@@ -276,7 +314,10 @@ function PortfolioMenu({ activeThemeName, onNavigate, onThemeSelect, onOpenChang
         <span className="menu-label">MENU</span>
       </div>
 
-      <div className="menu-content" aria-hidden={!open}>
+      {/* inert, not aria-hidden: clicking a link closes the menu while that
+          link still holds focus, and aria-hidden over a focused element is
+          invalid. inert drops focus along with the accessibility exposure. */}
+      <div className="menu-content" inert={!open}>
         <PageList onNavigate={handleNavigate} />
         <LedBar />
         <ThemeSelector activeThemeName={activeThemeName} onThemeSelect={onThemeSelect} />
@@ -322,14 +363,148 @@ const ScrollIndicator = memo(function ScrollIndicator({ hidden }) {
   )
 })
 
-function HomeView({ activeTheme, transitioning }) {
+const HomeMark = memo(function HomeMark({ label, note }) {
+  return (
+    <div className="home-mark" data-reveal="">
+      <span className="home-mark-label">{label}</span>
+      <span className="home-mark-rule" aria-hidden="true" />
+      {note ? <span className="home-mark-note">{note}</span> : null}
+    </div>
+  )
+})
+
+const HomeStatement = memo(function HomeStatement({ lines }) {
+  return (
+    <h2 className="home-statement">
+      {lines.map((line) => (
+        <span className="home-statement-line" data-reveal="" key={line}>
+          <span>{line}</span>
+        </span>
+      ))}
+    </h2>
+  )
+})
+
+const HomeWorkIndex = memo(function HomeWorkIndex({ onNavigate }) {
+  return (
+    <div className="home-work-list">
+      {homeWork.map((entry) => (
+        <a
+          className="home-work-row"
+          href={entry.href}
+          target="_blank"
+          rel="noreferrer"
+          data-reveal=""
+          key={entry.title}
+        >
+          <span className="home-work-index">{entry.index}</span>
+          <span className="home-work-title">{entry.title}</span>
+          <span className="home-work-stack">{entry.stack}</span>
+          <span className="home-work-status">{entry.status}</span>
+          <span className="home-work-arrow" aria-hidden="true">
+            &#8599;
+          </span>
+        </a>
+      ))}
+
+      <a
+        className="home-work-row home-work-all"
+        href="#projects"
+        data-reveal=""
+        onClick={(event) => {
+          event.preventDefault()
+          onNavigate('projects')
+        }}
+      >
+        <span className="home-work-index">&#43;</span>
+        <span className="home-work-title">ALL PROJECTS</span>
+        <span className="home-work-stack" />
+        <span className="home-work-status">{String(homeWork.length).padStart(2, '0')} TOTAL</span>
+        <span className="home-work-arrow" aria-hidden="true">
+          &#8594;
+        </span>
+      </a>
+    </div>
+  )
+})
+
+const HomeDisplay = memo(function HomeDisplay() {
+  return (
+    <div className="home-display">
+      {homeDisplay.map((line, index) => (
+        <span
+          className={`home-display-line ${index === homeDisplay.length - 1 ? 'is-accent' : ''}`}
+          data-reveal=""
+          key={line}
+        >
+          <span>{line}</span>
+        </span>
+      ))}
+    </div>
+  )
+})
+
+function HomeFooter({ activeTheme, layerRef, onBackToTop, revealed }) {
+  return (
+    <div className={`home-underlayer ${revealed ? 'is-revealed' : ''}`} ref={layerRef}>
+      <footer className="home-footer">
+        <div className="home-footer-name">
+          <GardenName text="JORGE SIMOES" color={activeTheme.color} active={revealed} />
+        </div>
+
+        <div className="home-footer-base">
+          <div className="home-footer-links">
+            <a className="home-footer-link" href={`mailto:${links.email}`}>
+              {links.email}
+            </a>
+            <a
+              className="home-footer-link"
+              href={links.linkedin}
+              target="_blank"
+              rel="noreferrer"
+            >
+              LINKEDIN
+            </a>
+            <a
+              className="home-footer-link"
+              href={links.github}
+              target="_blank"
+              rel="noreferrer"
+            >
+              GITHUB
+            </a>
+            <a className="home-footer-link" href={cvHref} download="Jorge Simoes CV.pdf">
+              CV
+            </a>
+          </div>
+
+          <button className="home-footer-top" onClick={onBackToTop} type="button">
+            <span className="home-footer-top-mark" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </span>
+            BACK TO TOP
+          </button>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
+function HomeView({ activeTheme, onNavigate, transitioning }) {
   const scrollRef = useRef()
+  const underlayerRef = useRef()
+  const storyRef = useRef()
   const blockRefs = useRef([])
   const heroLogoRef = useRef()
   const pinLogoRef = useRef()
   const pinLogoImgRef = useRef()
   const [scrolled, setScrolled] = useState(false)
   const [activeStoryId, setActiveStoryId] = useState(storyBlocks[0].id)
+  const [footerRevealed, setFooterRevealed] = useState(false)
 
   useEffect(() => {
     const scrollEl = scrollRef.current
@@ -375,14 +550,34 @@ function HomeView({ activeTheme, transitioning }) {
         ? 0
         : Math.min(1, scrollTop / HOME_LOGO_HANDOFF_RANGE)
 
+      // The pinned logo only belongs beside the story column. Once that column
+      // clears the viewport the full-width chapters take over, so it drops out.
+      const viewportHeight = scrollEl.clientHeight
+      const storyBottom = storyRef.current?.getBoundingClientRect().bottom ?? Infinity
+      const exit = Math.min(
+        1,
+        Math.max(0, (viewportHeight * HOME_PIN_EXIT_AT - storyBottom) / (viewportHeight * 0.45)),
+      )
+
+      // The last viewport of scroll peels the skin off the footer underneath,
+      // so the pinned logo has to clear out of the way as that happens.
+      const maxScroll = scrollEl.scrollHeight - scrollEl.clientHeight
+      const revealRange = underlayerRef.current?.offsetHeight || scrollEl.clientHeight
+      const reveal =
+        revealRange > 0
+          ? Math.min(1, Math.max(0, (scrollTop - (maxScroll - revealRange)) / revealRange))
+          : 0
+
       pinLogo.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`
-      pinLogo.style.opacity = String(handoff)
+      pinLogo.style.opacity = String(handoff * (1 - reveal) * (1 - exit))
       heroLogo.style.opacity = String(1 - handoff)
       pinLogoImg.style.animationPlayState = progress >= 1 ? 'paused' : 'running'
 
       if (scrollTop > 24) {
         setScrolled(true)
       }
+
+      setFooterRevealed(reveal > HOME_FOOTER_BLOOM_AT)
     }
 
     const handleScroll = () => {
@@ -502,6 +697,53 @@ function HomeView({ activeTheme, transitioning }) {
     return () => observer.disconnect()
   }, [])
 
+  // One-shot reveal for the ruled lines, index rows and display type.
+  useEffect(() => {
+    const scrollEl = scrollRef.current
+
+    if (!scrollEl) {
+      return undefined
+    }
+
+    const nodes = Array.from(scrollEl.querySelectorAll('[data-reveal]'))
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      nodes.forEach((node) => node.classList.add('is-in'))
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { root: scrollEl, rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+    )
+
+    nodes.forEach((node) => observer.observe(node))
+
+    return () => observer.disconnect()
+  }, [])
+
+  const handleBackToTop = useCallback(() => {
+    const scrollEl = scrollRef.current
+
+    if (!scrollEl) {
+      return
+    }
+
+    scrollEl.scrollTo({
+      top: 0,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+    })
+  }, [])
+
   const activeStoryIndex = storyBlocks.findIndex((block) => block.id === activeStoryId)
 
   return (
@@ -509,41 +751,92 @@ function HomeView({ activeTheme, transitioning }) {
       className={`view-layer home-view ${transitioning ? 'is-transitioning' : ''}`}
       ref={scrollRef}
     >
-      <div className="home-hero">
-        <HeroName logo={activeTheme.logo} logoRef={heroLogoRef} />
-        <ScrollIndicator hidden={scrolled} />
+      <div className="home-skin">
+        <div className="home-hero">
+          <HeroName logo={activeTheme.logo} logoRef={heroLogoRef} />
+
+          <div className="home-hero-meta" aria-hidden="true">
+            <span className="home-hero-meta-item is-top-left">PORTFOLIO &#183; 2026</span>
+            <span className="home-hero-meta-item is-top-right">
+              <span className="home-hero-dot" />
+              CURRENTLY BUILDING
+            </span>
+            <span className="home-hero-meta-item is-bottom-left">FRONT-END DEVELOPER</span>
+            <span className="home-hero-meta-item is-bottom-right">ROTTERDAM / NL</span>
+          </div>
+
+          <ScrollIndicator hidden={scrolled} />
+        </div>
+
+        <div className="home-logo-pin" ref={pinLogoRef} aria-hidden="true">
+          <div
+            className="home-logo-pin-step"
+            style={{ transform: `rotate(${Math.max(0, activeStoryIndex) * 90}deg)` }}
+          >
+            <img
+              className="home-logo-pin-img"
+              src={activeTheme.logo}
+              alt=""
+              ref={pinLogoImgRef}
+            />
+          </div>
+        </div>
+
+        <section className="home-chapter home-story" ref={storyRef}>
+          <div className="home-story-column">
+            <HomeMark label="Profile" note="18 &#183; PORTUGAL &#8594; NL" />
+            <HomeStatement lines={homeStatement} />
+
+            <div className="home-ethos" data-reveal="">
+              <span className="home-ethos-label">APPROACH</span>
+              <p className="home-ethos-text">{homeEthos}</p>
+            </div>
+          </div>
+
+          <div className="home-story-text">
+            {storyBlocks.map((block, index) => (
+              <div
+                className={`home-story-block ${block.id === activeStoryId ? 'is-active' : ''}`}
+                key={block.id}
+                data-story-id={block.id}
+                ref={(node) => {
+                  blockRefs.current[index] = node
+                }}
+              >
+                <span className="home-story-label">{block.label}</span>
+                <p className="home-story-copy">{block.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="home-chapter home-work">
+          <HomeMark label="Selected work" note={`${homeWork.length} BUILT`} />
+          <HomeWorkIndex onNavigate={onNavigate} />
+        </section>
+
+        <section className="home-chapter home-signals">
+          <HomeMark label="Details" note="INDEX" />
+
+          <dl className="home-stats">
+            {homeStats.map(([label, value]) => (
+              <div className="home-stat" data-reveal="" key={label}>
+                <dt className="home-stat-label">{label}</dt>
+                <dd className="home-stat-value">{value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <HomeDisplay />
+        </section>
       </div>
 
-      <div className="home-logo-pin" ref={pinLogoRef} aria-hidden="true">
-        <div
-          className="home-logo-pin-step"
-          style={{ transform: `rotate(${Math.max(0, activeStoryIndex) * 90}deg)` }}
-        >
-          <img
-            className="home-logo-pin-img"
-            src={activeTheme.logo}
-            alt=""
-            ref={pinLogoImgRef}
-          />
-        </div>
-      </div>
-
-      <div className="home-story">
-        <div className="home-story-text">
-          {storyBlocks.map((block, index) => (
-            <p
-              className={`home-story-block ${block.id === activeStoryId ? 'is-active' : ''}`}
-              key={block.id}
-              data-story-id={block.id}
-              ref={(node) => {
-                blockRefs.current[index] = node
-              }}
-            >
-              {block.text}
-            </p>
-          ))}
-        </div>
-      </div>
+      <HomeFooter
+        activeTheme={activeTheme}
+        layerRef={underlayerRef}
+        onBackToTop={handleBackToTop}
+        revealed={footerRevealed}
+      />
     </section>
   )
 }
@@ -649,19 +942,43 @@ function AboutView({ phase }) {
       />
 
       <div className="about-body">
-        <div className="about-identity">
-          <h2 className="about-name">
-            <span>{aboutProfile.name}</span>
-          </h2>
-          <p className="about-role">{aboutProfile.role}</p>
-          <AboutLinks />
+        <div className="about-eyebrow">
+          <span className="about-eyebrow-name">{aboutProfile.name}</span>
+          <span className="about-eyebrow-rule" aria-hidden="true" />
+          <span className="about-eyebrow-role">{aboutProfile.role}</span>
         </div>
 
-        <Suspense fallback={null}>
-          <AboutModel />
-        </Suspense>
+        <div className="about-main">
+          <h2 className="about-statement">
+            {aboutStatement.map((line) => (
+              <span className="about-statement-line" key={line}>
+                <span>{line}</span>
+              </span>
+            ))}
+          </h2>
 
-        <p className="about-lead">{aboutProfile.text}</p>
+          <p className="about-lead">{aboutProfile.text}</p>
+        </div>
+
+        <aside className="about-aside">
+          <dl className="about-facts">
+            {aboutFacts.map(([label, value]) => (
+              <div className="about-fact" key={label}>
+                <dt className="about-fact-label">{label}</dt>
+                <dd className="about-fact-value">{value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <Suspense fallback={null}>
+            <AboutModel />
+          </Suspense>
+        </aside>
+
+        <div className="about-foot">
+          <AboutLinks />
+          <span className="about-foot-note">Rotterdam, NL</span>
+        </div>
       </div>
     </section>
   )
@@ -948,7 +1265,11 @@ function App() {
       ) : view === 'projects' ? (
         <ProjectsView phase={transitionPhase} />
       ) : (
-        <HomeView activeTheme={activeTheme} transitioning={transitionPhase === 'out'} />
+        <HomeView
+          activeTheme={activeTheme}
+          onNavigate={handleNavigate}
+          transitioning={transitionPhase === 'out'}
+        />
       )}
     </main>
   )

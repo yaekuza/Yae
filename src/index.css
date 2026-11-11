@@ -3,9 +3,12 @@
   --ink: #ffffff;
   --muted: #777777;
   --accent: #5517ff;
-  --font-sans: "Space Grotesk", "NON Natural Grotesk", Arial, sans-serif;
-  --font-mono: "Space Mono", "NON Natural Mono", "Courier New", monospace;
-  --font-roman: "Instrument Serif", "FK Roman Standard", Georgia, serif;
+  /* Every face here is served from Google Fonts in index.html, so the site
+     renders the same on a machine that has none of them installed. The
+     fallbacks are system faces only -- no licensed, locally-installed names. */
+  --font-sans: "Space Grotesk", Arial, Helvetica, sans-serif;
+  --font-mono: "Space Mono", "Courier New", Courier, monospace;
+  --font-roman: "Instrument Serif", Georgia, "Times New Roman", serif;
 
   font-family: var(--font-sans);
   color: var(--ink);
