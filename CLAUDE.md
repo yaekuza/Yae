@@ -75,23 +75,58 @@ result as if you've seen it. Say explicitly when it's unverified so Yae knows to
   before using it; `font-synthesis: none` is set, so unloaded weights silently snap to a
   loaded one. Loaded: Space Grotesk 300/400/500/700, Space Mono 400/700, Instrument Serif 400.
   Canvas counts too (`FONT` in `src/garden.js`).
-- **About page typography**: max three typefaces, all from the `--font-sans` / `--font-mono`
-  / `--font-roman` vars. Never Tiny5. Sans for display and values, roman for the lead prose,
-  mono for micro-labels.
-- **Instrument Serif is a display face.** One weight, high contrast, no italic. Fine big.
-  Be suspicious of it at body sizes on black — thin strokes disappear.
+- **Typography**: max three typefaces, all from the `--font-sans` / `--font-mono` /
+  `--font-roman` vars. Never Tiny5. **Sans (Space Grotesk) for all body text** — leads,
+  story copy, values. Mono for micro-labels. Roman (Instrument Serif) only for big display
+  type: the home statement and the footer canvas. It's a one-weight, high-contrast display
+  face; at body size on black the strokes disappear. We tried it for body text and reverted.
 - **Don't touch** the footer or the `JORGE SIMOES` hero name on the home page without being
-  asked.
+  asked. The big `JORGE SIMOES` on *about* is deliberate and carries that page — it's the
+  one memorable thing on it, don't quietly demote it again.
+- **One message per page.** Home = the work, the position statement, and the ask.
+  About = the person: name, bio, spec sheet, what he's doing now. Don't let the two pages
+  explain him twice; if you write a statement for one, the other doesn't get one.
+- **Availability: he's interning until February, looking for front-end work from February
+  on** (as of 2026-11-11). Say it in **two places at most** — the home ask and the contact
+  statement — and never as a third repeated line. Over-stating it reads as pleading and
+  breaks the design rules above. It is *not* "looking for a third-year internship" any more.
+- **Home order is deliberate**: hero → work → position → ask → footer. Projects come first.
+  Don't bury the work again, and don't pad the page back out with prose.
+- **The four story blocks are gone** (SCHOOL / ORIGIN / DIRECTION / OFF SCREEN, removed
+  2026-11-12 — he called them bulk text). That autobiography already lives in the about bio.
+  The `.home-position` block (statement + HOW paragraph) is all the prose home gets. The old
+  copy is in git if it's ever wanted on about.
+- **The work section carries the page.** Each project is a block: title, one-line summary,
+  stack, VISIT/SOURCE link, and its screenshot. Screenshots are greyscale at 0.72 and go
+  full colour on hover — that's what keeps four screenshots from turning the page into a
+  colour swatch. Shot widths and vertical drops vary per `nth-child` on purpose; don't
+  "fix" them into a tidy grid.
+- **The ask is a footnote plus an address.** `Available from February` is a mono micro-label;
+  the email is the display type under it. Don't flip that hierarchy back.
+- **The laptop is gone.** `AboutModel.jsx` and the 1.8MB `.glb` were deleted (2026-11-11) —
+  1.8MB + ~155KB of three.js to spin a generic laptop that said nothing. `three` is still in
+  `package.json` and can be dropped. Don't reintroduce decoration that costs more than the
+  content.
+- **Project screenshots are `.webp`, 1400px wide** (converted 2026-11-12: the four PNGs were
+  2.4MB, Melograph alone 1.97MB; they're now 55KB total). `convert` (ImageMagick) is
+  available — `convert in.png -resize 1400x -quality 82 out.webp`. Any new screenshot goes
+  through that before it ships. The PNGs are in git history.
 
 ## Repo notes
 
 - Vite + React, no router — pages are `view` state in `src/App.jsx` with `pushState` +
   `popstate`. A bare `<a href="#page">` will **not** navigate; call `onNavigate(page)`.
 - `src/App.jsx` and `src/App.css` hold basically everything. Home, about, projects and
-  contact are all views in that one file.
-- `AboutModel` is lazy-loaded three.js (~155KB gzipped + a 1.8MB GLB). Keep it off the
-  critical path.
+  contact are all views in that one file. **Editing it by slicing between two markers is how
+  I deleted `ProjectsView` by accident on 2026-11-11** — match exact text, or check what sits
+  between your two anchors first.
 - `.home-view` is its own scroll container with hijacked wheel + smooth easing
-  (`HOME_SCROLL_SPEED`, `HOME_SCROLL_EASE`). Adding page length makes the scroll feel
+  (`HOME_SCROLL_SPEED` 0.85, `HOME_SCROLL_EASE`). Adding page length makes the scroll feel
   slower — account for it.
+- **The spinning square beside the home story is gone** (removed 2026-11-11, he found it
+  messy). All of it: markup, `.home-logo-pin*` CSS, the refs, `activeStoryIndex`, and the
+  measured hero→pin handoff transforms. Don't rebuild any version of it. The story column
+  is narrow on purpose and the right side of the page is meant to be empty.
+- `@media (prefers-reduced-motion: reduce)` near the bottom of `App.css` kills the infinite
+  animations. Any new `animation: … infinite` has to be added there.
 - Check it with `npx vite --port 5174` and `npx eslint src`.
