@@ -6,9 +6,18 @@
   /* Every face here is served from Google Fonts in index.html, so the site
      renders the same on a machine that has none of them installed. The
      fallbacks are system faces only -- no licensed, locally-installed names. */
+  /* Four faces, and four is the ceiling. Another look comes from a weight or
+     an italic of one of these, never a fifth family -- and any weight or
+     style used has to be added to the link in index.html first, because
+     font-synthesis is off and an unloaded one snaps silently.
+     sans   body text everywhere, and the about name at 700
+     mono   micro-labels only
+     roman  sharp display serif: the home statement and the footer canvas
+     serif  soft display serif: the contact statement */
   --font-sans: "Space Grotesk", Arial, Helvetica, sans-serif;
   --font-mono: "Space Mono", "Courier New", Courier, monospace;
   --font-roman: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
 
   font-family: var(--font-sans);
   color: var(--ink);

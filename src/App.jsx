@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
 import './App.css'
-import AboutLinks from './AboutLinks'
 import GardenName from './GardenName'
 import yaetypeShot from './assets/yaetypeSS.webp'
 import melographShot from './assets/Melograph.webp'
@@ -10,9 +10,8 @@ import { cvHref, cvHrefNL, links } from './links'
 import blueLogo from './assets/bluelogo.png'
 import orangeLogo from './assets/orangelogo.png'
 import pinkLogo from './assets/pinklogo.png'
-import contactPhoto1 from './assets/img1.png'
-import contactPhoto2 from './assets/img2.png'
-import contactPhoto7 from './assets/img7.png'
+import darkpoolShot from './assets/darkpool.avif'
+import stepsShot from './assets/steps.avif'
 
 const themes = [
   { name: 'pink', color: '#df32aa', logo: pinkLogo },
@@ -29,24 +28,23 @@ const HOME_SCROLL_EASE = 0.085
 const HOME_FOOTER_BLOOM_AT = 0.3
 const homeStatement = ['INTERFACES', 'THAT MOVE', 'WITH INTENT']
 const homeEthos =
-  'Mostly the unglamorous parts — how a layout holds at every width, what moves and what stays put, and why one page feels calculated while the next feels thrown together. Four projects above: two with a team, two on my own.'
-const homeAvailability = 'Available from February'
+  'Mostly the unglamorous parts: how a layout holds at every width, what moves and what stays put, and why one page feels calculated while the next feels thrown together. Four projects above: one built on my own, three with a team.'
 
 const aboutProfile = {
   name: 'JORGE SIMOES',
-  role: 'Software Developer',
+  role: 'Front-end developer',
   text:
-    'I am 18, born in Portugal and currently living in the Netherlands for school and work. Right now everything I do points at front-end development, and I plan on becoming a pro in that field, so most of my time goes into learning how interfaces are structured, how they move, and why some of them feel better than others. Outside of that you will find me bouldering or taking photos.',
+    'I am 18, born in Portugal. I would rather ship one page that survives being used than five that only look finished. Away from the screen I take photographs, and the ones on the contact page are mine.',
 }
 const aboutFacts = [
-  ['STACK', 'React · Next.js · TypeScript · Solid.js'],
-  ['SCHOOL', 'Grafisch Lyceum Rotterdam'],
+  ['STACK', 'React · Next.js · TypeScript · React Native'],
   ['LANGUAGES', 'Portuguese · English · Dutch'],
+  ['BASED', 'Rotterdam, NL'],
 ]
 const aboutNow = [
   'Third year at Grafisch Lyceum Rotterdam',
   'Interning until February',
-  'Moving from front-end into some backend',
+  'Learning enough backend to ship on my own',
   'Bouldering twice a week',
 ]
 const projects = [
@@ -55,6 +53,7 @@ const projects = [
     summary:
       'A typing trainer built around fast restarts, real word tests, and modes that keep practice from feeling like a drill.',
     language: 'NEXT.JS',
+    credit: 'FULLSTACK \u00b7 SOLO',
     href: 'https://yaetype.jorgesimoes.com',
     image: yaetypeShot,
     overview:
@@ -73,6 +72,7 @@ const projects = [
     summary:
       'A music archive where artists, charts and news sit in one browsable catalogue, built around smooth scroll and a cursor that reacts to the page.',
     language: 'NEXT.JS',
+    credit: 'FRONT-END \u00b7 TEAM OF 3',
     href: 'https://melograph.vercel.app',
     image: melographShot,
     overview:
@@ -91,6 +91,7 @@ const projects = [
     summary:
       'A browser DAW where you build a beat in the timeline, publish it, and get feedback back from other producers.',
     language: 'SOLID.JS',
+    credit: 'FRONT-END \u00b7 TEAM OF 3',
     href: 'https://github.com/Gaspaco/MeloStudio',
     image: melostudioShot,
     overview:
@@ -109,6 +110,7 @@ const projects = [
     summary:
       'A health app that pairs people with a coach, where the coach writes the training and nutrition plans and the client follows them day to day.',
     language: 'REACT NATIVE',
+    credit: 'FRONT-END \u00b7 COACH SIDE',
     href: 'https://health-app-xi-five.vercel.app',
     image: ariaShot,
     overview:
@@ -126,6 +128,7 @@ const projects = [
 const homeWork = projects.map((project) => ({
   title: project.title,
   summary: project.summary,
+  credit: project.credit,
   stack: project.language,
   status: (project.meta.find(([key]) => key === 'STATUS')?.[1] ?? '').split(' / ')[0],
   href: project.href,
@@ -134,27 +137,44 @@ const homeWork = projects.map((project) => ({
 
 const contactIntro = {
   text:
-    'Open to front-end and fullstack work in the Netherlands. The fastest way to reach me is email — I answer everything.',
+    'Rotterdam based, open to anywhere in the Netherlands. Email is the fastest way to reach me. I check the rest far less often.',
 }
-const contactPhotos = [contactPhoto7, contactPhoto2, contactPhoto1]
+const contactPhotos = [
+  {
+    src: darkpoolShot,
+    ratio: 1471 / 981,
+    alt: 'A player leaning over a pool table under a strip light in a dark hall.',
+  },
+  {
+    src: stepsShot,
+    ratio: 1470 / 980,
+    alt: 'A figure silhouetted at the top of a long flight of steps, against a clouded sky with a tower block behind.',
+  },
+]
 let lastContactPhotoIndex = -1
 
 function pickContactPhotoIndex() {
   const index = Math.floor(Math.random() * contactPhotos.length)
   return index === lastContactPhotoIndex ? (index + 1) % contactPhotos.length : index
 }
+// Vertical bars that wipe the figure. They cover on the way in, the photo is
+// swapped behind them, then they clear — so the swap itself is never seen.
+const SHUTTER_BARS = [0, 1, 2, 3, 4, 5, 6]
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const contactPrimary = {
+  label: 'EMAIL',
+  value: links.email,
+  href: `mailto:${links.email}`,
+}
+// The old LINKEDIN/GITHUB values were his own name and handle, and CV's value
+// was 'DOWNLOAD PDF' under a label already reading CV. The label is the link now.
 const contactChannels = [
-  { label: 'EMAIL', value: links.email, href: `mailto:${links.email}` },
-  { label: 'LINKEDIN', value: 'JORGE SIMOES', href: links.linkedin, external: true },
-  { label: 'GITHUB', value: 'YAEKUZA', href: links.github, external: true },
-  {
-    label: 'CV',
-    value: 'DOWNLOAD PDF',
-    options: [
-      { label: 'ENGLISH', href: cvHref, filename: 'Jorge Simoes CV.pdf' },
-      { label: 'DUTCH', href: cvHrefNL, filename: 'Jorge Simoes CV (NL).pdf' },
-    ],
-  },
+  { label: 'LINKEDIN', href: links.linkedin, external: true },
+  { label: 'GITHUB', href: links.github, external: true },
+  { label: 'CV (EN)', href: cvHref, filename: 'Jorge Simoes CV.pdf' },
+  { label: 'CV (NL)', href: cvHrefNL, filename: 'Jorge Simoes CV (NL).pdf' },
 ]
 const projectFilters = ['ALL', ...Array.from(new Set(projects.map((project) => project.language)))]
 
@@ -359,6 +379,7 @@ const HomeWorkIndex = memo(function HomeWorkIndex({ onNavigate }) {
             <p className="home-work-summary">{entry.summary}</p>
 
             <div className="home-work-meta">
+              <span className="home-work-credit">{entry.credit}</span>
               <span className="home-work-stack">{entry.stack}</span>
               <a
                 className="home-work-live"
@@ -506,6 +527,22 @@ function HomeView({ activeTheme, onNavigate, transitioning }) {
       frame = window.requestAnimationFrame(tick)
     }
 
+    // Picks the easing up from wherever the element actually is, so a native
+    // scroll (a tab-to-link jump) does not leave target behind.
+    const glide = (delta) => {
+      if (frame === null) {
+        current = scrollEl.scrollTop
+        target = current
+      }
+
+      const maxScroll = scrollEl.scrollHeight - scrollEl.clientHeight
+      target = Math.min(maxScroll, Math.max(0, target + delta))
+
+      if (frame === null) {
+        frame = window.requestAnimationFrame(tick)
+      }
+    }
+
     const handleWheel = (event) => {
       // The menu's own wheel lock runs first in the capture phase.
       if (event.defaultPrevented) {
@@ -513,11 +550,6 @@ function HomeView({ activeTheme, onNavigate, transitioning }) {
       }
 
       event.preventDefault()
-
-      if (frame === null) {
-        current = scrollEl.scrollTop
-        target = current
-      }
 
       let delta = event.deltaY
 
@@ -527,15 +559,62 @@ function HomeView({ activeTheme, onNavigate, transitioning }) {
         delta *= scrollEl.clientHeight
       }
 
-      const maxScroll = scrollEl.scrollHeight - scrollEl.clientHeight
-      target = Math.min(maxScroll, Math.max(0, target + delta * HOME_SCROLL_SPEED))
+      glide(delta * HOME_SCROLL_SPEED)
+    }
 
-      if (frame === null) {
-        frame = window.requestAnimationFrame(tick)
+    // Keys route through the same glide, so space / PageDown / arrows do not
+    // snap while the wheel eases.
+    const handleKey = (event) => {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) {
+        return
       }
+
+      const node = event.target
+
+      if (
+        node instanceof HTMLElement &&
+        (node.isContentEditable ||
+          ['INPUT', 'TEXTAREA', 'SELECT'].includes(node.tagName))
+      ) {
+        return
+      }
+
+      const page = scrollEl.clientHeight * 0.88
+      const maxScroll = scrollEl.scrollHeight - scrollEl.clientHeight
+      let delta
+
+      switch (event.key) {
+        case 'ArrowDown':
+          delta = 72
+          break
+        case 'ArrowUp':
+          delta = -72
+          break
+        case 'PageDown':
+          delta = page
+          break
+        case 'PageUp':
+          delta = -page
+          break
+        case ' ':
+          delta = event.shiftKey ? -page : page
+          break
+        case 'Home':
+          delta = -maxScroll
+          break
+        case 'End':
+          delta = maxScroll
+          break
+        default:
+          return
+      }
+
+      event.preventDefault()
+      glide(delta)
     }
 
     scrollEl.addEventListener('wheel', handleWheel, { passive: false })
+    window.addEventListener('keydown', handleKey)
 
     return () => {
       if (frame !== null) {
@@ -543,6 +622,7 @@ function HomeView({ activeTheme, onNavigate, transitioning }) {
       }
 
       scrollEl.removeEventListener('wheel', handleWheel)
+      window.removeEventListener('keydown', handleKey)
     }
   }, [])
 
@@ -625,19 +705,6 @@ function HomeView({ activeTheme, onNavigate, transitioning }) {
             <p className="home-ethos-text">{homeEthos}</p>
           </div>
         </section>
-
-        <section className="home-chapter home-ask">
-          <p className="home-ask-label" data-reveal="">
-            {homeAvailability}
-          </p>
-
-          <a className="home-ask-mail" href={`mailto:${links.email}`} data-reveal="">
-            <span className="home-ask-mail-value">{links.email}</span>
-            <span className="home-ask-mail-arrow" aria-hidden="true">
-              &#8594;
-            </span>
-          </a>
-        </section>
       </div>
 
       <HomeFooter
@@ -650,89 +717,162 @@ function HomeView({ activeTheme, onNavigate, transitioning }) {
   )
 }
 
-function SectionHeader({
-  phase,
-  title,
-  sectorLabel,
-  sectorClassName = 'projects-sector',
-  sectorFirst = false,
-  extraClassName = '',
-}) {
-  const sector = <span className={sectorClassName}>{sectorLabel}</span>
-
+function SectionHeader({ phase, title, extraClassName = '' }) {
   return (
     <header
       className={['projects-list-header', extraClassName, phase === 'out' ? 'is-exiting' : 'is-entering']
         .filter(Boolean)
         .join(' ')}
     >
-      {sectorFirst && sector}
       <h1>{title}</h1>
-      {!sectorFirst && sector}
       <span className="projects-list-rule" aria-hidden="true" />
     </header>
   )
 }
 
 function ContactView({ phase }) {
-  const [photoIndex] = useState(pickContactPhotoIndex)
+  const [photoIndex, setPhotoIndex] = useState(pickContactPhotoIndex)
+  const shutterRef = useRef(null)
+  const timelineRef = useRef(null)
 
   useEffect(() => {
     lastContactPhotoIndex = photoIndex
   }, [photoIndex])
 
+  // Intro: the bars start covering the photo in CSS, so there is nothing to
+  // flash before gsap takes over. They clear downward.
+  useEffect(() => {
+    const bars = shutterRef.current?.children
+
+    if (!bars || bars.length === 0) {
+      return undefined
+    }
+
+    if (prefersReducedMotion()) {
+      gsap.set(bars, { scaleY: 0 })
+      return undefined
+    }
+
+    const intro = gsap
+      .timeline({ delay: 0.14 })
+      .set(bars, { transformOrigin: 'bottom center' })
+      .to(bars, {
+        scaleY: 0,
+        duration: 0.62,
+        ease: 'power3.inOut',
+        stagger: 0.055,
+      })
+
+    timelineRef.current = intro
+
+    return () => {
+      intro.kill()
+    }
+  }, [])
+
+  // Close down over the photo, swap it underneath, clear down again. One
+  // continuous downward motion rather than a symmetric open/close.
+  const handleSwapPhoto = useCallback(() => {
+    const bars = shutterRef.current?.children
+    const nextIndex = () => setPhotoIndex((index) => (index + 1) % contactPhotos.length)
+
+    if (!bars || bars.length === 0 || prefersReducedMotion()) {
+      nextIndex()
+      return
+    }
+
+    if (timelineRef.current?.isActive()) {
+      return
+    }
+
+    timelineRef.current = gsap
+      .timeline()
+      .set(bars, { transformOrigin: 'top center' })
+      .to(bars, { scaleY: 1, duration: 0.42, ease: 'power3.inOut', stagger: 0.045 })
+      .add(nextIndex)
+      .set(bars, { transformOrigin: 'bottom center' })
+      // Held long enough for the figure's 360ms width transition to land, so
+      // the frame is never still resizing as the photo is uncovered.
+      .to(
+        bars,
+        { scaleY: 0, duration: 0.54, ease: 'power3.inOut', stagger: 0.045 },
+        '+=0.42',
+      )
+  }, [])
+
+  useEffect(() => () => timelineRef.current?.kill(), [])
+
   const photo = contactPhotos[photoIndex]
+  const canSwapPhotos = contactPhotos.length > 1
+  const Figure = canSwapPhotos ? 'button' : 'div'
 
   return (
     <section className={`view-layer contact-view page-phase-${phase}`} id="contact">
-      <SectionHeader phase={phase} title="CONTACT" sectorLabel="SECTOR 04" />
+      <SectionHeader phase={phase} title="CONTACT" extraClassName="contact-list-header" />
 
       <div className="contact-body">
         <div className="contact-intro">
           <h2 className="contact-statement">
-            Available from <span className="contact-highlight">February</span> for front-end
-            work.
+            Available from February for <span className="contact-keep">front-end</span> work.
           </h2>
           <p className="contact-lead">{contactIntro.text}</p>
         </div>
-
-        <img className="contact-photo" src={photo} alt="" />
       </div>
 
-      <div className="contact-channels">
-        {contactChannels.map((channel) =>
-          channel.options ? (
-            <div className="contact-channel contact-channel-cv" key={channel.label}>
-              <div className="contact-channel-default">
-                <span className="contact-channel-label">{channel.label}</span>
-                <span className="contact-channel-value">{channel.value}</span>
-              </div>
+      <Figure
+        className="contact-figure"
+        style={{ '--contact-shape': photo.ratio }}
+        {...(canSwapPhotos
+          ? {
+              type: 'button',
+              onClick: handleSwapPhoto,
+              'aria-label': 'Show a different photo',
+            }
+          : {})}
+      >
+        <img
+          className="contact-photo"
+          src={photo.src}
+          alt={photo.alt}
+          decoding="async"
+        />
+        <span className="contact-shutter" ref={shutterRef} aria-hidden="true">
+          {SHUTTER_BARS.map((bar) => (
+            <span key={bar} />
+          ))}
+        </span>
 
-              <div className="contact-channel-options">
-                {channel.options.map((option) => (
-                  <a
-                    className="contact-channel-option"
-                    href={option.href}
-                    download={option.filename}
-                    key={option.label}
-                  >
-                    {option.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          ) : (
+        {/* Only while there is something to swap to: otherwise the photo is a
+            click target with no affordance, and the count reads 01 / 01. */}
+        {canSwapPhotos ? (
+          <span className="contact-figure-index" aria-hidden="true">
+            {String(photoIndex + 1).padStart(2, '0')} /{' '}
+            {String(contactPhotos.length).padStart(2, '0')}
+          </span>
+        ) : null}
+      </Figure>
+
+      <div className="contact-channels">
+        <a className="contact-primary" href={contactPrimary.href}>
+          <span className="contact-primary-label">{contactPrimary.label}</span>
+          <span className="contact-primary-value">{contactPrimary.value}</span>
+        </a>
+
+        <div className="contact-minor">
+          {contactChannels.map((channel) => (
             <a
-              className="contact-channel"
+              className="contact-minor-link"
               href={channel.href}
               key={channel.label}
-              {...(channel.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+              {...(channel.external
+                ? { target: '_blank', rel: 'noreferrer' }
+                : { download: channel.filename })}
             >
-              <span className="contact-channel-label">{channel.label}</span>
-              <span className="contact-channel-value">{channel.value}</span>
+              {channel.label}
+              {channel.external ? <span aria-hidden="true">&#8599;</span> : null}
             </a>
-          ),
-        )}
+          ))}
+        </div>
       </div>
     </section>
   )
@@ -741,14 +881,7 @@ function ContactView({ phase }) {
 function AboutView({ phase }) {
   return (
     <section className={`view-layer about-view page-phase-${phase}`} id="about">
-      <SectionHeader
-        phase={phase}
-        title="ABOUT"
-        sectorLabel="sec-02"
-        sectorClassName="about-sector"
-        sectorFirst
-        extraClassName="about-list-header"
-      />
+      <SectionHeader phase={phase} title="ABOUT" extraClassName="about-list-header" />
 
       <div className="about-body">
         <div className="about-identity">
@@ -781,11 +914,6 @@ function AboutView({ phase }) {
             </ul>
           </div>
         </aside>
-
-        <div className="about-foot">
-          <AboutLinks />
-          <span className="about-foot-note">Rotterdam, NL</span>
-        </div>
       </div>
     </section>
   )
@@ -922,7 +1050,7 @@ function ProjectsView({ phase }) {
 
   return (
     <section className={`view-layer projects-view page-phase-${phase}`} id="projects">
-      <SectionHeader phase={phase} title="PROJECTS" sectorLabel="SECTOR 03" />
+      <SectionHeader phase={phase} title="PROJECTS" />
 
       <div className={`projects-list-view is-${swapPhase}`}>
         {activeProject ? (
