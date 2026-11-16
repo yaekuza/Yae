@@ -27,3 +27,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# One package manager: bun. package-lock.json drifting from bun.lock
+# means local installs and CI installs can resolve different trees.
+package-lock.json
