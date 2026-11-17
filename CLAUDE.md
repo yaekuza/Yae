@@ -280,8 +280,11 @@ that way, so none of it comes back:
 - **Email is primary, the rest are a link row.** It used to be four equal cards
   (`repeat(4, 1fr)` with divider borders), each a mono label over a value — the "three equal
   feature cards" tell, and it contradicted the lead copy claiming email is fastest. Now the
-  address is display type at `clamp(20px, 2.6vw, 40px)` and LINKEDIN / GITHUB / CV sit under
-  it as small mono links. Don't flatten them back into a grid.
+  address is display type and LINKEDIN / GITHUB / CV sit under it as small mono links. Don't
+  flatten them back into a grid.
+  **The `EMAIL` label above the address is gone** (2026-11-17). It was the last instance of
+  the pattern the bullet below describes: a mono label restating what its value obviously
+  is. An email address does not need to be told apart from anything else on that row.
 - **Values that restated their labels are gone.** `LINKEDIN → JORGE SIMOES` (his own name,
   already the biggest thing on about), `GITHUB → YAEKUZA`, and `CV → DOWNLOAD PDF` under a
   label that already read CV. The label is the link now.
@@ -357,22 +360,22 @@ that way, so none of it comes back:
   bundle went 259.6KB → 331.5KB. This shutter is doable in CSS keyframes for free; he asked
   for gsap specifically, so it stays. Now that it is paid for, prefer gsap for any further
   sequenced animation rather than adding a second approach.
-- **The statement is Space Grotesk 400** (`--font-sans`), at `clamp(34px, 4.6vw, 76px)` /
-  `line-height: 1` / `-0.028em`. It was Instrument Serif; Yae asked for something **less
-  sharp** on 2026-11-16 and a high-contrast serif with wedge serifs is the sharpest thing in
-  the loaded set. **So contact no longer uses the third face at all** — the page is sans plus
-  mono micro-labels, and `--font-roman` is back to home statement + footer canvas only, which
-  is what the typography rule above says it is for.
-  **Kept at 400, not 300.** Lighter strokes read *sharper*, not softer, so dropping the weight
-  would undo the request. `max-width` went `15ch → 13ch` because `ch` is the width of the
-  font's own zero and Space Grotesk's is wider than Instrument Serif's — the same count would
-  have widened the column.
-  **A genuinely new face is the one thing that can't be done cheaply here**: a 4th family
-  breaks the three-typeface rule, and replacing Instrument Serif instead would change the home
-  statement and the footer canvas (`FONT` in `src/garden.js`), which are both off-limits
-  without asking. Offered to Yae 2026-11-16, not taken up yet.
-  Yae also asked for the hairline between the statement and the lead to be removed on
-  2026-11-16; the gap alone separates them now.
+- **The statement is Space Grotesk 400** (`--font-sans`), `max-width: 8.1em`,
+  `clamp(32px, 3.8vw, 64px)` / `line-height: 1` / `-0.025em`. It has been through the whole
+  set: Instrument Serif, then Space Grotesk, then Newsreader, and back to Space Grotesk on
+  2026-11-17 when Yae asked for **less sharp** a second time and picked the sans himself.
+  A sans has no serifs to taper and one uniform stroke weight, so there is nowhere further
+  to go in that direction — **if he asks again it is not the typeface, look at the size or
+  the colour.**
+  **Measured in `em`, not `ch`.** `ch` is the width of the font's own zero, and Space
+  Grotesk's is about 16% wider than Newsreader's, so carrying the old `14ch` across would
+  have widened this column and taken the width straight out of the photo. The size dropped
+  in the same pass for the same reason; a sans at 58px carries about the weight this serif
+  did at 66px, so it is a swap, not a demotion. **Anything that changes this element's
+  typeface has to re-check `--contact-wide` and the text column with it** — the two compete
+  for the same horizontal space and nothing else does.
+  Contact still uses the serif twice, so this is not the page dropping it: the CONTACT title
+  above and the email address below are both Newsreader.
 - **`.contact-figure-index` (`01 / 03`) is the click affordance**, not decoration. A clickable
   photo with no hint is a control nobody finds. It also reports how many there are, which is
   the test for whether an index mark earns its place.

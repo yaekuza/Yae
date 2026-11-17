@@ -160,7 +160,6 @@ const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const contactPrimary = {
-  label: 'EMAIL',
   value: links.email,
   href: `mailto:${links.email}`,
 }
@@ -847,7 +846,6 @@ function ContactView({ phase }) {
 
       <div className="contact-channels">
         <a className="contact-primary" href={contactPrimary.href}>
-          <span className="contact-primary-label">{contactPrimary.label}</span>
           <span className="contact-primary-value">{contactPrimary.value}</span>
         </a>
 

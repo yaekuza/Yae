@@ -1267,26 +1267,26 @@
   }
 }
 
-/* Newsreader, the fourth face, and the only place it is used. It replaces
-   Instrument Serif here (2026-11-16): same editorial job, but low contrast and
-   soft bracketed serifs instead of thin strokes and wedges, which is the
-   "less sharp" Yae asked for.
-   The link requests opsz 16, the text cut, not the display cut — Newsreader's
-   display opticals thin the hairlines out, which is the thing being avoided.
-   font-optical-sizing: none keeps it there: left on auto the browser asks for
-   opsz 82 at this size and gets handed the sharp cut anyway. */
+/* Space Grotesk (2026-11-17). Newsreader replaced Instrument Serif here for
+   being less sharp and Yae asked for less sharp again, so this goes the whole
+   way: no serifs to taper, one uniform stroke weight, nothing pointed. The
+   page keeps its serif in the CONTACT title above and the email address below.
+   Measured in `em`, not `ch`, on purpose. `ch` is the width of the font's own
+   zero, and Space Grotesk's is about 16% wider than Newsreader's, so carrying
+   14ch across would have widened this column and taken that width straight
+   out of the photo. The size comes down with it for the same reason -- a sans
+   at 58px carries about as much weight as this serif did at 66px. */
 .contact-statement {
   min-width: 0;
-  max-width: 14ch;
+  max-width: 8.1em;
   margin: 0;
   animation: contact-block-in 560ms cubic-bezier(0.16, 1, 0.3, 1) 150ms backwards;
   color: #f2f2f2;
-  font-family: var(--font-serif);
-  font-size: clamp(34px, 4.4vw, 74px);
+  font-family: var(--font-sans);
+  font-size: clamp(32px, 3.8vw, 64px);
   font-weight: 400;
-  font-optical-sizing: none;
-  line-height: 1.02;
-  letter-spacing: -0.012em;
+  line-height: 1;
+  letter-spacing: -0.025em;
   text-rendering: geometricPrecision;
 }
 
@@ -1402,17 +1402,7 @@ button.contact-figure {
   position: relative;
   max-width: 100%;
   display: grid;
-  gap: clamp(6px, 1vh, 10px);
   color: #f2f2f2;
-}
-
-.contact-primary-label {
-  color: rgba(255, 255, 255, 0.42);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.16em;
 }
 
 /* Newsreader italic, the only italic on the site. It picks the serif back up
@@ -2408,7 +2398,7 @@ button.contact-figure {
 
   .contact-statement {
     max-width: 100%;
-    font-size: clamp(34px, 9.8vw, 58px);
+    font-size: clamp(32px, 9vw, 52px);
   }
 
   .contact-figure {
