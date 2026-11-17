@@ -135,10 +135,6 @@ const homeWork = projects.map((project) => ({
   image: project.image,
 }))
 
-const contactIntro = {
-  text:
-    'Rotterdam based, open to anywhere in the Netherlands. Email is the fastest way to reach me. I check the rest far less often.',
-}
 const contactPhotos = [
   {
     src: darkpoolShot,
@@ -811,12 +807,9 @@ function ContactView({ phase }) {
       <SectionHeader phase={phase} title="CONTACT" extraClassName="contact-list-header" />
 
       <div className="contact-body">
-        <div className="contact-intro">
-          <h2 className="contact-statement">
-            Available from February for <span className="contact-keep">front-end</span> work.
-          </h2>
-          <p className="contact-lead">{contactIntro.text}</p>
-        </div>
+        <h2 className="contact-statement">
+          Available from February for <span className="contact-keep">front-end</span> work.
+        </h2>
       </div>
 
       <Figure

@@ -1201,12 +1201,20 @@
   --project-line: rgba(255, 255, 255, 0.13);
   --about-gutter: clamp(22px, 3.4vw, 56px);
   --project-gutter: var(--about-gutter);
-  --contact-band: clamp(240px, calc(100vh - 364px), 700px);
+  --contact-band: clamp(240px, calc(100vh - 338px), 700px);
   /* How far the photo hangs below the top of its row. It comes out of the
      frame rather than being added to it, so the row height is untouched and
      nothing can push into the channels below. */
-  --contact-drop: clamp(16px, 2.8vh, 44px);
-  --contact-frame: calc(var(--contact-band) - var(--contact-drop));
+  --contact-drop: clamp(14px, 2.2vh, 34px);
+  /* The photo's two ceilings. The figure picks whichever one binds and sizes
+     itself to the ratio from there, so it is as large as it can be without
+     ever being cropped. --contact-wide has to leave room for the text column,
+     which is about 35vw while the statement is in its 5vw range. */
+  --contact-cap: calc(var(--contact-band) - var(--contact-drop));
+  /* The third term is the one that matters between 900 and ~1200px wide:
+     the lead's 46ch floor stops shrinking there while 58vw keeps growing, so
+     without it the photo squeezes the text column instead of yielding. */
+  --contact-wide: min(58vw, 1060px, calc(100vw - 400px));
   padding: 0;
   gap: 0;
   grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
@@ -1231,9 +1239,12 @@
   grid-row: 2;
   min-width: 0;
   min-height: 0;
-  padding: clamp(24px, 4vh, 46px) 0 clamp(20px, 3vh, 36px) var(--about-gutter);
+  padding: clamp(24px, 4vh, 46px) 0 clamp(18px, 2.4vh, 30px) var(--about-gutter);
   display: grid;
-  align-content: start;
+  /* The statement sits at the foot of the band so it reads straight into the
+     EMAIL block under it. `safe` matters: this is a scroll container, and a
+     plain `end` would push the top of an overflowing statement out of reach. */
+  align-content: safe end;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -1242,14 +1253,6 @@
 
 .page-phase-out .contact-body {
   animation: page-content-out 180ms ease both;
-}
-
-.contact-intro {
-  min-width: 0;
-  display: grid;
-  align-content: center;
-  gap: clamp(14px, 2.2vh, 24px);
-  animation: contact-block-in 560ms cubic-bezier(0.16, 1, 0.3, 1) 150ms backwards;
 }
 
 @keyframes contact-block-in {
@@ -1273,11 +1276,13 @@
    font-optical-sizing: none keeps it there: left on auto the browser asks for
    opsz 82 at this size and gets handed the sharp cut anyway. */
 .contact-statement {
+  min-width: 0;
   max-width: 14ch;
   margin: 0;
+  animation: contact-block-in 560ms cubic-bezier(0.16, 1, 0.3, 1) 150ms backwards;
   color: #f2f2f2;
   font-family: var(--font-serif);
-  font-size: clamp(36px, 5vw, 82px);
+  font-size: clamp(34px, 4.4vw, 74px);
   font-weight: 400;
   font-optical-sizing: none;
   line-height: 1.02;
@@ -1287,17 +1292,6 @@
 
 .contact-keep {
   white-space: nowrap;
-}
-
-.contact-lead {
-  max-width: 46ch;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.84);
-  font-family: var(--font-sans);
-  font-size: clamp(15px, 1.05vw, 19px);
-  font-weight: 400;
-  line-height: 1.5;
-  text-rendering: geometricPrecision;
 }
 
 /* Height is the band; width is the band times the photo's own aspect ratio,
@@ -1310,19 +1304,28 @@
    channel links on the other side. The left margin is only a floor, to keep
    the photo off the type if the middle column ever collapses. */
 .contact-figure {
+  /* min() of the two ceilings, so whichever runs out first decides the size
+     and the other dimension follows the ratio. There is deliberately no
+     max-width: a max-width clamps the width while the height stays put, which
+     is a crop, and this frame exists to not crop. */
+  --contact-frame: min(
+    var(--contact-cap),
+    calc(var(--contact-wide) / var(--contact-shape, 1.5))
+  );
   grid-column: 3;
   grid-row: 2;
   position: relative;
   height: var(--contact-frame);
-  width: calc(var(--contact-frame) * var(--contact-shape, 0.666));
-  max-width: min(46vw, 820px);
-  margin: var(--contact-drop) var(--about-gutter) 0 clamp(18px, 2.4vw, 48px);
+  width: calc(var(--contact-frame) * var(--contact-shape, 1.5));
+  margin: var(--contact-drop) var(--about-gutter) 0 clamp(16px, 2vw, 36px);
   padding: 0;
   display: block;
   overflow: hidden;
   border: 0;
   background: #050505;
-  transition: width 360ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    width 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    height 360ms cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -1501,13 +1504,20 @@ button.contact-figure {
   place-items: start center;
 }
 
+/* Newsreader rather than the sans (2026-11-17). opsz is pinned for the same
+   reason as everywhere else: left on auto the browser asks for the display cut
+   at this size and gets thinner hairlines. The size went 48 -> 52px and the
+   top margin 28 -> 24px to pay for it, because serif caps read smaller than
+   sans caps and the header is a fixed 70px box with the rule on its floor. */
 .projects-list-header h1 {
-  margin: 28px 0 0;
+  margin: 24px 0 0;
   color: #f2f2f2;
-  font-family: var(--font-sans);
-  font-size: 48px;
+  font-family: var(--font-serif);
+  font-size: 52px;
   font-weight: 400;
+  font-optical-sizing: none;
   line-height: 0.86;
+  letter-spacing: 0.015em;
   text-align: center;
   opacity: 0;
   text-rendering: geometricPrecision;
@@ -2376,6 +2386,8 @@ button.contact-figure {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: repeat(4, min-content);
     --contact-band: auto;
+    --contact-cap: clamp(240px, 46vh, 420px);
+    --contact-wide: calc(100vw - 2 * var(--about-gutter));
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -2402,9 +2414,6 @@ button.contact-figure {
   .contact-figure {
     grid-column: 1;
     grid-row: 3;
-    height: clamp(240px, 46vh, 420px);
-    width: calc(clamp(240px, 46vh, 420px) * var(--contact-shape, 0.666));
-    max-width: calc(100% - 2 * var(--about-gutter));
     margin: 0 var(--about-gutter);
     justify-self: start;
   }
@@ -2455,7 +2464,8 @@ button.contact-figure {
   }
 
   .projects-list-header h1 {
-    margin-top: 27px;
+    margin-top: 24px;
+    font-size: 48px;
   }
 
   .projects-list-view {

@@ -66,7 +66,6 @@ There's no browser in this environment (WSL, no system libs for Chromium, needs 
 Build + eslint only prove it compiles, not that it looks right. Never describe a visual
 result as if you've seen it. Say explicitly when it's unverified so Yae knows to look.
 
----
 
 ## Standing rules already in play
 
@@ -106,8 +105,13 @@ result as if you've seen it. Say explicitly when it's unverified so Yae knows to
   the about Now list. He asked for the home mention to go on 2026-11-16, so don't reintroduce
   it there or anywhere else. Over-stating it reads as pleading and breaks the design rules
   above. It is *not* "looking for a third-year internship" any more. The contact statement
-  says `Open to front-end and fullstack work in the Netherlands` without a date, which is
-  deliberate — it's the ask without the countdown.
+  reads `Available from February for front-end work.` and is the only other place the date
+  appears, which Yae has left alone through several passes.
+  **Gap, raised 2026-11-17, not filled:** the contact lead was deleted that day and it was
+  the only place the site said he is `open to anywhere in the Netherlands`. About's `BASED`
+  row gives Rotterdam as a location but says nothing about range. A recruiter outside
+  Rotterdam now has no way to know he would travel. Folding it into the statement is the
+  obvious fix; it is his copy, so ask.
 - **Home order is deliberate**: hero → work → position → footer. Projects come first.
   Don't bury the work again, and don't pad the page back out with prose.
 - **The four story blocks are gone** (SCHOOL / ORIGIN / DIRECTION / OFF SCREEN, removed
@@ -251,6 +255,12 @@ that way, so none of it comes back:
   the sans lead between them. **`font-style: italic` only works because the italic cut is in
   the `index.html` link** — `font-synthesis: none` means a roman-only load would leave it
   silently upright, with no false slant to hint anything is wrong.
+- **The page titles (ABOUT / PROJECTS / CONTACT) are Newsreader**, not the sans
+  (`.projects-list-header h1`, changed 2026-11-17 — one rule, all three pages). `48px → 52px`
+  and `margin-top: 28px → 24px`, because serif caps read smaller than sans caps and the
+  header is a fixed 70px box with `.projects-list-rule` pinned to its floor: at 52px the
+  block is 68.7px, so there are 1.3px to spare and no more. The 900px query holds it at 48px
+  in a 69px box. `font-optical-sizing: none` for the usual reason.
 - **Email is primary, the rest are a link row.** It used to be four equal cards
   (`repeat(4, 1fr)` with divider borders), each a mono label over a value — the "three equal
   feature cards" tell, and it contradicted the lead copy claiming email is fastest. Now the
@@ -265,10 +275,14 @@ that way, so none of it comes back:
 - **The body split is 1.42fr / 1fr with `align-items: start`** and the photo dropped by
   `clamp(16px, 5vh, 64px)`. It was `1fr / 1.05fr` with both halves vertically centred — a
   centred hero split whose only asymmetry (that 1.05) was too small to see. Don't re-centre it.
-- **The headline and the lead must not say the same thing.** The statement said "Available
-  from February for front-end work" and the paragraph directly under it said "Open to
-  front-end and fullstack work in the Netherlands" — a restatement that also contradicted
-  itself on front-end vs fullstack. The lead carries location and the channel hierarchy now.
+- **There is no lead paragraph any more** (deleted 2026-11-17 at Yae's request, along with
+  the `.contact-intro` wrapper it shared with the statement; the entry animation moved onto
+  `.contact-statement`). It had already been rewritten once because it restated the headline.
+  See the availability rule above for what went missing with it.
+- **The statement sits at the foot of the band, not the top** (2026-11-17): `.contact-body`
+  is `align-content: safe end`, so it reads straight into the EMAIL block below it. **`safe`
+  is load bearing** — `.contact-body` is a scroll container, and a plain `end` would push the
+  top of an overflowing statement out of reach with no way to scroll back to it.
 - **Fixed in passing**: `.contact-view` was `overflow: hidden` with a photo whose
   `max-height` floor was 320px, so on a ~500px-tall viewport it clipped with no scrollbar.
   It's `overflow-y: auto` now, same as about.
@@ -352,11 +366,27 @@ that way, so none of it comes back:
   sitting together on the left). The type is hard left, the photo's right edge sits on
   `--about-gutter` in line with the channel links below it, and the slack pools *between*
   them. Because the photo is right-aligned, a landscape shot grows leftward into that empty
-  middle instead of pushing the page wider. `--contact-band` is the height of the middle row (where the
-  header rule and the channels rule used to be) and is **constant**: `clamp(240px, calc(100vh - 350px), 700px)`. The
-  figure is `height: var(--contact-band)` and
-  `width: calc(var(--contact-band) * var(--contact-shape))`, where React sets
-  `--contact-shape` inline from that photo'''s own aspect ratio.
+  middle instead of pushing the page wider. `--contact-band` is the height of the middle row
+  and is **constant**: `clamp(240px, calc(100vh - 338px), 700px)`. React sets
+  `--contact-shape` inline from each photo'''s own aspect ratio.
+  **The figure is sized from two ceilings and never cropped** (2026-11-17, when Yae asked for
+  it bigger). `--contact-cap` is how tall it may be (`band - drop`), `--contact-wide` how
+  wide, and the figure takes
+  `--contact-frame: min(var(--contact-cap), calc(var(--contact-wide) / var(--contact-shape)))`
+  as its height, with width derived from that. Whichever ceiling binds decides the size and
+  the other dimension follows the ratio.
+  **Never put a `max-width` on `.contact-figure`.** It had `min(46vw, 820px)`, which clamped
+  the width while the height stayed at the frame, so `object-fit: cover` quietly cropped the
+  photo: 21% of it gone at 1512px wide, 18% at 1920. That is the exact thing this frame
+  exists to prevent, and it is invisible unless you compare against the source file. A width
+  ceiling belongs in `--contact-wide`, where the height follows it.
+  `--contact-wide` is `min(58vw, 1060px, calc(100vw - 400px))`. The third term reserves the
+  text column; it was `470px` while the lead existed, because the lead's `ch` measure stopped
+  shrinking once its font hit the 15px floor and the photo would squeeze the text instead of
+  yielding. With the lead gone the column is the statement alone, which scales with `vw`, so
+  the reserve only has to cover the ≥1640px case where the statement's size caps out. The
+  statement also went `clamp(36px, 5vw, 82px) → clamp(34px, 4.4vw, 74px)` to hand the photo
+  room; the text column is what the photo competes with, nothing else.
   **Why it is built this way:** the two photos are opposite orientations (687x1031 portrait,
   1471x981 landscape). Cropping both into one frame throws away most of the landscape shot;
   letting the frame change height would reflow the whole page on every swap. Fixing the
@@ -376,10 +406,10 @@ that way, so none of it comes back:
   so the 360ms width transition and the timeline's `+=0.42` hold are currently no-ops. Both
   stay: the sizing is driven by `contactPhotos` data, and a portrait shot would need them
   again the moment one is added.
-- **The photo hangs below the top of its row by `--contact-drop`** (`clamp(16px, 2.8vh, 44px)`,
-  added 2026-11-16) so it doesn't start level with the type. The drop is **subtracted from the
-  frame, not added to the row** — `--contact-frame: calc(var(--contact-band) - var(--contact-drop))`
-  is what the height *and* the width calc both use. Adding it as a plain `margin-top` instead
+- **The photo hangs below the top of its row by `--contact-drop`** (`clamp(14px, 2.2vh, 34px)`,
+  added 2026-11-16, trimmed 2026-11-17 because it was eating up to 44px of photo height) so it doesn't start level with the type. The drop is **subtracted from the
+  frame, not added to the row** — it is subtracted in `--contact-cap`, which feeds
+  `--contact-frame`, which the height *and* the width calc both use. Adding it as a plain `margin-top` instead
   would push a band-tall figure past a fixed-height grid track and straight over the EMAIL
   block. Deriving width from the frame is also what keeps the aspect ratio honest; derive it
   from the band and every photo stretches by the drop.
