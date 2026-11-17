@@ -98,11 +98,24 @@ Yae has said to publish.
   silently.
   - **sans** (Space Grotesk) — all body text: leads, story copy, values. Also the about name
     at 700.
-  - **mono** (Space Mono) — micro-labels only.
+  - **mono** (Space Mono) — micro-labels, and **the home hero name at 700** (2026-11-17).
+    Yae asked for something on the hero "more professional" and "fitting of the spinning
+    icon". The icon is a 5x5 pixel-grid Y on a solid accent square, and a monospace is the
+    only face in the set built on a grid: **every Space Mono glyph is a 0.612em cell**, so
+    `.hero-name img` is now `0.612em` square with `margin: 0` and the mark occupies exactly
+    one cell — it reads as the sixth character of SIMOES instead of an image pasted into a
+    word. **That is what the change is for, so don't put tracking on `.hero-first` /
+    `.hero-last`** (both pinned at 0): `letter-spacing` is added per character and would
+    slide the letters off the cell the mark is aligned to.
+    Measured, not guessed — I parsed the two TTFs: the faces share a designer and an
+    identical **0.700em cap height**, and the whole line goes **6.95em → 6.91em**, so the
+    swap moved nothing and `clamp(72px, 9.5vw, 138px)` was left alone. Space Grotesk is
+    derived from Space Mono, so this is the monospaced cut of the face already here.
   - **roman** (Instrument Serif) — the sharp display serif: the home statement and the footer
     canvas, nothing else. One weight, high contrast; at body size on black the strokes
     disappear. We tried it for body text and reverted.
-  - **serif** (Newsreader) — the soft display serif, currently only the contact statement.
+  - **serif** (Newsreader) — the soft display serif: the ABOUT / PROJECTS / CONTACT titles,
+    and the contact email address in the italic cut.
     Added because Yae wanted that line **less sharp** and `--font-roman` is the sharpest face
     in the set. Requested at **`opsz` 16, the text cut, not the display cut**, and pinned with
     `font-optical-sizing: none` — left on auto, the browser asks for `opsz` 82 at that size
@@ -111,7 +124,12 @@ Yae has said to publish.
     subset on the same Google request. The italic is the site's only italic and is used in
     exactly one place: the contact email address.
 - **Don't touch** the footer or the `JORGE SIMOES` hero name on the home page without being
-  asked. The big `JORGE SIMOES` on *about* is deliberate and carries that page — it's the
+  asked. **Open, raised 2026-11-17 while changing its typeface, not done:** `.hero-name` is
+  `color: var(--theme-color)` — eleven characters at up to 138px, which is the largest accent
+  spend on the site and the thing section 3 bans most directly. The logo inside it is the
+  same accent, so the mark has nothing to stand out against. Setting the letters near-white
+  and leaving the mark coloured would make the spinning icon the one accent on the screen,
+  which is what section 3 actually asks for. It's his hero, so ask. The big `JORGE SIMOES` on *about* is deliberate and carries that page — it's the
   one memorable thing on it, don't quietly demote it again.
 - **One message per page.** Home = the work, the position statement, and the ask.
   About = the person: name, bio, spec sheet, what he's doing now. Don't let the two pages

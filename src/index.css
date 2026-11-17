@@ -10,10 +10,11 @@
      an italic of one of these, never a fifth family -- and any weight or
      style used has to be added to the link in index.html first, because
      font-synthesis is off and an unloaded one snaps silently.
-     sans   body text everywhere, and the about name at 700
-     mono   micro-labels only
+     sans   body text everywhere, the about name at 700, the contact statement
+     mono   micro-labels, and the home hero name at 700
      roman  sharp display serif: the home statement and the footer canvas
-     serif  soft display serif: the contact statement */
+     serif  soft display serif: the ABOUT/PROJECTS/CONTACT titles, and the
+            contact email address in the italic cut */
   --font-sans: "Space Grotesk", Arial, Helvetica, sans-serif;
   --font-mono: "Space Mono", "Courier New", Courier, monospace;
   --font-roman: "Instrument Serif", Georgia, "Times New Roman", serif;

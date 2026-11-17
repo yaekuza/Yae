@@ -96,7 +96,15 @@
   gap: 0.18em;
   z-index: 2;
   color: var(--theme-color);
-  font-family: var(--font-sans);
+  /* Mono, not the sans, because the mark standing in for the O is a pixel
+     grid and a monospace is the only face here built on one: every Space
+     Mono glyph is a 0.612em cell, so the logo is sized to exactly one cell
+     below and reads as the sixth character of SIMOES rather than an image
+     dropped into a word. Space Mono and Space Grotesk share a designer and
+     measure the same cap height (0.700em), so this is the monospaced cut of
+     the face already here, not a fifth family -- the line comes out 6.91em
+     against the sans's 6.95em, so nothing below has to move. */
+  font-family: var(--font-mono);
   font-size: clamp(72px, 9.5vw, 138px);
   font-weight: 700;
   line-height: 0.86;
@@ -114,6 +122,8 @@
   white-space: nowrap;
 }
 
+/* Both stay at 0: any tracking is added per character and would push the
+   letters off the monospace cell the logo is aligned to. */
 .hero-first {
   letter-spacing: 0;
 }
@@ -123,12 +133,15 @@
 }
 
 .hero-name img {
-  width: 0.64em;
-  height: 0.64em;
+  /* One Space Mono advance exactly (612/1000 em), with no margin, so the mark
+     sits on the same cell rhythm as the letters either side of it. The 0.044em
+     lift centres it in the 0.700em cap band. */
+  width: 0.612em;
+  height: 0.612em;
   display: inline-block;
   object-fit: contain;
-  vertical-align: 0.035em;
-  margin: 0 0.04em;
+  vertical-align: 0.044em;
+  margin: 0;
   transform-origin: center;
   animation: hero-logo-turn 4s infinite;
   will-change: transform;
