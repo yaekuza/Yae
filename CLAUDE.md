@@ -66,6 +66,22 @@ There's no browser in this environment (WSL, no system libs for Chromium, needs 
 Build + eslint only prove it compiles, not that it looks right. Never describe a visual
 result as if you've seen it. Say explicitly when it's unverified so Yae knows to look.
 
+## 5. Commit when you're done
+
+Added 2026-11-17 at Yae's request. **Every change gets committed when it's finished** — don't
+leave work sitting in the working tree waiting to be asked about. Run the build and eslint
+first; if either fails, fix it and then commit.
+
+Write a real message: what changed and *why*, not a file list. End it with
+`Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`. Split into separate commits when the
+work splits cleanly (tooling vs. the site, say) so a single piece can be reverted on its own.
+
+**Committing is not publishing.** `deploy.yml` fires on *push* to `master`, so a commit that
+is never pushed changes nothing on jorgesimoes.com — that is exactly how the live site ended
+up three days stale on 2026-11-16. The rule above is commit; **ask before pushing**, unless
+Yae has said to publish.
+
+---
 
 ## Standing rules already in play
 
