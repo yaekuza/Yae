@@ -1214,7 +1214,29 @@
   --project-line: rgba(255, 255, 255, 0.13);
   --about-gutter: clamp(22px, 3.4vw, 56px);
   --project-gutter: var(--about-gutter);
-  --contact-band: clamp(240px, calc(100vh - 338px), 700px);
+  /* What the other two rows actually need, derived rather than guessed. This
+     was a flat 338px and was wrong by 33-73px depending on the viewport: the
+     rows are vh clamps, so a constant over-reserves most on short screens,
+     which is exactly where the photo is smallest. The band is the only thing
+     between those rows, .contact-view is overflow: hidden, and the figure is
+     height-bound on most laptops, so every pixel over-reserved here came
+     straight off the photo. Keep this in step with .contact-channels. */
+  --contact-rows: calc(
+    /* row 1: the header's 68px margin-top over its fixed 70px box */
+    138px
+    /* row 3: the channels, top to bottom */
+    + clamp(24px, 3.4vh, 42px)
+    + 1.08 * clamp(22px, 2.9vw, 46px)
+    + clamp(16px, 2.6vh, 30px)
+    /* the mono link line: 1.481em is Space Mono's own hhea line box */
+    + 1.481 * clamp(9px, 0.74vw, 11px)
+    + clamp(20px, 3vh, 34px)
+    /* so sub-pixel rounding can never clip the links */
+    + 8px
+  );
+  /* The 700px ceiling was below what a 1080p screen has spare, so it threw
+     away height on the largest viewports as well. */
+  --contact-band: clamp(240px, calc(100vh - var(--contact-rows)), 780px);
   /* How far the photo hangs below the top of its row. It comes out of the
      frame rather than being added to it, so the row height is untouched and
      nothing can push into the channels below. */
@@ -1224,10 +1246,17 @@
      ever being cropped. --contact-wide has to leave room for the text column,
      which is about 35vw while the statement is in its 5vw range. */
   --contact-cap: calc(var(--contact-band) - var(--contact-drop));
-  /* The third term is the one that matters between 900 and ~1200px wide:
-     the lead's 46ch floor stops shrinking there while 58vw keeps growing, so
-     without it the photo squeezes the text column instead of yielding. */
-  --contact-wide: min(58vw, 1060px, calc(100vw - 400px));
+  /* 1180px rather than 1060px because with the band fixed above, height stops
+     binding at 1920 wide and this became the ceiling instead.
+     The third term is the one that matters between 900 and ~1200px wide: the
+     statement's column stops shrinking once its font hits the 32px floor
+     while 58vw keeps growing, so without it the photo squeezes the text
+     instead of yielding. It is deliberately a flat reserve and not the real
+     width of that column plus a gap: deriving it properly would guarantee the
+     gap between the two but costs 3% of photo at 1512 and 1200 wide, and the
+     point of this block is that the photo gets bigger, never smaller. The
+     trade is that the gap closes to ~25px just above the 900px breakpoint. */
+  --contact-wide: min(58vw, 1180px, calc(100vw - 400px));
   padding: 0;
   gap: 0;
   grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;

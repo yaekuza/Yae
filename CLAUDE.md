@@ -343,9 +343,9 @@ that way, so none of it comes back:
   viewport edges** (changed 2026-11-16 —
   the full-bleed version lasted one turn; Yae wanted it bounded). `.contact-view` is a
   2-col x 3-row grid: header (row 1, both cols), `.contact-body` + `.contact-figure`
-  (row 2), `.contact-channels` (row 3, both cols). The header rule is the photo band'''s top
-  edge and the channels''' `border-top` is its bottom edge. The `.contact-main` wrapper is
-  gone — don'''t reintroduce it, the grid places all four children directly.
+  (row 2), `.contact-channels` (row 3, both cols). The header rule is the photo band's top
+  edge and the channels' `border-top` is its bottom edge. The `.contact-main` wrapper is
+  gone — don't reintroduce it, the grid places all four children directly.
 - **A downward entry animation on the last child of a scroll container flashes a scrollbar.**
   That was the "scrollbar visible on load" bug Yae reported 2026-11-16: `about-block-in` goes
   `from { translate3d(0, 16px, 0) }`, and `.contact-channels` was the last child of an
@@ -403,9 +403,22 @@ that way, so none of it comes back:
   sitting together on the left). The type is hard left, the photo's right edge sits on
   `--about-gutter` in line with the channel links below it, and the slack pools *between*
   them. Because the photo is right-aligned, a landscape shot grows leftward into that empty
-  middle instead of pushing the page wider. `--contact-band` is the height of the middle row
-  and is **constant**: `clamp(240px, calc(100vh - 338px), 700px)`. React sets
-  `--contact-shape` inline from each photo'''s own aspect ratio.
+  middle instead of pushing the page wider. `--contact-band` is the height of the middle row.
+  React sets `--contact-shape` inline from each photo's own aspect ratio.
+  **The band's subtraction is derived, not a constant** (2026-11-18, when Yae asked whether
+  the photo could grow more). It was a flat `338px` standing for the header row plus the
+  channels row, and it was **over by 33 to 73px** depending on the viewport: both rows are
+  built from `vh` clamps, so a constant over-reserves most on short screens, which is exactly
+  where the photo is smallest. `.contact-view` is `overflow: hidden` and the figure is
+  height-bound on most laptops, so every pixel over-reserved there came straight off the
+  photo and the leftover sat as dead space under the channels. It is now `--contact-rows`,
+  which adds up the real rows: `138px` (the header's 68px margin over its fixed 70px box),
+  then the channels top to bottom, then `8px` of slack so rounding cannot clip the links.
+  **The `1.481` in it is Space Mono's own hhea line box**, read out of the TTF, not guessed.
+  **Keep `--contact-rows` in step with `.contact-channels`** - change that block's padding,
+  gap or type size and this has to follow, or the links clip.
+  The band ceiling also went **`700px` to `780px`**, because a 1080p screen has about 742px
+  spare and the old ceiling threw the difference away.
   **The figure is sized from two ceilings and never cropped** (2026-11-17, when Yae asked for
   it bigger). `--contact-cap` is how tall it may be (`band - drop`), `--contact-wide` how
   wide, and the figure takes
@@ -417,13 +430,27 @@ that way, so none of it comes back:
   photo: 21% of it gone at 1512px wide, 18% at 1920. That is the exact thing this frame
   exists to prevent, and it is invisible unless you compare against the source file. A width
   ceiling belongs in `--contact-wide`, where the height follows it.
-  `--contact-wide` is `min(58vw, 1060px, calc(100vw - 400px))`. The third term reserves the
+  `--contact-wide` is `min(58vw, 1180px, calc(100vw - 400px))`. The middle term went
+  `1060px` to `1180px` on 2026-11-18: once the band stopped over-reserving, height no longer
+  binds at 1920 wide and this became the ceiling instead. The third term reserves the
   text column; it was `470px` while the lead existed, because the lead's `ch` measure stopped
   shrinking once its font hit the 15px floor and the photo would squeeze the text instead of
   yielding. With the lead gone the column is the statement alone, which scales with `vw`, so
   the reserve only has to cover the ≥1640px case where the statement's size caps out. The
   statement also went `clamp(36px, 5vw, 82px) → clamp(34px, 4.4vw, 74px)` to hand the photo
   room; the text column is what the photo competes with, nothing else.
+  **The reserve stays a flat `400px` on purpose.** Deriving it properly (the statement's real
+  column plus a gutter-wide gap) would guarantee the space between the type and the photo,
+  but it costs about 3% of photo at 1512x982 and 1200x900. Modelled and rejected 2026-11-18:
+  the point of that block is that the photo only ever gets bigger. **The trade is that the
+  gap between the two columns closes to about 23px just above the 900px breakpoint**, down
+  from 60px. If Yae ever says the photo crowds the text, that is the number to move, and
+  giving the reserve its real value is the fix.
+  **Measured, every time.** The sizing here has been wrong twice by eye (the `max-width`
+  crop, then this subtraction), and neither was visible without comparing against the source.
+  Model it across viewports before shipping a change to this block: the three things to check
+  are which ceiling binds, that no viewport gets *smaller*, and that
+  `header + band + channels` still fits inside `100vh` at every size, since the view clips.
   **Why it is built this way:** the two photos are opposite orientations (687x1031 portrait,
   1471x981 landscape). Cropping both into one frame throws away most of the landscape shot;
   letting the frame change height would reflow the whole page on every swap. Fixing the
@@ -450,7 +477,7 @@ that way, so none of it comes back:
   would push a band-tall figure past a fixed-height grid track and straight over the EMAIL
   block. Deriving width from the frame is also what keeps the aspect ratio honest; derive it
   from the band and every photo stretches by the drop.
-- **The photos are Yae'''s own photography, not portraits of him.** `moon.avif` is a crescent
+- **The photos are Yae's own photography, not portraits of him.** `moon.avif` is a crescent
   moon over a treeline; `darkpool.avif` is a player over a pool table under a strip light.
   Both monochrome, both very dark, both genuinely on-brand. They have real `alt` text because
   they are content, not decoration. **The about bio used to end on "bouldering or taking
